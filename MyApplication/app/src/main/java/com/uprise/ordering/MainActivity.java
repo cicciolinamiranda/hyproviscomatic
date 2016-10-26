@@ -11,11 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.uprise.ordering.fragment.ProductsFragment;
+import com.uprise.ordering.shared.LoginSharedPref;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ProductsFragment productsFragment;
+    private LoginSharedPref loginSharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity
 //            tx.replace(R.id.content_frame, productsFragment);
 //        tx.commit();
         productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
+        loginSharedPref = new LoginSharedPref();
+        if(!loginSharedPref.isLoggedIn(MainActivity.this)) {
+            startActivity(new Intent(MainActivity.this, LandingActivity.class));
+            finish();
+        }
 
     }
 
@@ -79,8 +86,12 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId()) {
 
             case R.id.nav_logout:
-                finish();
-                startActivity(new Intent(MainActivity.this, LandingActivity.class));
+
+                if(loginSharedPref.isLoggedIn(MainActivity.this)) {
+                    loginSharedPref.logOut(MainActivity.this);
+                    finish();
+                    startActivity(new Intent(MainActivity.this, LandingActivity.class));
+                }
                 break;
         }
 

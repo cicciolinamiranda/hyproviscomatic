@@ -27,6 +27,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.uprise.ordering.shared.LoginSharedPref;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private LoginSharedPref loginSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,7 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_loading_layout);
+        loginSharedPref = new LoginSharedPref();
     }
 
     private void populateAutoComplete() {
@@ -329,7 +333,8 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
             mAuthTask = null;
 
 
-            if (success) {
+            if (success && !loginSharedPref.isLoggedIn(LoginActivity.this)) {
+                loginSharedPref.login(LoginActivity.this, mEmail);
                 finish();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             } else {

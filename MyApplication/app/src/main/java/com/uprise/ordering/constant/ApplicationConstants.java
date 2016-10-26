@@ -11,6 +11,7 @@ public class ApplicationConstants {
 
     public static String APP_CODE = "Hyprviscomatic";
     public static String CART_ITEMS = "Cart_items";
+    public static String IS_LOGIN = "Is_login";
     public static final int RESULT_PICK_FROM_CAMERA_STORE = 0x03;
     public static final int RESULT_GALLERY_PICTURE_STORE = 0x02;
     public static final int RESULT_GALLERY_STORE = 0x05;

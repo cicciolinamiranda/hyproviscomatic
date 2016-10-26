@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by cicciolina on 10/26/16.
  */
-
+//TODO: WILL BE REPLACED BY SQL
 public class CartItemsSharedPref {
 
     public CartItemsSharedPref() {
@@ -36,17 +36,17 @@ public class CartItemsSharedPref {
     public ArrayList loadCartItems(Context context) {
 // used for retrieving arraylist from json formatted string
         SharedPreferences settings;
-        List favorites;
+        List<CartItemsModel> carts;
         settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
         if (settings.contains(ApplicationConstants.CART_ITEMS)) {
-            String cartItems = settings.getString(ApplicationConstants.CART_ITEMS, "");
+            String cartsStr = settings.getString(ApplicationConstants.CART_ITEMS, "");
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-            CartItemsModel[] favoriteItems = gson.fromJson(cartItems,CartItemsModel[].class);
-            favorites = Arrays.asList(favoriteItems);
-            favorites = new ArrayList(favorites);
+            CartItemsModel[] cartItems = gson.fromJson(cartsStr,CartItemsModel[].class);
+            carts = Arrays.asList(cartItems);
+            carts = new ArrayList(carts);
         } else
             return null;
-        return (ArrayList) favorites;
+        return (ArrayList) carts;
     }
 
     public void addCartItems(Context context, CartItemsModel cartItemsModel) {
@@ -72,5 +72,13 @@ public class CartItemsSharedPref {
             index++;
         }
         storeCartItems(context, cartItems);
+    }
+
+    public void removeCardItem(Context context, CartItemsModel cartItemsModel) {
+        List<CartItemsModel> cartItems = loadCartItems(context);
+        if (cartItems != null) {
+            cartItems.remove(cartItemsModel);
+            storeCartItems(context, cartItems);
+        }
     }
 }

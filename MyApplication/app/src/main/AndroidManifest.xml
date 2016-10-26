@@ -31,11 +31,6 @@
         <activity
             android:name=".LandingActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RegistrationActivity"
@@ -44,7 +39,13 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".camera.CameraImageActivity"
             android:parentActivityName=".BranchActivity"
@@ -53,7 +54,9 @@
             android:name=".BranchActivity"
             android:parentActivityName=".RegistrationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShoppingCartActivity"></activity>
+        <activity android:name=".ShoppingCartActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
