@@ -39,7 +39,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="10dp">
             <ImageView
-                android:id="@+id/list_item_history_img"
+                android:id="@+id/iv_brand_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/blank_image"

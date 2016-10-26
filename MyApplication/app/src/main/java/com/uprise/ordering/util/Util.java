@@ -12,6 +12,11 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import com.uprise.ordering.model.BrandModel;
+import com.uprise.ordering.model.ProductModel;
+
+import java.util.ArrayList;
+
 /**
  * Created by cicciolina on 10/15/16.
  */
@@ -123,6 +128,31 @@ public class Util {
 
         return newPoint;
 
+    }
+
+    // generate some random amount of child objects (1..10)
+    public ArrayList<ProductModel> generateProductModels() {
+        ArrayList<ProductModel> productModels = new ArrayList<>();
+        for(int i=0; i < 11; i++) {
+            ProductModel productModel = new ProductModel();
+            productModel.setName("Product "+i);
+            productModel.setBrands(generateBrands());
+            productModels.add(productModel);
+        }
+
+        return productModels;
+    }
+
+    public ArrayList<BrandModel> generateBrands() {
+        ArrayList<BrandModel> brands = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            BrandModel brandModel = new BrandModel();
+            brandModel.setBrandName("Brand " + i);
+            brandModel.setPrice(10d + brandModel.getPrice() + i);
+            brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
+            brands.add(brandModel);
+        }
+        return brands;
     }
 
 

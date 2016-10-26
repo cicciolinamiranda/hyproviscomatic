@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.uprise.ordering.R;
-import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
+import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
 
@@ -39,39 +39,15 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         super.onCreateView(inflater, container, savedInstanceState);
         fragmentView = inflater.inflate(R.layout.layout_shop_now, container, false);
         expandableListView = (ExpandableListView) fragmentView.findViewById(R.id.el_shop_now_products);
-        productModels = generateProductModels();
+
+        //TODO: to be replaced with Rest Call
+        productModels = Util.getInstance().generateProductModels();
         productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this);
         expandableListView.setAdapter(productsAdapter);
         expandableListView.setOnChildClickListener(this);
         sharedPreferences = new CartItemsSharedPref();
 
-        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext());
         return fragmentView;
-    }
-
-    // generate some random amount of child objects (1..10)
-    private ArrayList<ProductModel> generateProductModels() {
-        ArrayList<ProductModel> productModels = new ArrayList<>();
-        for(int i=0; i < 11; i++) {
-            ProductModel productModel = new ProductModel();
-            productModel.setName("Product "+i);
-            productModel.setBrands(generateBrands());
-            productModels.add(productModel);
-        }
-
-        return productModels;
-    }
-
-    private ArrayList<BrandModel> generateBrands() {
-        ArrayList<BrandModel> brands = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
-            BrandModel brandModel = new BrandModel();
-            brandModel.setBrandName("Brand " + i);
-            brandModel.setPrice(10d + brandModel.getPrice() + i);
-            brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
-            brands.add(brandModel);
-        }
-        return brands;
     }
 
     @Override

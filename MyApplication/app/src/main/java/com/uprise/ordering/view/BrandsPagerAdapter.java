@@ -96,7 +96,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         addToCartBtn.setOnClickListener(count);
 
         List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext);
-        if(cartItemsModelList !=null && !cartItemsModelList.isEmpty()) {
+        if(cartItemsModelList != null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
                 if (cartItemsModel.getBranchIndex() == position && cartItemsModel.getProductIndex() == productPosition) {
 //                    EditText etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
