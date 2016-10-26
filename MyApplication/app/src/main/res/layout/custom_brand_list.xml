@@ -4,13 +4,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <RelativeLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".80"
         android:weightSum="1"
-        android:id="@+id/rl_brand_image"
-        android:background="@drawable/blank_image"
+        android:scaleType="centerInside"
+        android:id="@+id/iv_brand_image"
+        android:src="@drawable/blank_image"
         />
     <TextView
         android:id="@+id/tv_brand_name"

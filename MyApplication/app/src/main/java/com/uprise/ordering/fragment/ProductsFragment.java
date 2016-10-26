@@ -68,6 +68,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
             BrandModel brandModel = new BrandModel();
             brandModel.setBrandName("Brand " + i);
             brandModel.setPrice(10d + brandModel.getPrice() + i);
+            brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
             brands.add(brandModel);
         }
         return brands;
@@ -83,7 +84,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     public void addToCart(CartItemsModel cartItemsModel) {
         List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext());
 
-        if(!items.isEmpty()) {
+        if(items != null && !items.isEmpty()) {
             sharedPreferences.addCartItems(getContext(), cartItemsModel);
         } else {
             sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());

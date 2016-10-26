@@ -56,17 +56,19 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     public void checkPermissions() {
         //TODO: check permissions
 
-        if (/**ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
+        if (/**  ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED
-                ||**/ ContextCompat.checkSelfPermission(this,
+                ||**/
+
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -81,7 +83,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
 
     public static void requestPermission(Activity activity){
         ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.CAMERA
+                new String[]{Manifest.permission.ACCESS_NETWORK_STATE
                         , Manifest.permission.READ_EXTERNAL_STORAGE
                         , Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 

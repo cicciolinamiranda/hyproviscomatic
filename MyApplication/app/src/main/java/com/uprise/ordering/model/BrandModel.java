@@ -8,6 +8,8 @@ import android.os.Parcelable;
  */
 
 public class BrandModel implements Parcelable {
+
+    private String brandPhotoUrl;
     private String brandName;
     private double price;
 
@@ -17,12 +19,14 @@ public class BrandModel implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(brandName);
         parcel.writeDouble(price);
+        parcel.writeString(brandPhotoUrl);
     }
 
     public BrandModel(Parcel in) {
         this();
         brandName = in.readString();
         price = in.readDouble();
+        brandPhotoUrl = in.readString();
     }
 
     public static final Creator<BrandModel> CREATOR = new Creator<BrandModel>() {
@@ -51,6 +55,14 @@ public class BrandModel implements Parcelable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getBrandPhotoUrl() {
+        return brandPhotoUrl;
+    }
+
+    public void setBrandPhotoUrl(String brandPhotoUrl) {
+        this.brandPhotoUrl = brandPhotoUrl;
     }
 
     @Override

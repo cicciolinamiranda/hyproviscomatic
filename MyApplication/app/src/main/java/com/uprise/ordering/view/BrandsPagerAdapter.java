@@ -2,15 +2,20 @@ package com.uprise.ordering.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +24,7 @@ import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
 
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -35,6 +41,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private ImageButton plusBtn;
     private ImageButton minusBtn;
     private EditText etQuantity;
+    private ImageView itemImage;
     private Button addToCartBtn;
     private int oldQtyValue;
     private BrandsPagerAdapter.BrandsAdapterListener listener;
@@ -73,6 +80,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         tvBrandPrice.setText(decimalFormat.format(web.get(position).getPrice())+" Php");
+        itemImage = (ImageView) itemView.findViewById(R.id.iv_brand_image);
+        new LoadImageAsyncTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
         etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
@@ -87,7 +96,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         addToCartBtn.setOnClickListener(count);
 
         List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext);
-        if(!cartItemsModelList.isEmpty()) {
+        if(cartItemsModelList !=null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
                 if (cartItemsModel.getBranchIndex() == position && cartItemsModel.getProductIndex() == productPosition) {
 //                    EditText etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
@@ -210,6 +219,33 @@ public class BrandsPagerAdapter extends PagerAdapter {
             saveEditBtn.setVisibility(View.GONE);
             oldQtyValue = count;
             addToCartBtn.setText(resources.getString(R.string.added_to_cart));
+        }
+    }
+
+    private class LoadImageAsyncTask extends AsyncTask<String, Void, Bitmap> {
+
+        private ImageView bmImage;
+        public LoadImageAsyncTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+
+//                Util.showToast(MainActivity.this,"Unable to load Profile Picture due to network connectivity loss");
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 }
