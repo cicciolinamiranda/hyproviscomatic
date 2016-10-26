@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class ProductModel implements Parcelable {
 
+    private String id;
     private String name;
     private ArrayList<BrandModel> brands;
 
@@ -20,12 +21,14 @@ public class ProductModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeTypedList(brands);
     }
 
     protected ProductModel(Parcel in) {
         this();
+        id = in.readString();
         name = in.readString();
         brands = in.createTypedArrayList(BrandModel.CREATOR);
     }
@@ -58,6 +61,13 @@ public class ProductModel implements Parcelable {
         this.brands = brands;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Override
     public int describeContents() {

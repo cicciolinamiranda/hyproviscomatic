@@ -113,7 +113,7 @@ public class ProductsAdapter extends BaseExpandableListAdapter {
         }
 
         viewPagerBrandList = (ViewPager) view.findViewById(R.id.viewpager_brand_list);
-        viewPagerBrandList.setAdapter(new BrandsPagerAdapter(context, mParent.get(i).getBrands(), brandsAdapterListener, i));
+        viewPagerBrandList.setAdapter(new BrandsPagerAdapter(context, mParent.get(i).getBrands(), brandsAdapterListener, mParent.get(i).getId()));
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
         rightNav = (ImageButton) view.findViewById(R.id.right_nav);
 

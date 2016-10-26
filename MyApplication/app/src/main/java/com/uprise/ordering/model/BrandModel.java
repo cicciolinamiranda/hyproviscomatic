@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class BrandModel implements Parcelable {
 
+    private String id;
     private String brandPhotoUrl;
     private String brandName;
     private double price;
@@ -17,6 +18,7 @@ public class BrandModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(brandName);
         parcel.writeDouble(price);
         parcel.writeString(brandPhotoUrl);
@@ -24,6 +26,7 @@ public class BrandModel implements Parcelable {
 
     public BrandModel(Parcel in) {
         this();
+        id = in.readString();
         brandName = in.readString();
         price = in.readDouble();
         brandPhotoUrl = in.readString();
@@ -63,6 +66,14 @@ public class BrandModel implements Parcelable {
 
     public void setBrandPhotoUrl(String brandPhotoUrl) {
         this.brandPhotoUrl = brandPhotoUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

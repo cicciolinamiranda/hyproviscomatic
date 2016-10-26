@@ -51,8 +51,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="0.2"
+                android:layout_weight="4"
                 android:layout_gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/ll_brand_name"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_brand_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:text="@string/label_brand_name"/>
                 <TextView
                     android:id="@+id/tv_brand_name"
                     android:layout_width="wrap_content"
@@ -62,6 +78,35 @@
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:text="Item Name" />
+                    </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/ll_product_name"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_product_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:text="@string/label_product_name"/>
+                    <TextView
+                        android:id="@+id/tv_product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:textSize="12sp"
+                        android:text="Product Name" />
+                </LinearLayout>
+
                 <!--<TextView-->
                     <!--android:id="@+id/list_item_history_time"-->
                     <!--android:layout_width="wrap_content"-->

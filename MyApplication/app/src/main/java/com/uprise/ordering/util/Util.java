@@ -16,6 +16,9 @@ import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.ProductModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by cicciolina on 10/15/16.
@@ -23,6 +26,20 @@ import java.util.ArrayList;
 public class Util {
 
     private static Util instance;
+
+    private static List<String> url = Arrays.asList("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg"
+                                    ,"http://www.trappsclassichumidors.com/wp-content/uploads/2014/08/shutterstock_116632465.jpg"
+                                    , "http://i.imgur.com/z4FaR3m.png"
+                                    ,"http://www.beste-cigarettebrands.com/wp-content/uploads/2014/05/v2pro_series3_package.png"
+                                    ,"http://www.dhresource.com/260x260s/f2-albu-g2-M00-E4-D0-rBVaGlbOi2iANimbAADaxFGu69Y909.jpg/new-updated-e-cigarette-vapor-storm-h30-8.jpg"
+                                    ,"http://image.dhgate.com/albu_384349298_00/1.0x0.jpg"
+                                    ,"http://image.made-in-china.com/43f34j00UZTtuGKrjYkf/Europa-First-Union-and-Famous-Electronic-Cigarette-Brand-Into-The-Market.jpg"
+                                    ,"https://upload.wikimedia.org/wikipedia/commons/2/2d/E_Cigarettes,_Ego,_Vaporizers_and_Box_Mods_(17679064871).jpg"
+                                    ,"http://e-cigarette-starter-kit.info/wp-content/uploads/2011/04/ecigarettebrands.png"
+                                    ,"http://www.cigarettesbrands.com/wp-content/uploads/2013/12/e-cigarette.png"
+                                    ,"http://www.ego-cigarettes.com/photo/pc889464-black_mini_affordable_brands_of_disposable_electric_cigarette_for_green_smoking.jpg");
+
+
 
     private Util() {
 
@@ -135,6 +152,7 @@ public class Util {
         ArrayList<ProductModel> productModels = new ArrayList<>();
         for(int i=0; i < 11; i++) {
             ProductModel productModel = new ProductModel();
+            productModel.setId(UUID.randomUUID().toString());
             productModel.setName("Product "+i);
             productModel.setBrands(generateBrands());
             productModels.add(productModel);
@@ -147,13 +165,16 @@ public class Util {
         ArrayList<BrandModel> brands = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
             BrandModel brandModel = new BrandModel();
+            brandModel.setId(UUID.randomUUID().toString());
             brandModel.setBrandName("Brand " + i);
             brandModel.setPrice(10d + brandModel.getPrice() + i);
-            brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
+            brandModel.setBrandPhotoUrl(Util.url.get(i));
             brands.add(brandModel);
         }
         return brands;
     }
+
+
 
 
 

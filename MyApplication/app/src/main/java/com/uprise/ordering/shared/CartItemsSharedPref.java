@@ -65,8 +65,8 @@ public class CartItemsSharedPref {
 
         int index =0;
         for(CartItemsModel model: cartItems) {
-            if(model.getBranchIndex() == cartItemsModel.getBranchIndex() &&
-                    model.getProductIndex() == cartItemsModel.getProductIndex()) {
+            if(model != null && model.getBranchId().equalsIgnoreCase(cartItemsModel.getBranchId()) &&
+                    model.getProductModelId().equalsIgnoreCase(cartItemsModel.getProductModelId())) {
                 cartItems.set(index, cartItemsModel);
             }
             index++;

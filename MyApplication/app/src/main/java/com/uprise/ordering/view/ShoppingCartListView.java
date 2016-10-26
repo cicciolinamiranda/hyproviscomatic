@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,6 +47,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     private View rowView;
     private TextView tvBrandName;
     private TextView tvBrandPrice;
+    private TextView tvProductName;
     private CartItemsModel savedCardItem;
     private ShoppingCartListView.ShoppingCartListViewListener listener;
 
@@ -73,6 +75,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         tvBrandName =(TextView) rowView.findViewById(R.id.tv_brand_name);
         itemImage = (ImageView) rowView.findViewById(R.id.iv_brand_image);
         tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
+        tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
         etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
@@ -80,32 +83,34 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         if(isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
-            BrandModel brandModel = productModels.get(cartItemsModels.get(position).getProductIndex()).getBrands()
-            .get(cartItemsModels.get(position).getBranchIndex());
 
-            if(brandModel != null) {
-                tvBrandName.setText(brandModel.getBrandName().toString());
-                tvBrandPrice.setText(decimalFormat.format(brandModel.getPrice()) + " Php");
-                new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(brandModel.getBrandPhotoUrl());
-                etQuantity.setText(cartItemsModels.get(position).getQuantity());
+            for(CartItemsModel model: cartItemsModels) {
+                ProductModel matchedProductModel = getMatchedProductModel(model, productModels);
+
+                tvProductName.setText(matchedProductModel.getName());
+                if(matchedProductModel != null &&
+                        !matchedProductModel.getBrands().isEmpty()) {
+                    BrandModel matchedBrandModel = getMatchedBrandModel(model, matchedProductModel.getBrands());
+                    if(matchedBrandModel != null) {
+                        tvBrandName.setText(matchedBrandModel.getBrandName().toString());
+                        tvBrandPrice.setText(decimalFormat.format(matchedBrandModel.getPrice()) + " Php");
+                        new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+                        etQuantity.setText(cartItemsModels.get(position).getQuantity());
+                    }
+                }
             }
+//            BrandModel brandModel = productModels.get(cartItemsModels.get(position).getProductIndex()).getBrands()
+//            .get(cartItemsModels.get(position).getBranchIndex());
+//
+//            if(brandModel != null) {
+//                tvBrandName.setText(brandModel.getBrandName().toString());
+//                tvBrandPrice.setText(decimalFormat.format(brandModel.getPrice()) + " Php");
+//                new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(brandModel.getBrandPhotoUrl());
+//                etQuantity.setText(cartItemsModels.get(position).getQuantity());
+//            }
 
         }
-//        TextView tvBrandName =(TextView) rowView.findViewById(R.id.tv_brand_name);
-
-//        TextView tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
-//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-//
-//        tvBrandPrice.setText(decimalFormat.format(web.get(position).getPrice())+" Php");
-
-//        new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
-//        addToCartBtn = (Button) rowView.findViewById(R.id.btn_add_to_cart);
-//        addToCartBtn.setVisibility(View.GONE);
-//        etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
-//        minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
-//        plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
-//        saveEditBtn = (Button)   rowView.findViewById(R.id.btn_save_edit_brand_item);
-        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBranchIndex(), cartItemsModels.get(position).getProductIndex());
+        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBranchId(), cartItemsModels.get(position).getProductModelId());
         etQuantity.addTextChangedListener(count);
         minusBtn.setOnClickListener(count);
         plusBtn.setOnClickListener(count);
@@ -166,14 +171,15 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         EditText etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
-        ImageButton deleteBtn;
-//        Button addToCartBtn;
-//        Button saveEditBtn;
-        int brandPosition;
-        int productPosition;
+        Button addToCartBtn;
+        Button saveEditBtn;
+        //        int brandPosition;
+//        int productPosition;
+        String brandId;
+        String productId;
         String beforeTextChanged;
         View itemView;
-        public CountListener(View itemView, int brandPosition, int productPosition) {
+        public CountListener(View itemView, String brandId, String productId) {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
@@ -181,8 +187,8 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
 //            addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
 //            saveEditBtn = (Button) itemView.findViewById(R.id.btn_save_edit_brand_item);
-            this.brandPosition = brandPosition;
-            this.productPosition = productPosition;
+            this.brandId = brandId;
+            this.productId = productId;
         }
         @Override
         public void onClick(View view) {
@@ -202,7 +208,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                     listener.editCartItem(savedCardItem);
                     break;
                 case R.id.btn_delete:
-                    listener.deleteCartItem(productPosition, brandPosition);
+                    listener.deleteCartItem(brandId, productId);
                     break;
             }
 
@@ -249,8 +255,8 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
         private void saveItem() {
             savedCardItem.setQuantity(count);
-            savedCardItem.setBranchIndex(brandPosition);
-            savedCardItem.setProductIndex(productPosition);
+            savedCardItem.setBranchId(brandId);
+            savedCardItem.setProductModelId(productId);
             savedCardItem.setCartItemsView(itemView);
 //            addToCartBtn.setEnabled(false);
 //            saveEditBtn.setVisibility(View.GONE);
@@ -260,7 +266,27 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     }
 
     public interface ShoppingCartListViewListener {
-        void deleteCartItem(int productPosition, int brandPosition);
+        void deleteCartItem(String branchId, String productId);
         void editCartItem(CartItemsModel cartItemsModel);
+    }
+
+    private ProductModel getMatchedProductModel(CartItemsModel cartItemsModel, List<ProductModel> productModels) {
+        ProductModel result = new ProductModel();
+        for(int i=0; i<productModels.size(); i++) {
+            if(productModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getProductModelId())) {
+                result = productModels.get(i);
+            }
+        }
+        return result;
+    }
+
+    private BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels) {
+        BrandModel result = new BrandModel();
+        for(int i=0; i<brandModels.size(); i++) {
+            if(brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
+                result = brandModels.get(i);
+            }
+        }
+        return result;
     }
 }
