@@ -2,16 +2,33 @@ package com.uprise.ordering.model;
 
 import android.view.View;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by cicciolina on 10/25/16.
  */
 
 public class CartItemsModel
 {
+    @Expose
     private int productIndex;
+    @Expose
     private int branchIndex;
+    @Expose
     private int quantity;
+    @Expose
     private View cartItemsView;
+
+    public CartItemsModel() {
+        super();
+    }
+
+    public CartItemsModel(int productIndex, int branchIndex, int quantity, View cartItemsView) {
+        this.productIndex = productIndex;
+        this.branchIndex = branchIndex;
+        this.quantity = quantity;
+        this.cartItemsView = cartItemsView;
+    }
 
     public View getCartItemsView() {
         return cartItemsView;

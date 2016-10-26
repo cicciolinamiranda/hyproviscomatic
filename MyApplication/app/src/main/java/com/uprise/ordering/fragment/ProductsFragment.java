@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
 
@@ -24,19 +23,15 @@ import java.util.List;
  * Created by cicciolina on 10/22/16.
  */
 
-public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener, BrandsPagerAdapter.BrandsAdapterListener, ProductsAdapter.ProductsAdapterListener {
+public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener, BrandsPagerAdapter.BrandsAdapterListener {
 
     private View fragmentView;
     private View childView;
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
-    private List<CartItemsModel> cartItemsModelList;
-
-//    private EditText etQuantity;
-//    private ImageButton minusBtn;
-//    private ImageButton plusBtn;
-//    private Button addToCartBtn;
+//    private List<CartItemsModel> cartItemsModelList;
+    private CartItemsSharedPref sharedPreferences;
 
     @Nullable
     @Override
@@ -45,10 +40,12 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         fragmentView = inflater.inflate(R.layout.layout_shop_now, container, false);
         expandableListView = (ExpandableListView) fragmentView.findViewById(R.id.el_shop_now_products);
         productModels = generateProductModels();
-        productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this);
+        productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this);
         expandableListView.setAdapter(productsAdapter);
         expandableListView.setOnChildClickListener(this);
-        cartItemsModelList = new ArrayList<>();
+        sharedPreferences = new CartItemsSharedPref();
+
+        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext());
         return fragmentView;
     }
 
@@ -84,39 +81,19 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
     @Override
     public void addToCart(CartItemsModel cartItemsModel) {
-        cartItemsModelList.add(cartItemsModel);
+        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext());
+
+        if(!items.isEmpty()) {
+            sharedPreferences.addCartItems(getContext(), cartItemsModel);
+        } else {
+            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
+        }
     }
 
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
-        if(!cartItemsModelList.isEmpty()) {
+        sharedPreferences.editCardItem(getContext(), cartItemsModel);
 
-            for (CartItemsModel localCartItems : cartItemsModelList) {
-                if (localCartItems.getProductIndex() == cartItemsModel.getProductIndex() &&
-                        localCartItems.getBranchIndex() == cartItemsModel.getBranchIndex()) {
-                    localCartItems.setQuantity(cartItemsModel.getQuantity());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onBrandPageSelected(int position) {
-
-        if(!cartItemsModelList.isEmpty()) {
-
-            for (CartItemsModel cartItemsModel : cartItemsModelList) {
-                if (cartItemsModel.getBranchIndex() == position) {
-                    EditText etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
-//                    ImageButton minusBtn = (ImageButton) cartItemsModel.getCartItemsView().findViewById(R.id.btn_minus_brand_qty);
-//                    ImageButton plusBtn = (ImageButton)  cartItemsModel.getCartItemsView().findViewById(R.id.btn_plus_brand_qty);
-                    Button addToCartBtn = (Button) cartItemsModel.getCartItemsView().findViewById(R.id.btn_add_to_cart);
-                    addToCartBtn.setEnabled(false);
-                    addToCartBtn.setText(getResources().getString(R.string.added_to_cart));
-                     etQuantity.setText(cartItemsModel.getQuantity()+"");
-                }
-            }
-        }
     }
 }
 

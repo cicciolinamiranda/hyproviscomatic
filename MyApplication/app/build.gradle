@@ -26,4 +26,5 @@ dependencies {
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     compile 'com.android.support:design:24.1.1'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'com.google.code.gson:gson:2.3'
 }

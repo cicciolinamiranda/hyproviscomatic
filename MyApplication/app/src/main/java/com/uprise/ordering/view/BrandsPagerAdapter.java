@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.shared.CartItemsSharedPref;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -40,6 +41,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private Button saveEditBtn;
     private int productPosition;
     private CartItemsModel savedCardItem;
+    private CartItemsSharedPref sharedPreferences;
 
     public BrandsPagerAdapter(Context context, List<BrandModel> web, BrandsPagerAdapter.BrandsAdapterListener listener, int productPosition ) {
         this.mContext = context;
@@ -49,6 +51,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         this.listener = listener;
         this.productPosition = productPosition;
         savedCardItem = new CartItemsModel();
+        sharedPreferences = new CartItemsSharedPref();
     }
 
     @Override
@@ -83,6 +86,19 @@ public class BrandsPagerAdapter extends PagerAdapter {
         plusBtn.setOnClickListener(count);
         addToCartBtn.setOnClickListener(count);
 
+        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext);
+        if(!cartItemsModelList.isEmpty()) {
+            for (CartItemsModel cartItemsModel : cartItemsModelList) {
+                if (cartItemsModel.getBranchIndex() == position && cartItemsModel.getProductIndex() == productPosition) {
+//                    EditText etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
+//                    Button addToCartBtn = (Button) cartItemsModel.getCartItemsView().findViewById(R.id.btn_add_to_cart);
+                    addToCartBtn.setEnabled(false);
+                    addToCartBtn.setText(resources.getString(R.string.added_to_cart));
+                    saveEditBtn.setVisibility(View.GONE);
+                    etQuantity.setText(cartItemsModel.getQuantity()+"");
+                }
+            }
+        }
         container.addView(itemView);
 
         return itemView;

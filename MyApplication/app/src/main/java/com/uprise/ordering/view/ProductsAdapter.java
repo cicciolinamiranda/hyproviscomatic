@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by cicciolina on 10/22/16.
  */
 
-public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPager.OnPageChangeListener {
+public class ProductsAdapter extends BaseExpandableListAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<ProductModel> mParent;
@@ -30,16 +30,14 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
     private ImageButton leftNav;
     private ImageButton rightNav;
     private BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener;
-    private ProductsAdapter.ProductsAdapterListener productsAdapterListener;
 
     public ProductsAdapter(Context context, ArrayList<ProductModel> parent, ExpandableListView accordion,
-                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener, ProductsAdapter.ProductsAdapterListener productsAdapterListener) {
+                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener) {
         this.mParent = parent;
         this.inflater = LayoutInflater.from(context);
         this.accordion = accordion;
         this.context = context;
         this.brandsAdapterListener = brandsAdapterListener;
-        this.productsAdapterListener = productsAdapterListener;
     }
 
     @Override
@@ -116,7 +114,6 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
 
         viewPagerBrandList = (ViewPager) view.findViewById(R.id.viewpager_brand_list);
         viewPagerBrandList.setAdapter(new BrandsPagerAdapter(context, mParent.get(i).getBrands(), brandsAdapterListener, i));
-        viewPagerBrandList.setOffscreenPageLimit( mParent.get(i).getBrands().size());
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
         rightNav = (ImageButton) view.findViewById(R.id.right_nav);
 
@@ -180,23 +177,5 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
 
         lastExpandedGroupPosition = groupPosition;
 
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        productsAdapterListener.onBrandPageSelected(position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    public interface ProductsAdapterListener {
-        void onBrandPageSelected(int position);
     }
 }
