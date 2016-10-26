@@ -52,4 +52,5 @@
     <string name="brand_qty_default">How many?</string>
     <string name="added_to_cart">Added to\ncart</string>
     <string name="action_save_new_qty">Save new\nquantity</string>
+    <string name="label_shopping_cart_no_label">Your cart is empty!</string>
 </resources>

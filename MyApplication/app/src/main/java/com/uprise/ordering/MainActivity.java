@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.uprise.ordering.fragment.ProductsFragment;
 import com.uprise.ordering.shared.LoginSharedPref;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity
 
     private ProductsFragment productsFragment;
     private LoginSharedPref loginSharedPref;
+    private View headerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
 //        FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
 //        productsFragment = new ProductsFragment();
 //            tx.replace(R.id.content_frame, productsFragment);
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
             finish();
         }
+
+        tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
 
     }
 

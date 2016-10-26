@@ -32,19 +32,18 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:textColor="@color/material_red"
             android:text="Price:"
             android:gravity="right"
             />
-        <TextView
-        android:id="@+id/tv_brand_price"
+            <TextView
+            android:id="@+id/tv_brand_price"
             android:layout_width="0dp"
             android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:text="0"
-        android:gravity="left"
-        />
+            android:layout_height="wrap_content" android:textColor="@color/material_red"
+            android:text="0"
+            android:gravity="left"
+            />
         </LinearLayout>
 
     <LinearLayout

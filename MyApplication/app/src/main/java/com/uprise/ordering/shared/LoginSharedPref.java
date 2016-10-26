@@ -47,6 +47,17 @@ public class LoginSharedPref {
                editor.putString(ApplicationConstants.IS_LOGIN,"");
                 editor.commit();
         }
+    }
 
+    public String getUsername(Context context) {
+        SharedPreferences settings;
+        String username = "";
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_PRIVATE);
+
+        if(settings.contains(ApplicationConstants.IS_LOGIN)) {
+            username = settings.getString(ApplicationConstants.IS_LOGIN, "");
+        }
+
+        return username;
     }
 }
