@@ -23,6 +23,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
+import com.uprise.ordering.shared.LoginSharedPref;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -49,8 +50,10 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private String productId;
     private CartItemsModel savedCardItem;
     private CartItemsSharedPref sharedPreferences;
+    private LoginSharedPref loginSharedPref;
+    private List<CartItemsModel> cartItemsModelList;
 
-    public BrandsPagerAdapter(Context context, List<BrandModel> web, BrandsPagerAdapter.BrandsAdapterListener listener, String productId) {
+    public BrandsPagerAdapter(Context context, List<BrandModel> web, List<CartItemsModel> cartItemsModelList, BrandsPagerAdapter.BrandsAdapterListener listener, String productId) {
         this.mContext = context;
         this.mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.resources = context.getResources();
@@ -60,6 +63,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
 //        this.productPosition = productPosition;
         savedCardItem = new CartItemsModel();
         sharedPreferences = new CartItemsSharedPref();
+        loginSharedPref = new LoginSharedPref();
+        this.cartItemsModelList = cartItemsModelList;
 
     }
 
@@ -97,14 +102,11 @@ public class BrandsPagerAdapter extends PagerAdapter {
         plusBtn.setOnClickListener(count);
         addToCartBtn.setOnClickListener(count);
 
-        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext);
+//        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext, loginSharedPref.getUsername(mContext));
         if(cartItemsModelList != null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
                 if (cartItemsModel.getBranchId().equalsIgnoreCase(web.get(position).getId())
                         && cartItemsModel.getProductModelId().equalsIgnoreCase(productId)) {
-//                if (cartItemsModel.getBranchIndex() == position && cartItemsModel.getProductIndex() == productPosition) {
-//                    etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
-//                    addToCartBtn = (Button) cartItemsModel.getCartItemsView().findViewById(R.id.btn_add_to_cart);
                     addToCartBtn.setEnabled(false);
                     addToCartBtn.setText(resources.getString(R.string.added_to_cart));
                     saveEditBtn.setVisibility(View.GONE);
@@ -226,7 +228,6 @@ public class BrandsPagerAdapter extends PagerAdapter {
             savedCardItem.setQuantity(count);
             savedCardItem.setBranchId(brandId);
             savedCardItem.setProductModelId(productId);
-            savedCardItem.setCartItemsView(itemView);
             oldQtyValue = count;
             addToCartBtn.setEnabled(false);
             saveEditBtn.setVisibility(View.GONE);

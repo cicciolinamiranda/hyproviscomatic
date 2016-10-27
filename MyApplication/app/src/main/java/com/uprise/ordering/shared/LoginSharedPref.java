@@ -17,7 +17,7 @@ public class LoginSharedPref {
     public void login(Context context, String username) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_MULTI_PROCESS);
         editor = settings.edit();
         editor.putString(ApplicationConstants.IS_LOGIN, username);
         editor.commit();
@@ -27,7 +27,7 @@ public class LoginSharedPref {
 // used for retrieving arraylist from json formatted string
         SharedPreferences settings;
         String username = "";
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
 
         if(settings.contains(ApplicationConstants.IS_LOGIN)) {
             username = settings.getString(ApplicationConstants.IS_LOGIN, "");
@@ -40,9 +40,8 @@ public class LoginSharedPref {
     }
 
     public void logOut(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
         SharedPreferences.Editor editor = settings.edit();
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_PRIVATE);
         if(isLoggedIn(context) && settings.contains(ApplicationConstants.IS_LOGIN)) {
                editor.putString(ApplicationConstants.IS_LOGIN,"");
                 editor.commit();
@@ -52,7 +51,7 @@ public class LoginSharedPref {
     public String getUsername(Context context) {
         SharedPreferences settings;
         String username = "";
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
 
         if(settings.contains(ApplicationConstants.IS_LOGIN)) {
             username = settings.getString(ApplicationConstants.IS_LOGIN, "");

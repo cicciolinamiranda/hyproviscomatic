@@ -55,4 +55,5 @@
     <string name="label_shopping_cart_no_label">Your cart is empty!</string>
     <string name="label_brand_name">Brand name: </string>
     <string name="label_product_name">Product name:</string>
+    <string name="changes_saved">Changes saved</string>
 </resources>

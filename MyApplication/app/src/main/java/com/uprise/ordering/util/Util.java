@@ -18,7 +18,6 @@ import com.uprise.ordering.model.ProductModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by cicciolina on 10/15/16.
@@ -152,7 +151,7 @@ public class Util {
         ArrayList<ProductModel> productModels = new ArrayList<>();
         for(int i=0; i < 11; i++) {
             ProductModel productModel = new ProductModel();
-            productModel.setId(UUID.randomUUID().toString());
+            productModel.setId("product_"+i);
             productModel.setName("Product "+i);
             productModel.setBrands(generateBrands());
             productModels.add(productModel);
@@ -165,7 +164,7 @@ public class Util {
         ArrayList<BrandModel> brands = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
             BrandModel brandModel = new BrandModel();
-            brandModel.setId(UUID.randomUUID().toString());
+            brandModel.setId("brand_"+i);
             brandModel.setBrandName("Brand " + i);
             brandModel.setPrice(10d + brandModel.getPrice() + i);
             brandModel.setBrandPhotoUrl(Util.url.get(i));

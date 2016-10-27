@@ -1,7 +1,5 @@
 package com.uprise.ordering.model;
 
-import android.view.View;
-
 import com.google.gson.annotations.Expose;
 
 /**
@@ -10,14 +8,8 @@ import com.google.gson.annotations.Expose;
 
 public class CartItemsModel
 {
-//    @Expose
-//    private int productIndex;
-//    @Expose
-//    private int branchIndex;
     @Expose
     private int quantity;
-    @Expose
-    private View cartItemsView;
 
     @Expose
     private String productModelId;
@@ -25,16 +17,11 @@ public class CartItemsModel
     @Expose
     private String branchId;
 
+    @Expose
+    private String userName;
+
     public CartItemsModel() {
         super();
-    }
-
-    public View getCartItemsView() {
-        return cartItemsView;
-    }
-
-    public void setCartItemsView(View cartItemsView) {
-        this.cartItemsView = cartItemsView;
     }
 
     public int getQuantity() {
@@ -59,5 +46,13 @@ public class CartItemsModel
 
     public void setBranchId(String branchId) {
         this.branchId = branchId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

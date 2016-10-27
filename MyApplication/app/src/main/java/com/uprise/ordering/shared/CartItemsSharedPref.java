@@ -25,7 +25,7 @@ public class CartItemsSharedPref {
     public void storeCartItems(Context context, List<CartItemsModel> cartItemsModelList) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_MULTI_PROCESS);
         editor = settings.edit();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         String cartItems = gson.toJson(cartItemsModelList);
@@ -33,24 +33,34 @@ public class CartItemsSharedPref {
         editor.commit();
     }
 
-    public ArrayList loadCartItems(Context context) {
+    public ArrayList loadCartItems(Context context, String username) {
 // used for retrieving arraylist from json formatted string
         SharedPreferences settings;
         List<CartItemsModel> carts;
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_MULTI_PROCESS);
         if (settings.contains(ApplicationConstants.CART_ITEMS)) {
             String cartsStr = settings.getString(ApplicationConstants.CART_ITEMS, "");
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             CartItemsModel[] cartItems = gson.fromJson(cartsStr,CartItemsModel[].class);
             carts = Arrays.asList(cartItems);
-            carts = new ArrayList(carts);
+//            carts = new ArrayList(carts);
         } else
             return null;
-        return (ArrayList) carts;
+
+        List<CartItemsModel> filteredCarts = new ArrayList<>();
+
+        if(carts != null && !carts.isEmpty()) {
+            for (CartItemsModel cart : carts) {
+                if (cart.getUserName() != null && cart.getUserName().trim().equals(username.trim())) {
+                    filteredCarts.add(cart);
+                }
+            }
+        }
+        return (ArrayList) filteredCarts;
     }
 
     public void addCartItems(Context context, CartItemsModel cartItemsModel) {
-        List<CartItemsModel> cartItems = loadCartItems(context);
+        List<CartItemsModel> cartItems = loadCartItems(context, cartItemsModel.getUserName());
         if (cartItems == null)
             cartItems = new ArrayList();
         cartItems.add(cartItemsModel);
@@ -58,7 +68,7 @@ public class CartItemsSharedPref {
     }
 
     public void editCardItem(Context context, CartItemsModel cartItemsModel) {
-        List<CartItemsModel> cartItems = loadCartItems(context);
+        List<CartItemsModel> cartItems = loadCartItems(context, cartItemsModel.getUserName());
         if (cartItems == null)
             cartItems = new ArrayList();
         cartItems.add(cartItemsModel);
@@ -74,8 +84,8 @@ public class CartItemsSharedPref {
         storeCartItems(context, cartItems);
     }
 
-    public void removeCardItem(Context context, CartItemsModel cartItemsModel) {
-        List<CartItemsModel> cartItems = loadCartItems(context);
+    public void removeCardItem(Context context, CartItemsModel cartItemsModel, String username) {
+        List<CartItemsModel> cartItems = loadCartItems(context, username);
         if (cartItems != null) {
             cartItems.remove(cartItemsModel);
             storeCartItems(context, cartItems);

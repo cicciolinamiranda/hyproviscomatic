@@ -257,11 +257,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             savedCardItem.setQuantity(count);
             savedCardItem.setBranchId(brandId);
             savedCardItem.setProductModelId(productId);
-            savedCardItem.setCartItemsView(itemView);
-//            addToCartBtn.setEnabled(false);
-//            saveEditBtn.setVisibility(View.GONE);
             oldQtyValue = count;
-//            addToCartBtn.setText(resources.getString(R.string.added_to_cart));
         }
     }
 

@@ -12,6 +12,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
+import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
@@ -32,6 +33,8 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private ArrayList<ProductModel> productModels;
 //    private List<CartItemsModel> cartItemsModelList;
     private CartItemsSharedPref sharedPreferences;
+    private LoginSharedPref loginSharedPref;
+    private String username;
 
     @Nullable
     @Override
@@ -42,11 +45,20 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
-        productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this);
-        expandableListView.setAdapter(productsAdapter);
         expandableListView.setOnChildClickListener(this);
         sharedPreferences = new CartItemsSharedPref();
+        loginSharedPref = new LoginSharedPref();
+        username = loginSharedPref.getUsername(getContext());
 
+        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+        populateProductList(items);
+//        expandableListView.setAdapter(productsAdapter);
+        registerForContextMenu(expandableListView);
+//        if(items !=null && !items.isEmpty()) {
+//            sharedPreferences.storeCartItems(getContext(), items);
+//        } else {
+//            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
+//        }
         return fragmentView;
     }
 
@@ -58,19 +70,43 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
     @Override
     public void addToCart(CartItemsModel cartItemsModel) {
-        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext());
+//        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+        cartItemsModel.setUserName(username);
+//
+//        if(!items.isEmpty()) {
+//            sharedPreferences.storeCartItems(getContext(), items);
+//        } else {
+//            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
+//        }
+        sharedPreferences.addCartItems(getContext(), cartItemsModel);
+        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+        populateProductList(items);
+        Util.getInstance().showSnackBarToast(getContext(), getString(R.string.changes_saved));
 
-        if(items != null && !items.isEmpty()) {
-            sharedPreferences.addCartItems(getContext(), cartItemsModel);
-        } else {
-            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
-        }
     }
 
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
+        cartItemsModel.setUserName(username);
         sharedPreferences.editCardItem(getContext(), cartItemsModel);
+        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+        populateProductList(items);
+        Util.getInstance().showSnackBarToast(getContext(), getString(R.string.changes_saved));
 
+    }
+
+    private void populateProductList(List<CartItemsModel> items) {
+//        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+
+        if(items !=null && !items.isEmpty()) {
+            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, items);
+            productsAdapter.notifyDataSetChanged();
+        }
+        else {
+            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
+            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, new ArrayList<CartItemsModel>());
+        }
+        expandableListView.setAdapter(productsAdapter);
     }
 }
 

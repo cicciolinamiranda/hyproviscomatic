@@ -11,15 +11,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.uprise.ordering.R;
+import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cicciolina on 10/22/16.
  */
 
-public class ProductsAdapter extends BaseExpandableListAdapter {
+public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPager.OnPageChangeListener {
 
     private LayoutInflater inflater;
     private ArrayList<ProductModel> mParent;
@@ -30,14 +32,17 @@ public class ProductsAdapter extends BaseExpandableListAdapter {
     private ImageButton leftNav;
     private ImageButton rightNav;
     private BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener;
+    private List<CartItemsModel> cartItemsModelList;
+    private int brandListSize;
 
     public ProductsAdapter(Context context, ArrayList<ProductModel> parent, ExpandableListView accordion,
-                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener) {
+                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener, List<CartItemsModel> cartItemsModelList) {
         this.mParent = parent;
         this.inflater = LayoutInflater.from(context);
         this.accordion = accordion;
         this.context = context;
         this.brandsAdapterListener = brandsAdapterListener;
+        this.cartItemsModelList = cartItemsModelList;
     }
 
     @Override
@@ -49,6 +54,7 @@ public class ProductsAdapter extends BaseExpandableListAdapter {
     @Override
     //counts the number of children items so the list knows how many times calls getChildView() method
     public int getChildrenCount(int i) {
+        this.brandListSize = mParent.get(i).getBrands().size();
         return 1;
     }
 
@@ -113,7 +119,10 @@ public class ProductsAdapter extends BaseExpandableListAdapter {
         }
 
         viewPagerBrandList = (ViewPager) view.findViewById(R.id.viewpager_brand_list);
-        viewPagerBrandList.setAdapter(new BrandsPagerAdapter(context, mParent.get(i).getBrands(), brandsAdapterListener, mParent.get(i).getId()));
+        BrandsPagerAdapter brandsPagerAdapter = new BrandsPagerAdapter(context, mParent.get(i).getBrands(), cartItemsModelList, brandsAdapterListener, mParent.get(i).getId());
+        brandsPagerAdapter.notifyDataSetChanged();
+        viewPagerBrandList.setAdapter(brandsPagerAdapter);
+        viewPagerBrandList.addOnPageChangeListener(this);
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
         rightNav = (ImageButton) view.findViewById(R.id.right_nav);
 
@@ -176,6 +185,30 @@ public class ProductsAdapter extends BaseExpandableListAdapter {
         super.onGroupExpanded(groupPosition);
 
         lastExpandedGroupPosition = groupPosition;
+
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        leftNav.setVisibility(View.VISIBLE);
+        rightNav.setVisibility(View.VISIBLE);
+
+        if(viewPagerBrandList.getCurrentItem() == 0) {
+            leftNav.setVisibility(View.GONE);
+        }
+
+        if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
+            rightNav.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 }
