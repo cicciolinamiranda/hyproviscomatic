@@ -110,10 +110,11 @@ public class BrandsPagerAdapter extends PagerAdapter {
                     saveEditBtn.setVisibility(View.GONE);
                     etQuantity.setText(cartItemsModel.getQuantity()+"");
                 }
+                oldQtyValue = cartItemsModel.getQuantity();
             }
         }
         container.addView(itemView);
-
+//        oldQtyValue = sharedPreferences.
         return itemView;
     }
 
@@ -157,13 +158,21 @@ public class BrandsPagerAdapter extends PagerAdapter {
 
             String qtyStr = etQuantity.getText().toString();
             if(!qtyStr.isEmpty()) count = Integer.parseInt(qtyStr);
-
+            saveEditBtn.setVisibility(View.GONE);
             switch(view.getId()) {
                 case R.id.btn_minus_brand_qty:
                     if(count > 0) count--;
+                    if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0) {
+                        saveEditBtn.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case R.id.btn_plus_brand_qty:
                     count++;
+                    if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0)
+
+                    {
+                        saveEditBtn.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case R.id.btn_add_to_cart:
                     saveItem();
@@ -187,14 +196,10 @@ public class BrandsPagerAdapter extends PagerAdapter {
         private void isCountZero() {
             minusBtn.setVisibility(View.GONE);
             addToCartBtn.setVisibility(View.GONE);
-            saveEditBtn.setVisibility(View.GONE);
             if(count > 0) {
                 minusBtn.setVisibility(View.VISIBLE);
                 addToCartBtn.setVisibility(View.VISIBLE);
             }
-
-
-            if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0) saveEditBtn.setVisibility(View.VISIBLE);
 
             etQuantity.setText(count+"");
         }
@@ -222,9 +227,9 @@ public class BrandsPagerAdapter extends PagerAdapter {
             savedCardItem.setBranchId(brandId);
             savedCardItem.setProductModelId(productId);
             savedCardItem.setCartItemsView(itemView);
+            oldQtyValue = count;
             addToCartBtn.setEnabled(false);
             saveEditBtn.setVisibility(View.GONE);
-            oldQtyValue = count;
             addToCartBtn.setText(resources.getString(R.string.added_to_cart));
         }
     }
