@@ -34,15 +34,20 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
     private BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener;
     private List<CartItemsModel> cartItemsModelList;
     private int brandListSize;
+    public int lastViewerPagePosition;
+    private ProductsAdapter.ProductsAdapterListener productsAdapterListener;
 
     public ProductsAdapter(Context context, ArrayList<ProductModel> parent, ExpandableListView accordion,
-                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener, List<CartItemsModel> cartItemsModelList) {
+                           BrandsPagerAdapter.BrandsAdapterListener brandsAdapterListener,
+                           ProductsAdapter.ProductsAdapterListener productsAdapterListener,
+                           List<CartItemsModel> cartItemsModelList) {
         this.mParent = parent;
         this.inflater = LayoutInflater.from(context);
         this.accordion = accordion;
         this.context = context;
         this.brandsAdapterListener = brandsAdapterListener;
         this.cartItemsModelList = cartItemsModelList;
+        this.productsAdapterListener = productsAdapterListener;
     }
 
     @Override
@@ -117,11 +122,12 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         if (view == null) {
             view = inflater.inflate(R.layout.shop_now_list_item_brands, viewGroup,false);
         }
-
         viewPagerBrandList = (ViewPager) view.findViewById(R.id.viewpager_brand_list);
-        BrandsPagerAdapter brandsPagerAdapter = new BrandsPagerAdapter(context, mParent.get(i).getBrands(), cartItemsModelList, brandsAdapterListener, mParent.get(i).getId());
-        brandsPagerAdapter.notifyDataSetChanged();
-        viewPagerBrandList.setAdapter(brandsPagerAdapter);
+
+            BrandsPagerAdapter brandsPagerAdapter = new BrandsPagerAdapter(context, mParent.get(i).getBrands(), cartItemsModelList, brandsAdapterListener, mParent.get(i).getId());
+            brandsPagerAdapter.notifyDataSetChanged();
+            viewPagerBrandList.setAdapter(brandsPagerAdapter);
+
         viewPagerBrandList.setOffscreenPageLimit(mParent.get(i).getBrands().size());
         viewPagerBrandList.addOnPageChangeListener(this);
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
@@ -164,6 +170,10 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
                 }
             }
         });
+
+        if(productsAdapterListener.isAddOrSaved()) {
+            viewPagerBrandList.setCurrentItem(productsAdapterListener.pageSaved());
+        }
         return view;
     }
 
@@ -201,15 +211,29 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
             rightNav.setVisibility(View.GONE);
         }
+
+        productsAdapterListener.onPageChange(viewPagerBrandList, position);
     }
 
     @Override
     public void onPageSelected(int position) {
+        lastViewerPagePosition = position;
+//        productsAdapterListener.onPageChange(viewPagerBrandList, position);
 
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public ViewPager getViewPagerBrandList() {
+        return viewPagerBrandList;
+    }
+
+    public interface ProductsAdapterListener {
+        void onPageChange(ViewPager viewPager, int position);
+        boolean isAddOrSaved();
+        int pageSaved();
     }
 }

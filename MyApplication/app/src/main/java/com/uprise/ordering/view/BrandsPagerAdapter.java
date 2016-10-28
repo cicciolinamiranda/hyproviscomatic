@@ -23,8 +23,6 @@ import android.widget.TextView;
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
-import com.uprise.ordering.shared.CartItemsSharedPref;
-import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -51,8 +49,6 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private Button saveEditBtn;
     private String productId;
     private CartItemsModel savedCardItem;
-    private CartItemsSharedPref sharedPreferences;
-    private LoginSharedPref loginSharedPref;
     private List<CartItemsModel> cartItemsModelList;
 
     public BrandsPagerAdapter(Context context, List<BrandModel> web, List<CartItemsModel> cartItemsModelList, BrandsPagerAdapter.BrandsAdapterListener listener, String productId) {
@@ -64,8 +60,6 @@ public class BrandsPagerAdapter extends PagerAdapter {
         this.productId = productId;
 //        this.productPosition = productPosition;
         savedCardItem = new CartItemsModel();
-        sharedPreferences = new CartItemsSharedPref();
-        loginSharedPref = new LoginSharedPref();
         this.cartItemsModelList = cartItemsModelList;
 
     }
@@ -277,5 +271,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
             });
 
         }
+
+
     }
 }

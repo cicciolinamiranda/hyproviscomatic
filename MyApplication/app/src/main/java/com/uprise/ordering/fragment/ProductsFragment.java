@@ -3,6 +3,7 @@ package com.uprise.ordering.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,8 @@ import java.util.List;
 
 public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener,
         ExpandableListView.OnGroupExpandListener,
-        BrandsPagerAdapter.BrandsAdapterListener {
+        BrandsPagerAdapter.BrandsAdapterListener,
+        ProductsAdapter.ProductsAdapterListener{
 
     private View fragmentView;
     private ProductsAdapter productsAdapter;
@@ -36,6 +38,9 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private LoginSharedPref loginSharedPref;
     private String username;
     private int lastExpandedPosition = -1;
+    private int lastViewPagerPosition = -1;
+    private ViewPager childView;
+    private boolean isAddOrSaved;
 
     @Nullable
     @Override
@@ -76,6 +81,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         sharedPreferences.addCartItems(getContext(), cartItemsModel);
         List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
         populateProductList(items);
+        isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(getContext(), getString(R.string.changes_saved));
 
     }
@@ -86,6 +92,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         sharedPreferences.editCardItem(getContext(), cartItemsModel);
         List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
         populateProductList(items);
+        isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(getContext(), getString(R.string.changes_saved));
 
     }
@@ -94,12 +101,12 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 //        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
 
         if(items !=null && !items.isEmpty()) {
-            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, items);
+            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
             productsAdapter.notifyDataSetChanged();
         }
         else {
             sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
-            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, new ArrayList<CartItemsModel>());
+            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         }
         expandableListView.setAdapter(productsAdapter);
 
@@ -119,7 +126,25 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 //
     @Override
     public void onGroupExpand(int groupPosition) {
+        isAddOrSaved = false;
         lastExpandedPosition = groupPosition;
+    }
+
+
+    @Override
+    public void onPageChange(ViewPager viewPager, int position) {
+        childView = viewPager;
+        lastViewPagerPosition = position;
+    }
+
+    @Override
+    public boolean isAddOrSaved() {
+        return isAddOrSaved;
+    }
+
+    @Override
+    public int pageSaved() {
+        return lastViewPagerPosition;
     }
 }
 
