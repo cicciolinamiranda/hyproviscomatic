@@ -23,6 +23,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -84,21 +85,21 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
         if(isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
 
-            for(CartItemsModel model: cartItemsModels) {
-                ProductModel matchedProductModel = getMatchedProductModel(model, productModels);
+            int productIndex = 0;
+                ProductModel matchedProductModel = getMatchedProductModel(cartItemsModels.get(position), productModels);
 
-                tvProductName.setText(matchedProductModel.getName());
                 if(matchedProductModel != null &&
                         !matchedProductModel.getBrands().isEmpty()) {
-                    BrandModel matchedBrandModel = getMatchedBrandModel(model, matchedProductModel.getBrands());
+                    BrandModel matchedBrandModel = getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
                     if(matchedBrandModel != null) {
+                        tvProductName.setText(matchedProductModel.getName());
                         tvBrandName.setText(matchedBrandModel.getBrandName().toString());
                         tvBrandPrice.setText(decimalFormat.format(matchedBrandModel.getPrice()) + " Php");
                         new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
-                        etQuantity.setText(cartItemsModels.get(position).getQuantity());
+                        etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
                     }
                 }
-            }
+
 //            BrandModel brandModel = productModels.get(cartItemsModels.get(position).getProductIndex()).getBrands()
 //            .get(cartItemsModels.get(position).getBranchIndex());
 //
@@ -146,9 +147,17 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
+            }
+            catch (OutOfMemoryError e) {
 
-//                Util.showToast(MainActivity.this,"Unable to load Profile Picture due to network connectivity loss");
+                Util.getInstance().showSnackBarToast(context,"Unable to load Profile Picture due no response from the image source");
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+
+            catch (Exception e) {
+
+                Util.getInstance().showSnackBarToast(context,"Unable to load Profile Picture due to network connectivity loss");
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
@@ -208,7 +217,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                     listener.editCartItem(savedCardItem);
                     break;
                 case R.id.btn_delete:
-                    listener.deleteCartItem(brandId, productId);
+                    listener.deleteCartItem(savedCardItem);
                     break;
             }
 
@@ -232,7 +241,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
 //            if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0) saveEditBtn.setVisibility(View.VISIBLE);
 
-//            etQuantity.setText(count);
+            etQuantity.setText(count+"");
         }
 
         @Override
@@ -262,7 +271,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     }
 
     public interface ShoppingCartListViewListener {
-        void deleteCartItem(String branchId, String productId);
+        void deleteCartItem(CartItemsModel cartItemsModel);
         void editCartItem(CartItemsModel cartItemsModel);
     }
 
@@ -276,10 +285,11 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         return result;
     }
 
-    private BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels) {
+    private BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels, String productId) {
         BrandModel result = new BrandModel();
         for(int i=0; i<brandModels.size(); i++) {
-            if(brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
+            if(cartItemsModel.getProductModelId().equalsIgnoreCase(productId) &&
+                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
                 result = brandModels.get(i);
             }
         }

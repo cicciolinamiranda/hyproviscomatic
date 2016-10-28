@@ -24,6 +24,7 @@ import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -248,9 +249,16 @@ public class BrandsPagerAdapter extends PagerAdapter {
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
+            } catch (OutOfMemoryError e) {
 
-//                Util.showToast(MainActivity.this,"Unable to load Profile Picture due to network connectivity loss");
+                Util.getInstance().showSnackBarToast(mContext,"Unable to load Profile Picture due no response from the image source");
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+
+            catch (Exception e) {
+
+                Util.getInstance().showSnackBarToast(mContext,"Unable to load Profile Picture due to network connectivity loss");
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }

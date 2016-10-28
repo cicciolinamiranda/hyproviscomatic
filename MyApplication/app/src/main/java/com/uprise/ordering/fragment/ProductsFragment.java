@@ -31,7 +31,6 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
-//    private List<CartItemsModel> cartItemsModelList;
     private CartItemsSharedPref sharedPreferences;
     private LoginSharedPref loginSharedPref;
     private String username;
@@ -70,14 +69,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
     @Override
     public void addToCart(CartItemsModel cartItemsModel) {
-//        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
         cartItemsModel.setUserName(username);
-//
-//        if(!items.isEmpty()) {
-//            sharedPreferences.storeCartItems(getContext(), items);
-//        } else {
-//            sharedPreferences.storeCartItems(getContext(), new ArrayList<CartItemsModel>());
-//        }
         sharedPreferences.addCartItems(getContext(), cartItemsModel);
         List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
         populateProductList(items);

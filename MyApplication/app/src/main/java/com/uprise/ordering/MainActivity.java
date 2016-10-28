@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch(item.getItemId()) {
 
+            case R.id.nav_shopping_cart:
+//                finish();
+                startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));
+                break;
             case R.id.nav_logout:
 
                 if(loginSharedPref.isLoggedIn(MainActivity.this)) {
@@ -106,5 +110,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+
+
     }
 }

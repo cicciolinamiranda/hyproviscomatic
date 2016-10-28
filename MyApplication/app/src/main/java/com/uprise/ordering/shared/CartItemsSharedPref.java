@@ -71,7 +71,7 @@ public class CartItemsSharedPref {
         List<CartItemsModel> cartItems = loadCartItems(context, cartItemsModel.getUserName());
         if (cartItems == null)
             cartItems = new ArrayList();
-        cartItems.add(cartItemsModel);
+        //cartItems.add(cartItemsModel);
 
         int index =0;
         for(CartItemsModel model: cartItems) {
@@ -84,8 +84,8 @@ public class CartItemsSharedPref {
         storeCartItems(context, cartItems);
     }
 
-    public void removeCardItem(Context context, CartItemsModel cartItemsModel, String username) {
-        List<CartItemsModel> cartItems = loadCartItems(context, username);
+    public void removeCardItem(Context context, CartItemsModel cartItemsModel) {
+        List<CartItemsModel> cartItems = loadCartItems(context, cartItemsModel.getUserName());
         if (cartItems != null) {
             cartItems.remove(cartItemsModel);
             storeCartItems(context, cartItems);
