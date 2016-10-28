@@ -17,7 +17,7 @@ public class LoginSharedPref {
     public void login(Context context, String username) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_MULTI_PROCESS);
+        settings = context.getSharedPreferences(ApplicationConstants.IS_LOGIN,Context.MODE_PRIVATE);
         editor = settings.edit();
         editor.putString(ApplicationConstants.IS_LOGIN, username);
         editor.commit();
@@ -27,7 +27,7 @@ public class LoginSharedPref {
 // used for retrieving arraylist from json formatted string
         SharedPreferences settings;
         String username = "";
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
+        settings = context.getSharedPreferences(ApplicationConstants.IS_LOGIN, Context.MODE_PRIVATE);
 
         if(settings.contains(ApplicationConstants.IS_LOGIN)) {
             username = settings.getString(ApplicationConstants.IS_LOGIN, "");
@@ -40,7 +40,7 @@ public class LoginSharedPref {
     }
 
     public void logOut(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
+        SharedPreferences settings = context.getSharedPreferences(ApplicationConstants.IS_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         if(isLoggedIn(context) && settings.contains(ApplicationConstants.IS_LOGIN)) {
                editor.putString(ApplicationConstants.IS_LOGIN,"");
@@ -51,7 +51,7 @@ public class LoginSharedPref {
     public String getUsername(Context context) {
         SharedPreferences settings;
         String username = "";
-        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE, Context.MODE_MULTI_PROCESS);
+        settings = context.getSharedPreferences(ApplicationConstants.IS_LOGIN, Context.MODE_PRIVATE);
 
         if(settings.contains(ApplicationConstants.IS_LOGIN)) {
             username = settings.getString(ApplicationConstants.IS_LOGIN, "");

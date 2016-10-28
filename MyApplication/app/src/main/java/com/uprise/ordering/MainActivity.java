@@ -3,6 +3,7 @@ package com.uprise.ordering;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -39,19 +40,19 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
-//        FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
-//        productsFragment = new ProductsFragment();
-//            tx.replace(R.id.content_frame, productsFragment);
-//        tx.commit();
-        productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
+
         loginSharedPref = new LoginSharedPref();
         if(!loginSharedPref.isLoggedIn(MainActivity.this)) {
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
             finish();
+        } else {
+            tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
+//            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
+            productsFragment = new ProductsFragment();
+            FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
+            tx.replace(R.id.content_frame, productsFragment);
+            tx.commit();
         }
-
-        tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
-
     }
 
     @Override

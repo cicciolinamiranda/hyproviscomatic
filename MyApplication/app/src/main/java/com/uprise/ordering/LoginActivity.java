@@ -84,6 +84,10 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_loading_layout);
+        loginSharedPref = new LoginSharedPref();
+
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +95,6 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_loading_layout);
-        loginSharedPref = new LoginSharedPref();
     }
 
     private void populateAutoComplete() {
@@ -187,8 +188,17 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            //TODO: WHEN API IS AVAILABLE
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+        }
+
+
+        if(!loginSharedPref.isLoggedIn(LoginActivity.this)) {
+            loginSharedPref.login(LoginActivity.this, email);
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
     }
     private boolean isEmailValid(String email) {
