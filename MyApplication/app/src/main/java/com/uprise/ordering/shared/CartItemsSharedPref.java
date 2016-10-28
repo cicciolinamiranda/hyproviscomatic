@@ -96,4 +96,10 @@ public class CartItemsSharedPref {
             storeCartItems(context, cartItems);
         }
     }
+
+    public void removeAll(Context context, String username) {
+        List<CartItemsModel> cartItems = loadCartItems(context, username);
+        cartItems.clear();
+        storeCartItems(context, cartItems);
+    }
 }

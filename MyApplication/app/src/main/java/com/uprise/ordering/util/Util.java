@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.uprise.ordering.model.BrandModel;
+import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 
 import java.util.ArrayList;
@@ -173,6 +174,33 @@ public class Util {
         return brands;
     }
 
+    public ProductModel getMatchedProductModel(CartItemsModel cartItemsModel, List<ProductModel> productModels) {
+        ProductModel result = new ProductModel();
+        for(int i=0; i<productModels.size(); i++) {
+            if(productModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getProductModelId())) {
+                result = productModels.get(i);
+            }
+        }
+        return result;
+    }
+
+
+    public BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels, String productId) {
+        BrandModel result = new BrandModel();
+        for(int i=0; i<brandModels.size(); i++) {
+            if(cartItemsModel.getProductModelId().equalsIgnoreCase(productId) &&
+                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
+                result = brandModels.get(i);
+            }
+        }
+        return result;
+    }
+
+    public boolean isProductsAndCartItemsNotEmpty(List<ProductModel> productModels,
+                                                   List<CartItemsModel> cartItemsModels) {
+        return cartItemsModels != null && !cartItemsModels.isEmpty() && productModels != null
+                && !productModels.isEmpty();
+    }
 
 
 

@@ -49,6 +49,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     private TextView tvBrandPrice;
     private TextView tvProductName;
     private CartItemsModel savedCardItem;
+    private DecimalFormat decimalFormat;
     private ShoppingCartListView.ShoppingCartListViewListener listener;
 
     private List<ProductModel> productModels;
@@ -80,16 +81,15 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat = new DecimalFormat("#.##");
 
-        if(isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
+        if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
 
-            int productIndex = 0;
-                ProductModel matchedProductModel = getMatchedProductModel(cartItemsModels.get(position), productModels);
+                ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);
 
                 if(matchedProductModel != null &&
                         !matchedProductModel.getBrands().isEmpty()) {
-                    BrandModel matchedBrandModel = getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
+                    BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
                     if(matchedBrandModel != null) {
                         tvProductName.setText(matchedProductModel.getName());
                         tvBrandName.setText(matchedBrandModel.getBrandName().toString());
@@ -99,16 +99,6 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                     }
                 }
 
-//            BrandModel brandModel = productModels.get(cartItemsModels.get(position).getProductIndex()).getBrands()
-//            .get(cartItemsModels.get(position).getBranchIndex());
-//
-//            if(brandModel != null) {
-//                tvBrandName.setText(brandModel.getBrandName().toString());
-//                tvBrandPrice.setText(decimalFormat.format(brandModel.getPrice()) + " Php");
-//                new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(brandModel.getBrandPhotoUrl());
-//                etQuantity.setText(cartItemsModels.get(position).getQuantity());
-//            }
-
         }
         ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBranchId(), cartItemsModels.get(position).getProductModelId());
         etQuantity.addTextChangedListener(count);
@@ -116,19 +106,6 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         plusBtn.setOnClickListener(count);
         deleteBtn.setOnClickListener(count);
 
-//        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(context);
-//        if(cartItemsModelList !=null && !cartItemsModelList.isEmpty()) {
-//            for (CartItemsModel cartItemsModel : cartItemsModelList) {
-//                if (cartItemsModel.getBranchIndex() == position && cartItemsModel.getProductIndex() == productPosition) {
-////                    EditText etQuantity = (EditText) cartItemsModel.getCartItemsView().findViewById(R.id.et_brand_qty);
-////                    Button addToCartBtn = (Button) cartItemsModel.getCartItemsView().findViewById(R.id.btn_add_to_cart);
-//                    addToCartBtn.setEnabled(false);
-//                    addToCartBtn.setText(resources.getString(R.string.added_to_cart));
-//                    saveEditBtn.setVisibility(View.GONE);
-//                    etQuantity.setText(cartItemsModel.getQuantity()+"");
-//                }
-//            }
-//        }
         return rowView;
     }
 
@@ -163,16 +140,17 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             return mIcon11;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+        protected void onPostExecute(final Bitmap result) {
+            Activity activity = context;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bmImage.setImageBitmap(result);
+                }
+            });
         }
     }
 
-    private boolean isProductsAndCartItemsNotEmpty(List<ProductModel> productModels,
-                                                   List<CartItemsModel> cartItemsModels) {
-     return cartItemsModels != null && !cartItemsModels.isEmpty() && productModels != null
-             && !productModels.isEmpty();
-    }
 
     private class CountListener implements View.OnClickListener, TextWatcher {
         int count;
@@ -273,26 +251,5 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     public interface ShoppingCartListViewListener {
         void deleteCartItem(CartItemsModel cartItemsModel);
         void editCartItem(CartItemsModel cartItemsModel);
-    }
-
-    private ProductModel getMatchedProductModel(CartItemsModel cartItemsModel, List<ProductModel> productModels) {
-        ProductModel result = new ProductModel();
-        for(int i=0; i<productModels.size(); i++) {
-            if(productModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getProductModelId())) {
-                result = productModels.get(i);
-            }
-        }
-        return result;
-    }
-
-    private BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels, String productId) {
-        BrandModel result = new BrandModel();
-        for(int i=0; i<brandModels.size(); i++) {
-            if(cartItemsModel.getProductModelId().equalsIgnoreCase(productId) &&
-                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
-                result = brandModels.get(i);
-            }
-        }
-        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.uprise.ordering.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -265,8 +266,16 @@ public class BrandsPagerAdapter extends PagerAdapter {
             return mIcon11;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+        protected void onPostExecute(final Bitmap result) {
+
+            Activity activity = (Activity) mContext;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bmImage.setImageBitmap(result);
+                }
+            });
+
         }
     }
 }

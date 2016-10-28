@@ -56,4 +56,7 @@
     <string name="label_brand_name">Brand name: </string>
     <string name="label_product_name">Product name:</string>
     <string name="changes_saved">Changes saved</string>
+    <string name="btn_proceed_to_checkout">Proceed to checkout</string>
+    <string name="estimated_total_label">Estimated total:</string>
+    <string name="action_checkout">Order sent. Please wait for email approval</string>
 </resources>

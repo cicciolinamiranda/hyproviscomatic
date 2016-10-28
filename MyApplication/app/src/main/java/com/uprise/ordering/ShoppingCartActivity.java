@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
@@ -16,29 +18,39 @@ import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ShoppingCartActivity extends AppCompatActivity implements ShoppingCartListView.ShoppingCartListViewListener {
+public class ShoppingCartActivity extends AppCompatActivity implements ShoppingCartListView.ShoppingCartListViewListener,
+View.OnClickListener {
 
     private LinearLayout llNoRecords;
     private LinearLayout llShopCartList;
+    private LinearLayout llLowerLayouts;
+    private LinearLayout llProceedToCheckout;
     private ListView lvShoppingCartList;
+    private TextView tvEstimatedTotal;
     private ArrayAdapter<CartItemsModel> cartItemsModelArrayAdapter;
     private CartItemsSharedPref cartItemsSharedPref;
     private LoginSharedPref loginSharedPref;
     private ArrayList<ProductModel> productModels;
     private ArrayList<CartItemsModel> cartItemsModelArrayList;
+    private DecimalFormat decimalFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
+        decimalFormat = new DecimalFormat("#.##");
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
         llShopCartList = (LinearLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
-        lvShoppingCartList.setClickable(true);
-        lvShoppingCartList.setFocusable(true);
+        llLowerLayouts = (LinearLayout) findViewById(R.id.ll_shopping_cart_lower_layout);
+        tvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_total_value);
+        llProceedToCheckout = (LinearLayout) findViewById(R.id.ll_shopping_cart_proceed_checkout);
+        llProceedToCheckout.setOnClickListener(this);
         cartItemsSharedPref = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         //TODO: to be replaced with Rest Call
@@ -47,6 +59,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
                 loginSharedPref.getUsername(ShoppingCartActivity.this));
         populateList();
         getSupportActionBar().setTitle("Cart Items");
+
 
     }
 
@@ -71,6 +84,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
     private void populateList() {
         llNoRecords.findViewById(View.GONE);
         llShopCartList.findViewById(View.VISIBLE);
+        llLowerLayouts.findViewById(View.VISIBLE);
 
         if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
@@ -78,9 +92,13 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
             cartItemsModelArrayAdapter.notifyDataSetChanged();
             lvShoppingCartList.setAdapter(cartItemsModelArrayAdapter);
             registerForContextMenu(lvShoppingCartList);
+
+            double total = computeEstimatedTotal(cartItemsModelArrayList);
+            tvEstimatedTotal.setText(decimalFormat.format(total).toString());
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
             llShopCartList.setVisibility(View.GONE);
+            llLowerLayouts.setVisibility(View.GONE);
         }
     }
 
@@ -95,5 +113,41 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         return true;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ll_shopping_cart_proceed_checkout:
+                Util.getInstance().showSnackBarToast(this, getString(R.string.action_checkout));
+
+                //TODO: Must transfer in MyOrders
+                cartItemsSharedPref.removeAll(ShoppingCartActivity.this, loginSharedPref.getUsername(ShoppingCartActivity.this));
+                finish();
+                startActivity(getIntent());
+                break;
+        }
+    }
+
+    private double computeEstimatedTotal(List<CartItemsModel> cartItemsModels) {
+        double total = 0d;
+
+
+        for (CartItemsModel model : cartItemsModels) {
+            if (Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
+
+
+                ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(model, productModels);
+
+                if (matchedProductModel != null &&
+                        !matchedProductModel.getBrands().isEmpty()) {
+                    BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(model, matchedProductModel.getBrands(), matchedProductModel.getId());
+                    if (matchedBrandModel != null) {
+                        total += matchedBrandModel.getPrice() * model.getQuantity();
+                    }
+                }
+
+            }
+        }
+        return total;
+    }
 }
 
