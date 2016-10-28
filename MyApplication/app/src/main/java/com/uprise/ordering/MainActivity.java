@@ -3,7 +3,6 @@ package com.uprise.ordering;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,10 +47,10 @@ public class MainActivity extends AppCompatActivity
         } else {
             tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
 //            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
-            productsFragment = new ProductsFragment();
-            FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
-            tx.replace(R.id.content_frame, productsFragment);
-            tx.commit();
+//            productsFragment = new ProductsFragment();
+//            FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
+//            tx.replace(R.id.content_frame, productsFragment);
+//            tx.commit();
         }
     }
 
@@ -93,6 +92,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch(item.getItemId()) {
 
+            case R.id.nav_shop_now:
+                finish();
+                startActivity(new Intent(MainActivity.this, ProductsActivity.class));
+                break;
             case R.id.nav_shopping_cart:
                 finish();
                 startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));

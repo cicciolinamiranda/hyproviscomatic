@@ -219,6 +219,14 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
     public void onPageSelected(int position) {
         lastViewerPagePosition = position;
 //        productsAdapterListener.onPageChange(viewPagerBrandList, position);
+        if(viewPagerBrandList.getCurrentItem() == 0) {
+            leftNav.setVisibility(View.GONE);
+        }
+
+        if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
+            rightNav.setVisibility(View.GONE);
+        }
+
 
     }
 

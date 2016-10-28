@@ -25,7 +25,7 @@ public class CartItemsSharedPref {
     public void storeCartItems(Context context, List<CartItemsModel> cartItemsModelList) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
-        settings = context.getSharedPreferences(ApplicationConstants.CART_ITEMS,Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
         editor = settings.edit();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         String cartItems = gson.toJson(cartItemsModelList);
@@ -37,7 +37,7 @@ public class CartItemsSharedPref {
 // used for retrieving arraylist from json formatted string
         SharedPreferences settings;
         List<CartItemsModel> carts;
-        settings = context.getSharedPreferences(ApplicationConstants.CART_ITEMS,Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
         if (settings.contains(ApplicationConstants.CART_ITEMS)) {
             String cartsStr = settings.getString(ApplicationConstants.CART_ITEMS, "");
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();

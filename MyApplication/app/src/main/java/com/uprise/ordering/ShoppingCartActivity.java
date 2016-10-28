@@ -18,7 +18,6 @@ import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +35,14 @@ View.OnClickListener {
     private LoginSharedPref loginSharedPref;
     private ArrayList<ProductModel> productModels;
     private ArrayList<CartItemsModel> cartItemsModelArrayList;
-    private DecimalFormat decimalFormat;
+//    private DecimalFormat decimalFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
-        decimalFormat = new DecimalFormat("#.##");
+//        decimalFormat = new DecimalFormat("#.##");
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
         llShopCartList = (LinearLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
@@ -94,7 +93,7 @@ View.OnClickListener {
             registerForContextMenu(lvShoppingCartList);
 
             double total = computeEstimatedTotal(cartItemsModelArrayList);
-            tvEstimatedTotal.setText(decimalFormat.format(total).toString());
+            tvEstimatedTotal.setText(String.format("%.2f", total)+" Php");
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
             llShopCartList.setVisibility(View.GONE);

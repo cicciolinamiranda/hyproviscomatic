@@ -25,7 +25,6 @@ import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     private TextView tvBrandPrice;
     private TextView tvProductName;
     private CartItemsModel savedCardItem;
-    private DecimalFormat decimalFormat;
+//    private DecimalFormat decimalFormat;
     private ShoppingCartListView.ShoppingCartListViewListener listener;
 
     private List<ProductModel> productModels;
@@ -81,7 +80,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
-        decimalFormat = new DecimalFormat("#.##");
+//        decimalFormat = new DecimalFormat("#.##");
 
         if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
 
@@ -93,7 +92,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                     if(matchedBrandModel != null) {
                         tvProductName.setText(matchedProductModel.getName());
                         tvBrandName.setText(matchedBrandModel.getBrandName().toString());
-                        tvBrandPrice.setText(decimalFormat.format(matchedBrandModel.getPrice()) + " Php");
+                        tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
                         new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
                         etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
                     }

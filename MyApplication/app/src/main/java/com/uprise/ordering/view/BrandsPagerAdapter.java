@@ -26,7 +26,6 @@ import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -80,9 +79,9 @@ public class BrandsPagerAdapter extends PagerAdapter {
         TextView tvBrandName =(TextView) itemView.findViewById(R.id.tv_brand_name);
         tvBrandName.setText(web.get(position).getBrandName());
         TextView tvBrandPrice =(TextView) itemView.findViewById(R.id.tv_brand_price);
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-        tvBrandPrice.setText(decimalFormat.format(web.get(position).getPrice())+" Php");
+        tvBrandPrice.setText(String.format("%.2f", web.get(position).getPrice())+" Php");
         itemImage = (ImageView) itemView.findViewById(R.id.iv_brand_image);
         new LoadImageAsyncTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
