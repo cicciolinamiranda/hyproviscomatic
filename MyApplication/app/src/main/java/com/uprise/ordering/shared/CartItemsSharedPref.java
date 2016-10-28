@@ -87,7 +87,12 @@ public class CartItemsSharedPref {
     public void removeCardItem(Context context, CartItemsModel cartItemsModel) {
         List<CartItemsModel> cartItems = loadCartItems(context, cartItemsModel.getUserName());
         if (cartItems != null) {
-            cartItems.remove(cartItemsModel);
+            for(int i=0; i<cartItems.size(); i++) {
+                if(cartItems.get(i) !=null && cartItems.get(i).getBranchId().equalsIgnoreCase(cartItemsModel.getBranchId())
+                        && cartItems.get(i).getProductModelId().equalsIgnoreCase(cartItemsModel.getProductModelId())) {
+                    cartItems.remove(cartItems.get(i));
+                }
+            }
             storeCartItems(context, cartItems);
         }
     }

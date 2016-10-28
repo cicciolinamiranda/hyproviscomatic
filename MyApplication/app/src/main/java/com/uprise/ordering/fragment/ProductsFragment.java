@@ -24,16 +24,18 @@ import java.util.List;
  * Created by cicciolina on 10/22/16.
  */
 
-public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener, BrandsPagerAdapter.BrandsAdapterListener {
+public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener,
+        ExpandableListView.OnGroupExpandListener,
+        BrandsPagerAdapter.BrandsAdapterListener {
 
     private View fragmentView;
-    private View childView;
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
     private CartItemsSharedPref sharedPreferences;
     private LoginSharedPref loginSharedPref;
     private String username;
+    private int lastExpandedPosition = -1;
 
     @Nullable
     @Override
@@ -45,6 +47,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
+        expandableListView.setOnGroupExpandListener(this);
         sharedPreferences = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         username = loginSharedPref.getUsername(getContext());
@@ -99,6 +102,24 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
             productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, new ArrayList<CartItemsModel>());
         }
         expandableListView.setAdapter(productsAdapter);
+
+        if(lastExpandedPosition != -1) {
+            expandableListView.expandGroup(lastExpandedPosition);
+        }
+    }
+
+//
+//    @Override
+//    public void onGroupCollapse(int i) {
+//        if(i == lastExpandedPosition){
+//            expandableListView.expandGroup(i);
+//        }
+//
+//    }
+//
+    @Override
+    public void onGroupExpand(int groupPosition) {
+        lastExpandedPosition = groupPosition;
     }
 }
 

@@ -122,6 +122,7 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         BrandsPagerAdapter brandsPagerAdapter = new BrandsPagerAdapter(context, mParent.get(i).getBrands(), cartItemsModelList, brandsAdapterListener, mParent.get(i).getId());
         brandsPagerAdapter.notifyDataSetChanged();
         viewPagerBrandList.setAdapter(brandsPagerAdapter);
+        viewPagerBrandList.setOffscreenPageLimit(mParent.get(i).getBrands().size());
         viewPagerBrandList.addOnPageChangeListener(this);
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
         rightNav = (ImageButton) view.findViewById(R.id.right_nav);

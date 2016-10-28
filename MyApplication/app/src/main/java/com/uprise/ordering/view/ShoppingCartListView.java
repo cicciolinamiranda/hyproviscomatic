@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,7 +79,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
-        deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete);
+        deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         if(isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
@@ -180,8 +179,9 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         EditText etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
-        Button addToCartBtn;
-        Button saveEditBtn;
+        ImageButton deleteBtn;
+//        Button addToCartBtn;
+//        Button saveEditBtn;
         //        int brandPosition;
 //        int productPosition;
         String brandId;
@@ -194,8 +194,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
-//            addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
-//            saveEditBtn = (Button) itemView.findViewById(R.id.btn_save_edit_brand_item);
+            deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_delete_cart_item) ;
             this.brandId = brandId;
             this.productId = productId;
         }
@@ -216,7 +215,8 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                     saveItem();
                     listener.editCartItem(savedCardItem);
                     break;
-                case R.id.btn_delete:
+                case R.id.btn_delete_cart_item:
+                    saveItem();
                     listener.deleteCartItem(savedCardItem);
                     break;
             }

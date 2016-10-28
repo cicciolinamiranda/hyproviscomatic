@@ -1,5 +1,6 @@
 package com.uprise.ordering;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -36,13 +37,15 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
         llShopCartList = (LinearLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
+        lvShoppingCartList.setClickable(true);
+        lvShoppingCartList.setFocusable(true);
         cartItemsSharedPref = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
         cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
                 loginSharedPref.getUsername(ShoppingCartActivity.this));
-        populateListt();
+        populateList();
         getSupportActionBar().setTitle("Cart Items");
 
     }
@@ -53,7 +56,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         cartItemsSharedPref.removeCardItem(ShoppingCartActivity.this, cartItemsModel);
         cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
                 loginSharedPref.getUsername(ShoppingCartActivity.this));
-//        populateListt(cartItemsModelArrayList);
+        populateList();
     }
 
     @Override
@@ -62,10 +65,10 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         cartItemsSharedPref.editCardItem(ShoppingCartActivity.this, cartItemsModel);
         cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
                 loginSharedPref.getUsername(ShoppingCartActivity.this));
-//        populateListt(cartItemsModelArrayList);
+        populateList();
     }
 
-    private void populateListt() {
+    private void populateList() {
         llNoRecords.findViewById(View.GONE);
         llShopCartList.findViewById(View.VISIBLE);
 
@@ -86,9 +89,11 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                startActivity(new Intent(ShoppingCartActivity.this, MainActivity.class));
                 break;
         }
         return true;
     }
-    }
+
+}
 

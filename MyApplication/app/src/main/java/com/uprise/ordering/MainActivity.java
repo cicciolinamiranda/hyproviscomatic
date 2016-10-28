@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId()) {
 
             case R.id.nav_shopping_cart:
-//                finish();
+                finish();
                 startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));
                 break;
             case R.id.nav_logout:

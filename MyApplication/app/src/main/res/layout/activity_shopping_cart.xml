@@ -33,6 +33,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
             android:id="@+id/list_shopping_cart"
             android:layout_alignParentTop="true"/>
     </LinearLayout>
