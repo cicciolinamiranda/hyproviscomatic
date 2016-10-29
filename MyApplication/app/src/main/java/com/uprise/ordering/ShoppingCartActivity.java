@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uprise.ordering.model.BrandModel;
@@ -25,7 +26,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
 View.OnClickListener {
 
     private LinearLayout llNoRecords;
-    private LinearLayout llShopCartList;
+    private RelativeLayout llShopCartList;
     private LinearLayout llLowerLayouts;
     private LinearLayout llProceedToCheckout;
     private ListView lvShoppingCartList;
@@ -44,7 +45,7 @@ View.OnClickListener {
 
 //        decimalFormat = new DecimalFormat("#.##");
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
-        llShopCartList = (LinearLayout) findViewById(R.id.ll_shopping_cart_list);
+        llShopCartList = (RelativeLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
         llLowerLayouts = (LinearLayout) findViewById(R.id.ll_shopping_cart_lower_layout);
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_total_value);

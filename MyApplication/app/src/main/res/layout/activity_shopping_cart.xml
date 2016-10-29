@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_shopping_cart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/ll_shopping_cart_no_records"
         android:layout_width="match_parent"
@@ -24,10 +28,11 @@
             android:paddingLeft="20dp"/>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_shopping_cart_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".80"
         android:orientation="horizontal">
         <ListView
             android:layout_width="match_parent"
@@ -35,14 +40,13 @@
             android:descendantFocusability="blocksDescendants"
             android:id="@+id/list_shopping_cart"
             android:layout_alignParentTop="true"/>
-    </LinearLayout>
-
+    </RelativeLayout>
+</LinearLayout>
     <LinearLayout
         android:id="@+id/ll_shopping_cart_lower_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_shopping_cart_estimated_total"
@@ -94,5 +98,5 @@
             android:layout_marginLeft="20dp"
             />
         </LinearLayout>
-        </LinearLayout>
-</RelativeLayout>
+    </LinearLayout>
+</FrameLayout>

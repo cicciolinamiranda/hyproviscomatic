@@ -173,6 +173,7 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
 
         if(productsAdapterListener.isAddOrSaved()) {
             viewPagerBrandList.setCurrentItem(productsAdapterListener.pageSaved());
+            hideOrShowViewPagerButtons();
         }
         return view;
     }
@@ -201,6 +202,24 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        hideOrShowViewPagerButtons();
+
+        productsAdapterListener.onPageChange(viewPagerBrandList, position);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        hideOrShowViewPagerButtons();
+
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void hideOrShowViewPagerButtons() {
         leftNav.setVisibility(View.VISIBLE);
         rightNav.setVisibility(View.VISIBLE);
 
@@ -211,32 +230,6 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
             rightNav.setVisibility(View.GONE);
         }
-
-        productsAdapterListener.onPageChange(viewPagerBrandList, position);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        lastViewerPagePosition = position;
-//        productsAdapterListener.onPageChange(viewPagerBrandList, position);
-        if(viewPagerBrandList.getCurrentItem() == 0) {
-            leftNav.setVisibility(View.GONE);
-        }
-
-        if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
-            rightNav.setVisibility(View.GONE);
-        }
-
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-    public ViewPager getViewPagerBrandList() {
-        return viewPagerBrandList;
     }
 
     public interface ProductsAdapterListener {
