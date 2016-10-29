@@ -62,7 +62,13 @@
             android:name=".ProductsActivity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity
+            android:name=".NotificationActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NotifMsgActivity"
+            android:parentActivityName=".NotificationActivity"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

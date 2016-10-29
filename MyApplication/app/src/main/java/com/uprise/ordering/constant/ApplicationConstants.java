@@ -27,4 +27,6 @@ public class ApplicationConstants {
     public static final String BRANCH_INTENT_OBJ = "BranchModel";
     public static final int BRANCH_PICS = 0X11;
     public static final int BRANCH_PERMIT_PICS = 0X12;
+
+    public static final int RESULT_FROM_DELETING_NOTIF_MSG = 0x13;
 }

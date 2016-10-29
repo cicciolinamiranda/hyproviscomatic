@@ -61,7 +61,7 @@ public class LoginActivity extends LandingSubPageBaseActivity implements LoaderC
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private LoginSharedPref loginSharedPref;
+//    private LoginSharedPref loginSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

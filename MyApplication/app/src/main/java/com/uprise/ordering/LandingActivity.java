@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.uprise.ordering.shared.LoginSharedPref;
-
 public class LandingActivity extends BaseAuthenticatedActivity implements View.OnClickListener {
 
     private Button btnSignIn;
     private Button btnRegister;
     private Button btnShop;
-    private LoginSharedPref loginSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +26,6 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         btnShop.setOnClickListener(this);
 
         getSupportActionBar().hide();
-
-        //For Now. TODO:It must have a base authenticated class
-        loginSharedPref = new LoginSharedPref();
 
 //        if(loginSharedPref != null && loginSharedPref.isLoggedIn(LandingActivity.this)) {
 //            startActivity(new Intent(LandingActivity.this, MainActivity.class));

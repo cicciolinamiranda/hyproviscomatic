@@ -14,10 +14,12 @@ import android.widget.Toast;
 
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.model.ProductModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -161,6 +163,7 @@ public class Util {
         return productModels;
     }
 
+    //Mock only
     public ArrayList<BrandModel> generateBrands() {
         ArrayList<BrandModel> brands = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
@@ -174,6 +177,7 @@ public class Util {
         return brands;
     }
 
+    //Mock only
     public ProductModel getMatchedProductModel(CartItemsModel cartItemsModel, List<ProductModel> productModels) {
         ProductModel result = new ProductModel();
         for(int i=0; i<productModels.size(); i++) {
@@ -200,6 +204,23 @@ public class Util {
                                                    List<CartItemsModel> cartItemsModels) {
         return cartItemsModels != null && !cartItemsModels.isEmpty() && productModels != null
                 && !productModels.isEmpty();
+    }
+
+    //Mock only
+    public ArrayList<NotificationsModel> generateNotifications() {
+        ArrayList<NotificationsModel> notificationsModelArrayList = new ArrayList<>();
+
+        for (int i = 0; i < 11; i++) {
+            NotificationsModel notificationsModel = new NotificationsModel();
+            notificationsModel.setTitle("Title "+i);
+            notificationsModel.setMessage("Message "+i);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, -i);
+            long daysAgo = cal.getTimeInMillis();
+            notificationsModel.setDate((daysAgo / 1000L)+"");
+            notificationsModelArrayList.add(notificationsModel);
+        }
+        return notificationsModelArrayList;
     }
 
 

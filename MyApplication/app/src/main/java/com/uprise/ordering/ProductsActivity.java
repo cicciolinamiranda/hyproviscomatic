@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
@@ -44,6 +45,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
         loginSharedPref = new LoginSharedPref();
+        cartItemsSharedPref = new CartItemsSharedPref();
         username = loginSharedPref.getUsername(this);
 
         List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);

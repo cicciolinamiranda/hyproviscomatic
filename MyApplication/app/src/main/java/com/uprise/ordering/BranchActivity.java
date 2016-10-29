@@ -17,8 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.uprise.ordering.camera.CameraImageActivity;
@@ -52,10 +50,10 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnAddBranch;
     private ImageButton btnPicsOfStore;
     private  ImageButton btnPicsOfPermit;
-    private LinearLayout llPicsOfStore;
-    private  LinearLayout llPicsOfPermit;
+//    private LinearLayout llPicsOfStore;
+//    private  LinearLayout llPicsOfPermit;
     private int selectedBranchId;
-    private ImageModel imageModelResult;
+//    private ImageModel imageModelResult;
     private int resultCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +67,8 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
         etBranchPhone = (EditText) findViewById(R.id.et_dialog_add_branch_phone);
         btnPicsOfStore = (ImageButton) findViewById(R.id.btn_shop_picture_camera);
         btnPicsOfPermit=(ImageButton) findViewById(R.id.btn_shop_picture_permit_camera);
-        llPicsOfStore=(LinearLayout) findViewById(R.id.ll_shop_picture_camera);
-        llPicsOfPermit=(LinearLayout) findViewById(R.id.ll_shop_picture_permit_camera);
+//        llPicsOfStore=(LinearLayout) findViewById(R.id.ll_shop_picture_camera);
+//        llPicsOfPermit=(LinearLayout) findViewById(R.id.ll_shop_picture_permit_camera);
         btnAddBranch = (Button) findViewById(R.id.btn_branch_add);
         btnAddBranch.setOnClickListener(this);
         btnPicsOfStore.setOnClickListener(this);
@@ -88,8 +86,8 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
             imageStoreModel = branchModel.getBranchsPic();
             imagePermitModel = branchModel.getPermitsPic();
             if(ApplicationConstants.RESULT_EDIT_BRANCH == getIntent().getIntExtra("resultCode",0)) selectedBranchId = getIntent().getIntExtra("id",0);
-            refreshImageList("iv_cam_store_", R.id.ll_photo_store_imageExcessDisplay, R.id.tv_store_imageExcessCount, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
-            refreshImageList("iv_cam_permit_", R.id.ll_photo_permit_imageExcessDisplay, R.id.tv_permit_imageExcessCount, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+            refreshImageList("iv_cam_store_", R.id.btn_shop_picture_camera, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+            refreshImageList("iv_cam_permit_", R.id.btn_shop_picture_permit_camera, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
         }
     }
 
@@ -140,12 +138,12 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
                         });
                 photoOfPermitDialog.show();
                 break;
-            case R.id.ll_photo_store_imageExcessDisplay:
-                clickImageExcess(imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
-                break;
-            case R.id.ll_photo_permit_imageExcessDisplay:
-                clickImageExcess(imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
-                break;
+//            case R.id.ll_photo_store_imageExcessDisplay:
+//                clickImageExcess(imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+//                break;
+//            case R.id.ll_photo_permit_imageExcessDisplay:
+//                clickImageExcess(imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+//                break;
             case R.id.btn_branch_add:
                 if(isFormCanBeSaved()) {
                     Intent branchIntent = new Intent(BranchActivity.this, RegistrationActivity.class);
@@ -174,13 +172,13 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
             case ApplicationConstants.RESULT_GALLERY_STORE:
                 if (resultCode != RESULT_CANCELED) {
                     imageStoreModel = setImagesResultGallery(data);
-                    refreshImageList("iv_cam_store_", R.id.ll_photo_store_imageExcessDisplay, R.id.tv_store_imageExcessCount, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+                    refreshImageList("iv_cam_store_", R.id.btn_shop_picture_camera,   imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
                 }
                 break;
             case ApplicationConstants.RESULT_GALLERY_PERMIT:
                 if (resultCode != RESULT_CANCELED) {
                     imagePermitModel = setImagesResultGallery(data);
-                    refreshImageList("iv_cam_permit_", R.id.ll_photo_permit_imageExcessDisplay, R.id.tv_permit_imageExcessCount, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                    refreshImageList("iv_cam_permit_",R.id.btn_shop_picture_permit_camera,   imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
                 }
                 break;
             case ApplicationConstants.RESULT_PICK_FROM_CAMERA_STORE:
@@ -192,7 +190,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
                     imageStoreModel.getStringBase().add(photoFile);
                     imageStoreModel.setNumOfImages(imagePermitModel.getNumOfImages() + 1);
                 }
-                refreshImageList("iv_cam_store_", R.id.ll_photo_store_imageExcessDisplay, R.id.tv_store_imageExcessCount, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+                refreshImageList("iv_cam_store_", R.id.btn_shop_picture_camera,   imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
                 break;
             case ApplicationConstants.RESULT_PICK_FROM_CAMERA_PERMIT:
                 if (resultCode != RESULT_CANCELED) {
@@ -203,7 +201,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
                     imagePermitModel.getStringBase().add(photoFile);
                     imagePermitModel.setNumOfImages(imagePermitModel.getNumOfImages() + 1);
                 }
-                refreshImageList("iv_cam_permit_", R.id.ll_photo_permit_imageExcessDisplay, R.id.tv_permit_imageExcessCount, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                refreshImageList("iv_cam_permit_", R.id.btn_shop_picture_permit_camera,   imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
                 break;
 
             case ApplicationConstants.RESULT_GALLERY_PICTURE_STORE:
@@ -211,14 +209,14 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
                     resultFromGallery(data, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
 
                 }
-                refreshImageList("iv_cam_store_", R.id.ll_photo_store_imageExcessDisplay, R.id.tv_store_imageExcessCount, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+                refreshImageList("iv_cam_store_", R.id.btn_shop_picture_camera,   imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
                 break;
             case ApplicationConstants.RESULT_GALLERY_PICTURE_PERMIT:
                 if (resultCode != RESULT_CANCELED) {
                     resultFromGallery(data, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
 
                 }
-                refreshImageList("iv_cam_permit_", R.id.ll_photo_permit_imageExcessDisplay, R.id.tv_permit_imageExcessCount, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                refreshImageList("iv_cam_permit_", R.id.btn_shop_picture_permit_camera,   imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
                 break;
 //            case ApplicationConstants.RESULT_EDIT_BRANCH:
 //                BranchModel branchModel = data.getParcelableExtra("branchModel");
@@ -227,8 +225,8 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
 //                etBranchPhone.setText(branchModel.getContactNum());
 //                imageStoreModel = branchModel.getBranchsPic();
 //                imagePermitModel = branchModel.getPermitsPic();
-//                refreshImageList("iv_cam_store_", R.id.ll_photo_store_imageExcessDisplay, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
-//                refreshImageList("iv_cam_permit_", R.id.ll_photo_permit_imageExcessDisplay, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+//                refreshImageList("iv_cam_store_",  imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
+//                refreshImageList("iv_cam_permit_",  imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
 //                break;
         }
     }
@@ -279,7 +277,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
         return imageModel;
     }
 
-    private void refreshImageList(final String idPrefix, final int imageExcessLinearId, final int imageExcessCount, final ImageModel imageModel, final int resultCode) {
+    private void refreshImageList(final String idPrefix, final int btnId, final ImageModel imageModel, final int resultCode) {
         //clear imageviews
         for (int k = 0; k < NUM_IMAGES; k++) {
             int resId = getResources()
@@ -288,7 +286,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
             img.setImageBitmap(null);
             img.setVisibility(View.GONE);
         }
-        findViewById(imageExcessLinearId).setVisibility(View.GONE);
+//        findViewById(imageExcessLinearId).setVisibility(View.GONE);
 
         int x = 0;
         for (int i = imageModel.getIntegerBase().size() - 1; i >= ((imageModel.getIntegerBase().size() - NUM_IMAGES) >= 0 ? (imageModel.getIntegerBase().size() - NUM_IMAGES) : 0); i--) {
@@ -312,9 +310,13 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
             x++;
         }
 
-        if (imageModel.getIntegerBase().size() > NUM_IMAGES) {
-            findViewById(imageExcessLinearId).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(imageExcessCount)).setText("+" + (imageModel.getIntegerBase().size() - NUM_IMAGES));
+        findViewById(btnId).setVisibility(View.VISIBLE);
+        if (imageModel.getIntegerBase().size() >= NUM_IMAGES) {
+
+            findViewById(btnId).setVisibility(View.GONE);
+            //MAX OF THREE. THIS NOT NEEDED
+//            findViewById(imageExcessLinearId).setVisibility(View.GONE);
+//            ((TextView) findViewById(imageExcessCount)).setText("+" + (imageModel.getIntegerBase().size() - NUM_IMAGES));
         }
     }
 

@@ -99,6 +99,10 @@ public class MainActivity extends BaseAuthenticatedActivity
                 finish();
                 startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));
                 break;
+            case R.id.nav_notifications:
+                startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+                break;
+
             case R.id.nav_logout:
 
                 if(loginSharedPref.isLoggedIn(MainActivity.this)) {
