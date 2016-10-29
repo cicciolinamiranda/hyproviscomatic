@@ -1,13 +1,12 @@
 package com.uprise.ordering;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.uprise.ordering.model.NotificationsModel;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends BaseAuthenticatedActivity {
 
     private ArrayAdapter<NotificationsModel> notificationsModelArrayAdapter;
     private ListView lvNotificationsList;

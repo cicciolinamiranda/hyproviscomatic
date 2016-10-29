@@ -2,7 +2,6 @@ package com.uprise.ordering;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,7 +21,7 @@ import com.uprise.ordering.view.ShoppingCartListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartActivity extends AppCompatActivity implements ShoppingCartListView.ShoppingCartListViewListener,
+public class ShoppingCartActivity extends BaseAuthenticatedActivity implements ShoppingCartListView.ShoppingCartListViewListener,
 View.OnClickListener {
 
     private LinearLayout llNoRecords;
@@ -32,8 +31,8 @@ View.OnClickListener {
     private ListView lvShoppingCartList;
     private TextView tvEstimatedTotal;
     private ArrayAdapter<CartItemsModel> cartItemsModelArrayAdapter;
-    private CartItemsSharedPref cartItemsSharedPref;
-    private LoginSharedPref loginSharedPref;
+//    private CartItemsSharedPref cartItemsSharedPref;
+//    private LoginSharedPref loginSharedPref;
     private ArrayList<ProductModel> productModels;
     private ArrayList<CartItemsModel> cartItemsModelArrayList;
 //    private DecimalFormat decimalFormat;

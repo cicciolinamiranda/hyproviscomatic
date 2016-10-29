@@ -1,16 +1,14 @@
 package com.uprise.ordering;
 
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
@@ -19,7 +17,7 @@ import com.uprise.ordering.view.ProductsAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductsActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener,
+public class ProductsActivity extends BaseAuthenticatedActivity implements ExpandableListView.OnChildClickListener,
         ExpandableListView.OnGroupExpandListener,
         BrandsPagerAdapter.BrandsAdapterListener,
         ProductsAdapter.ProductsAdapterListener {
@@ -27,8 +25,8 @@ public class ProductsActivity extends AppCompatActivity implements ExpandableLis
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
-    private CartItemsSharedPref sharedPreferences;
-    private LoginSharedPref loginSharedPref;
+//    private CartItemsSharedPref sharedPreferences;
+//    private LoginSharedPref loginSharedPref;
     private String username;
     private int lastExpandedPosition = -1;
     private int lastViewPagerPosition = -1;
@@ -45,11 +43,10 @@ public class ProductsActivity extends AppCompatActivity implements ExpandableLis
         productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
-        sharedPreferences = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         username = loginSharedPref.getUsername(this);
 
-        List<CartItemsModel> items = sharedPreferences.loadCartItems(this, username);
+        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
         populateProductList(items);
     }
 
@@ -67,8 +64,8 @@ public class ProductsActivity extends AppCompatActivity implements ExpandableLis
     @Override
     public void addToCart(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(username);
-        sharedPreferences.addCartItems(this, cartItemsModel);
-        List<CartItemsModel> items = sharedPreferences.loadCartItems(this, username);
+        cartItemsSharedPref.addCartItems(this, cartItemsModel);
+        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
         populateProductList(items);
         isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(this, getString(R.string.changes_saved));
@@ -78,8 +75,8 @@ public class ProductsActivity extends AppCompatActivity implements ExpandableLis
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(username);
-        sharedPreferences.editCardItem(this, cartItemsModel);
-        List<CartItemsModel> items = sharedPreferences.loadCartItems(this, username);
+        cartItemsSharedPref.editCardItem(this, cartItemsModel);
+        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
         populateProductList(items);
         isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(this, getString(R.string.changes_saved));
@@ -110,7 +107,7 @@ public class ProductsActivity extends AppCompatActivity implements ExpandableLis
             productsAdapter.notifyDataSetChanged();
         }
         else {
-            sharedPreferences.storeCartItems(this, new ArrayList<CartItemsModel>());
+            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
             productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         }
         expandableListView.setAdapter(productsAdapter);

@@ -1,19 +1,13 @@
 package com.uprise.ordering;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.uprise.ordering.shared.LoginSharedPref;
 
-public class LandingActivity extends AppCompatActivity implements View.OnClickListener {
+public class LandingActivity extends BaseAuthenticatedActivity implements View.OnClickListener {
 
     private Button btnSignIn;
     private Button btnRegister;
@@ -35,7 +29,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         btnShop.setOnClickListener(this);
 
         getSupportActionBar().hide();
-        checkPermissions();
 
         //For Now. TODO:It must have a base authenticated class
         loginSharedPref = new LoginSharedPref();
@@ -62,41 +55,5 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
         }
-    }
-
-    public void checkPermissions() {
-        //TODO: check permissions
-
-        if (/**  ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED
-                ||**/
-
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermission(this);
-        } else {
-//            requestStatus();
-        }
-    }
-
-
-    public static void requestPermission(Activity activity){
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_NETWORK_STATE
-                        , Manifest.permission.READ_EXTERNAL_STORAGE
-                        , Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
     }
 }
