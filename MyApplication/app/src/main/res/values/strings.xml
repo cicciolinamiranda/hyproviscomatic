@@ -45,7 +45,7 @@
     <string name="tv_branch_list_permit_header">Pictures of Mayor\\\'s Permit or DTI or Barangay Permit</string>
     <string name="save_modification">Save Changes</string>
     <string name="nav_products">Shop now!</string>
-    <string name="nav_shopping_cart">Shopping Cart</string>
+    <string name="nav_shopping_cart">Cart Items</string>
     <string name="nav_branch">Branch</string>
     <string name="add_to_cart">Add to\ncart</string>
     <string name="label_brand_qty">Qty</string>
