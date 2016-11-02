@@ -223,8 +223,16 @@ public class Util {
         return notificationsModelArrayList;
     }
 
+    //Mock only
 
-
+//    public ArrayList<BrandModel> generateBranchModel() {
+//        ArrayList<BrandModel> brandModelArrayList = new ArrayList<>();
+//        for (int i = 0; i < 11; i++) {
+//            BrandModel branchModel = new BrandModel();
+//            br
+//        }
+//        return brandModelArrayList;
+//    }
 
 
 }

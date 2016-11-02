@@ -164,7 +164,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
             shopName.setError("Shopname is required in adding a branch");
         }
         else {
-            Intent intent = new Intent(RegistrationActivity.this, BranchActivity.class);
+            Intent intent = new Intent(RegistrationActivity.this, AddBranchActivity.class);
             intent.putExtra("shopName", shopName.getText().toString());
             startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
 //            finish();
@@ -191,7 +191,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                 listViewDialog.setPositiveButton("Edit",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
-                                Intent editBranch = new Intent(RegistrationActivity.this, BranchActivity.class);
+                                Intent editBranch = new Intent(RegistrationActivity.this, AddBranchActivity.class);
                                 editBranch.putExtra("branchModel", branchModelList.get(i));
                                 editBranch.putExtra("id",i);
                                 editBranch.putExtra(("resultCode"), ApplicationConstants.RESULT_EDIT_BRANCH);

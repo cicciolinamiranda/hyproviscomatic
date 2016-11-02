@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.uprise.ordering.BranchActivity;
+import com.uprise.ordering.AddBranchActivity;
 import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 
@@ -116,12 +116,12 @@ public class CameraImageActivity extends AppCompatActivity implements
                 boolean deleted = file.delete();
                 if(deleted && resultCode == ApplicationConstants.RESULT_GALLERY_STORE){
                 Log.d("Access:AssetMgmt", "Photo Store successfully deleted: " + imageUri);
-                    BranchActivity.totalStoreImages--;
+                    AddBranchActivity.totalStoreImages--;
 
                  }
                 else if(deleted && resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT){
                     Log.d("Access:AssetMgmt", "Photo PERMIT successfully deleted: " + imageUri);
-                    BranchActivity.totalPermitImages--;
+                    AddBranchActivity.totalPermitImages--;
                 }
                 else {
                     Log.d("Access:AssetMgmt", "Photo failed to be deleted: " + imageUri);

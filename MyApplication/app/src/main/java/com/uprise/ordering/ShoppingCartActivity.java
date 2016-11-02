@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -82,9 +81,9 @@ View.OnClickListener {
     }
 
     private void populateList() {
-        llNoRecords.findViewById(View.GONE);
-        llShopCartList.findViewById(View.VISIBLE);
-        llLowerLayouts.findViewById(View.VISIBLE);
+        llNoRecords.setVisibility(View.GONE);
+        llShopCartList.setVisibility(View.VISIBLE);
+        llLowerLayouts.setVisibility(View.VISIBLE);
 
         if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
@@ -92,12 +91,6 @@ View.OnClickListener {
             cartItemsModelArrayAdapter.notifyDataSetChanged();
             lvShoppingCartList.setAdapter(cartItemsModelArrayAdapter);
             registerForContextMenu(lvShoppingCartList);
-            lvShoppingCartList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Util.getInstance().showSnackBarToast(ShoppingCartActivity.this, "Test");
-                }
-            });
 
             double total = computeEstimatedTotal(cartItemsModelArrayList);
             tvEstimatedTotal.setText(String.format("%.2f", total)+" Php");

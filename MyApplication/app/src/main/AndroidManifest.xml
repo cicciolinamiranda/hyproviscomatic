@@ -48,10 +48,10 @@
         </activity>
         <activity
             android:name=".camera.CameraImageActivity"
-            android:parentActivityName=".BranchActivity"
+            android:parentActivityName=".AddBranchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BranchActivity"
+            android:name=".AddBranchActivity"
             android:parentActivityName=".RegistrationActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -66,9 +66,11 @@
             android:name=".NotificationActivity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NotifMsgActivity"
+        <activity
+            android:name=".NotifMsgActivity"
             android:parentActivityName=".NotificationActivity"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ExistingBranch"></activity>
     </application>
 
 </manifest>

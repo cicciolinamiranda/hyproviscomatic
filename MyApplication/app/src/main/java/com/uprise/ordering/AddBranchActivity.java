@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BranchActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddBranchActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageModel imageStoreModel;
     private ImageModel imagePermitModel;
@@ -50,10 +50,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnAddBranch;
     private ImageButton btnPicsOfStore;
     private  ImageButton btnPicsOfPermit;
-//    private LinearLayout llPicsOfStore;
-//    private  LinearLayout llPicsOfPermit;
     private int selectedBranchId;
-//    private ImageModel imageModelResult;
     private int resultCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +93,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
         switch(view.getId()) {
             case R.id.btn_shop_picture_camera:
                 AlertDialog.Builder photoOfStoreDialog = new AlertDialog.Builder(
-                        BranchActivity.this);
+                        AddBranchActivity.this);
                 photoOfStoreDialog.setPositiveButton("Gallery",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -118,7 +115,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_shop_picture_permit_camera:
                 AlertDialog.Builder photoOfPermitDialog = new AlertDialog.Builder(
-                        BranchActivity.this);
+                        AddBranchActivity.this);
                 photoOfPermitDialog.setPositiveButton("Gallery",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -146,7 +143,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
 //                break;
             case R.id.btn_branch_add:
                 if(isFormCanBeSaved()) {
-                    Intent branchIntent = new Intent(BranchActivity.this, RegistrationActivity.class);
+                    Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
                     branchIntent.putExtra("branchModel",toBeSaved());
 
                     if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
@@ -299,7 +296,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(BranchActivity.this, CameraImageActivity.class);
+                    Intent intent = new Intent(AddBranchActivity.this, CameraImageActivity.class);
                     intent.putExtra("bitmaps", imageModel.getStringBase());
                     intent.putExtra("resultCode", resultCode);
                     intent.putExtra("display", CameraImageActivity.FULLSCREEN);
@@ -392,11 +389,11 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
         boolean canBeAdded = true;
 
         if (etBranchName.getText().toString().isEmpty()) {
-            etBranchName.setError(BranchActivity.this.getString(R.string.is_required));
+            etBranchName.setError(AddBranchActivity.this.getString(R.string.is_required));
             canBeAdded = false;
         }
         if (etBranchAdd.getText().toString().isEmpty()) {
-            etBranchAdd.setError(BranchActivity.this.getString(R.string.is_required));
+            etBranchAdd.setError(AddBranchActivity.this.getString(R.string.is_required));
             canBeAdded = false;
         }
         if (imageStoreModel.getIntegerBase().isEmpty()) {
@@ -433,7 +430,7 @@ public class BranchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void clickImageExcess(final ImageModel imageModel, int resultCode) {
-        Intent intent = new Intent(BranchActivity.this, CameraImageActivity.class);
+        Intent intent = new Intent(AddBranchActivity.this, CameraImageActivity.class);
         intent.putExtra("bitmaps", imageModel.getStringBase());
         startActivityForResult(intent, resultCode);
     }

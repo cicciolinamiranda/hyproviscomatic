@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.NotificationsList;
@@ -29,7 +30,6 @@ public class NotificationActivity extends BaseAuthenticatedActivity {
         notificationsModelArrayList = Util.getInstance().generateNotifications();
         notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
         notificationsModelArrayAdapter.notifyDataSetChanged();
-        lvNotificationsList.setEnabled(true);
         lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
         registerForContextMenu(lvNotificationsList);
 
@@ -46,14 +46,19 @@ public class NotificationActivity extends BaseAuthenticatedActivity {
         return true;
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//        Intent notifIntent = new Intent(NotificationActivity.this, NotifMsgActivity.class);
-//        notifIntent.putExtra("notificationsModel", notificationsModelArrayList.get(i));
-//        startActivity(notifIntent);
-//        finish();
-//
-//
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+
+            case ApplicationConstants.RESULT_FROM_DELETING_NOTIF_MSG:
+
+                //TODO: to be replaced by rest call api
+                notificationsModelArrayAdapter.clear();
+                lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
+                break;
+        }
+    }
 //    }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.uprise.ordering.NotifMsgActivity;
 import com.uprise.ordering.R;
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.NotificationsModel;
 
 import java.text.SimpleDateFormat;
@@ -56,8 +57,8 @@ public class NotificationsList extends ArrayAdapter<NotificationsModel> {
             public void onClick(View v) {
                 Intent notifIntent = new Intent(context, NotifMsgActivity.class);
                 notifIntent.putExtra("notificationsModel", web.get(position));
-                context.startActivity(notifIntent);
-                context.finish();
+                context.startActivityForResult(notifIntent, ApplicationConstants.RESULT_FROM_DELETING_NOTIF_MSG);
+//                context.finish();
             }
         });
         return rowView;
