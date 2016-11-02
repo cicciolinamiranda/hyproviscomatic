@@ -59,4 +59,5 @@
     <string name="btn_proceed_to_checkout">Proceed to checkout</string>
     <string name="estimated_total_label">Estimated total:</string>
     <string name="action_checkout">Order sent. Please wait for email approval</string>
+    <string name="notif_msg_action_delete">Delete Message</string>
 </resources>

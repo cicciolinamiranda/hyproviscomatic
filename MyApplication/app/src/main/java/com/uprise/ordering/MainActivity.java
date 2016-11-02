@@ -100,6 +100,7 @@ public class MainActivity extends BaseAuthenticatedActivity
                 startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));
                 break;
             case R.id.nav_notifications:
+                finish();
                 startActivity(new Intent(MainActivity.this, NotificationActivity.class));
                 break;
 

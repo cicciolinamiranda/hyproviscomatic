@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.uprise.ordering.model.NotificationsModel;
+
 public class NotifMsgActivity extends AppCompatActivity {
 
     @Override
@@ -12,6 +14,12 @@ public class NotifMsgActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notif_msg);
         getSupportActionBar().setTitle("Notifications");
+
+        NotificationsModel notificationsModel = getIntent().getParcelableExtra("notificationsModel");
+
+        if(null != notificationsModel) {
+
+        }
     }
 
     @Override
