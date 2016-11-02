@@ -70,9 +70,11 @@
             android:name=".NotifMsgActivity"
             android:parentActivityName=".NotificationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ExistingBranch"
+        <activity
+            android:name=".ExistingBranch"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".OrderListActivity"></activity>
     </application>
 
 </manifest>

@@ -7,16 +7,35 @@ import java.util.ArrayList;
  */
 
 public class OrderModel {
-    private ArrayList<ProductModel> brands;
+
+    private String orderId;
+    private String date;
+    private ArrayList<CartItemsModel> cartItemsModels;
     private int quantity;
     private double totalAmount;
 
-    public ArrayList<ProductModel> getBrands() {
-        return brands;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setBrands(ArrayList<ProductModel> brands) {
-        this.brands = brands;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public ArrayList<CartItemsModel> getCartItemsModels() {
+        return cartItemsModels;
+    }
+
+    public void setCartItemsModels(ArrayList<CartItemsModel> cartItemsModels) {
+        this.cartItemsModels = cartItemsModels;
     }
 
     public int getQuantity() {
