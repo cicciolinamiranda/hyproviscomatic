@@ -39,7 +39,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
     private ImageModel imageStoreModel;
     private ImageModel imagePermitModel;
-    private String shopName;
+//    private String shopName;
     private static int NUM_IMAGES = 3;
     private String photoFile;
     public static int totalStoreImages = 0;
@@ -58,7 +58,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.layout_add_branch);
         imageStoreModel  = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
         imagePermitModel = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
-        shopName = getIntent().getStringExtra("shopName");
+//        shopName = getIntent().getStringExtra("shopName");
         etBranchName = (EditText) findViewById(R.id.et_dialog_add_branch_name);
         etBranchAdd = (EditText) findViewById(R.id.et_dialog_add_branch_address);
         etBranchPhone = (EditText) findViewById(R.id.et_dialog_add_branch_phone);
@@ -92,48 +92,60 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.btn_shop_picture_camera:
-                AlertDialog.Builder photoOfStoreDialog = new AlertDialog.Builder(
-                        AddBranchActivity.this);
-                photoOfStoreDialog.setPositiveButton("Gallery",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                Intent pictureActionIntent = null;
-                                pictureActionIntent = new Intent(
-                                        Intent.ACTION_PICK,
-                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(pictureActionIntent, ApplicationConstants.RESULT_GALLERY_PICTURE_STORE);
-                            }
-                        });
 
-                photoOfStoreDialog.setNegativeButton("Camera",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                getPhotoFromCamera(ApplicationConstants.RESULT_PICK_FROM_CAMERA_STORE);
-                            }
-                        });
-                photoOfStoreDialog.show();
+                if(etBranchName.getText().toString().isEmpty()) {
+                    etBranchName.setError("Branch Name is required in adding a branch");
+                }
+                else {
+                    AlertDialog.Builder photoOfStoreDialog = new AlertDialog.Builder(
+                            AddBranchActivity.this);
+                    photoOfStoreDialog.setPositiveButton("Gallery",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Intent pictureActionIntent = null;
+                                    pictureActionIntent = new Intent(
+                                            Intent.ACTION_PICK,
+                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                    startActivityForResult(pictureActionIntent, ApplicationConstants.RESULT_GALLERY_PICTURE_STORE);
+                                }
+                            });
+
+                    photoOfStoreDialog.setNegativeButton("Camera",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    getPhotoFromCamera(ApplicationConstants.RESULT_PICK_FROM_CAMERA_STORE);
+                                }
+                            });
+                    photoOfStoreDialog.show();
+                }
                 break;
             case R.id.btn_shop_picture_permit_camera:
-                AlertDialog.Builder photoOfPermitDialog = new AlertDialog.Builder(
-                        AddBranchActivity.this);
-                photoOfPermitDialog.setPositiveButton("Gallery",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                Intent pictureActionIntent = null;
-                                pictureActionIntent = new Intent(
-                                        Intent.ACTION_PICK,
-                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(pictureActionIntent, ApplicationConstants.RESULT_GALLERY_PICTURE_PERMIT);
-                            }
-                        });
 
-                photoOfPermitDialog.setNegativeButton("Camera",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                getPhotoFromCamera(ApplicationConstants.RESULT_PICK_FROM_CAMERA_PERMIT);
-                            }
-                        });
-                photoOfPermitDialog.show();
+                if(etBranchName.getText().toString().isEmpty()) {
+                    etBranchName.setError("Branch Name is required in adding a branch");
+                }
+                else {
+                    AlertDialog.Builder photoOfPermitDialog = new AlertDialog.Builder(
+                            AddBranchActivity.this);
+                    photoOfPermitDialog.setPositiveButton("Gallery",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Intent pictureActionIntent = null;
+                                    pictureActionIntent = new Intent(
+                                            Intent.ACTION_PICK,
+                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                    startActivityForResult(pictureActionIntent, ApplicationConstants.RESULT_GALLERY_PICTURE_PERMIT);
+                                }
+                            });
+
+                    photoOfPermitDialog.setNegativeButton("Camera",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    getPhotoFromCamera(ApplicationConstants.RESULT_PICK_FROM_CAMERA_PERMIT);
+                                }
+                            });
+                    photoOfPermitDialog.show();
+                }
                 break;
 //            case R.id.ll_photo_store_imageExcessDisplay:
 //                clickImageExcess(imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
@@ -233,7 +245,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //        String DATA_STORAGE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "wasabi" + File.separator;
 
         String strTimeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss" ).format( new Date() );
-        photoFile = "photo_"+requestCode+"_"+shopName+"_"+strTimeStamp+".png";
+        photoFile = "photo_"+requestCode+"_"+etBranchName.getText().toString()+"_"+strTimeStamp+".png";
 
         File dir = new File(ApplicationConstants.DATA_STORAGE_STORE_PATH);
 
@@ -331,7 +343,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
 //                        String DATA_STORAGE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "wasabi" + File.separator;
 
-            String id = shopName;
+            String id = etBranchName.getText().toString();
             String strTimeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss" ).format( new Date() );
             photoFile = "store_photo_"+imageModel.getNumOfImages()+id+"_"+strTimeStamp+".png";
 

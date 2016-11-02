@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,9 +17,10 @@ import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.view.BranchList;
 import com.uprise.ordering.view.ExpandableHeightListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ExistingBranch extends AppCompatActivity {
+public class ExistingBranch extends BaseAuthenticatedActivity {
 
     private LinearLayout llNoBranchAvail;
     private LinearLayout llExistingBranch;
@@ -35,6 +35,9 @@ public class ExistingBranch extends AppCompatActivity {
 
         llNoBranchAvail =(LinearLayout) findViewById(R.id.ll_existing_branch_no_records);
         llExistingBranch =(LinearLayout) findViewById(R.id.ll_existing_branch);
+        listViewBranch = (ExpandableHeightListView) findViewById(R.id.list_existing_branch);
+        listViewBranch.setExpanded(true);
+        branchModelList = new ArrayList<>();
 
         llNoBranchAvail.setVisibility(View.VISIBLE);
         llExistingBranch.setVisibility(View.GONE);
@@ -60,8 +63,7 @@ public class ExistingBranch extends AppCompatActivity {
                 break;
 
             case R.id.existing_branch_add_new:
-                setResult(ApplicationConstants.RESULT_FROM_ADD_BRANCH);
-                finish();
+                showAddBranchDialog();
                 break;
         }
         return true;
@@ -85,7 +87,8 @@ public class ExistingBranch extends AppCompatActivity {
 
     private void populateBranchListView() {
         adapterBranchModelList = new BranchList(this, branchModelList);
-
+        llExistingBranch.setVisibility(View.VISIBLE);
+        llNoBranchAvail.setVisibility(View.GONE);
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -126,4 +129,10 @@ public class ExistingBranch extends AppCompatActivity {
             }
         });
     }
+
+    private void showAddBranchDialog() {
+            Intent intent = new Intent(ExistingBranch.this, AddBranchActivity.class);
+            startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
+    }
+
 }

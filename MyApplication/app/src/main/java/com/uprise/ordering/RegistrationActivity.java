@@ -160,15 +160,9 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     }
 
     private void showAddBranchDialog() {
-        if(shopName.getText().toString().isEmpty()) {
-            shopName.setError("Shopname is required in adding a branch");
-        }
-        else {
             Intent intent = new Intent(RegistrationActivity.this, AddBranchActivity.class);
-            intent.putExtra("shopName", shopName.getText().toString());
             startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
 //            finish();
-        }
     }
 
     private void populateBranchListView() {
