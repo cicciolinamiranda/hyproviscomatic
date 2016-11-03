@@ -74,7 +74,13 @@
             android:name=".ExistingBranch"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OrderListActivity"></activity>
+        <activity
+            android:name=".OrderListActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".OrderDetailsActivity"
+            android:parentActivityName=".OrderListActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ public class NotificationsModel implements Parcelable {
     private boolean isRead;
 
     public NotificationsModel() {}
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);

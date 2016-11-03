@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,7 +39,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private LayoutInflater mLayoutInflater;
     private ImageButton plusBtn;
     private ImageButton minusBtn;
-    private EditText etQuantity;
+    private TextView etQuantity;
     private ImageView itemImage;
     private Button addToCartBtn;
     private int oldQtyValue;
@@ -86,7 +85,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         new LoadImageAsyncTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
-        etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
+        etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
@@ -128,7 +127,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
 
     private class CountListener implements View.OnClickListener, TextWatcher {
         int count;
-        EditText etQuantity;
+        TextView etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
         Button addToCartBtn;
@@ -142,7 +141,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         public CountListener(View itemView, String brandId, String productId) {
             this.count = 0;
             this.itemView = itemView;
-            etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
+            etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);

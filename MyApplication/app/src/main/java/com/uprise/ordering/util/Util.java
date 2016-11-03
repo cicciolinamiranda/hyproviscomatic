@@ -15,12 +15,15 @@ import android.widget.Toast;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.NotificationsModel;
+import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.shared.LoginSharedPref;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by cicciolina on 10/15/16.
@@ -217,7 +220,7 @@ public class Util {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, -i);
             long daysAgo = cal.getTimeInMillis();
-            notificationsModel.setDate((daysAgo / 1000L)+"");
+            notificationsModel.setDate(daysAgo+"");
             notificationsModelArrayList.add(notificationsModel);
         }
         return notificationsModelArrayList;
@@ -225,14 +228,60 @@ public class Util {
 
     //Mock only
 
-//    public ArrayList<BrandModel> generateBranchModel() {
-//        ArrayList<BrandModel> brandModelArrayList = new ArrayList<>();
-//        for (int i = 0; i < 11; i++) {
-//            BrandModel branchModel = new BrandModel();
-//            br
-//        }
-//        return brandModelArrayList;
-//    }
+    public ArrayList<OrderModel> generateOrders(Context ctx) {
+        ArrayList<OrderModel> orderModels = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            OrderModel orderModel = new OrderModel();
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, -i);
+            long daysAgo = cal.getTimeInMillis();
+            orderModel.setOrderId(UUID.randomUUID().toString());
+            orderModel.setDate(daysAgo+"");
+            orderModel.setCartItemsModels(generateCartItems(ctx));
+            orderModels.add(orderModel);
+        }
+        return orderModels;
+    }
+
+    public ArrayList<CartItemsModel> generateCartItems(Context ctx) {
+
+        LoginSharedPref loginSharedPref = new LoginSharedPref();
+
+        ArrayList<CartItemsModel> cartItemsModels = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+        CartItemsModel cartItemsModel = new CartItemsModel();
+            cartItemsModel.setProductModelId("product_"+i);
+            cartItemsModel.setBranchId("brand_"+i);
+            cartItemsModel.setQuantity(i*2);
+            cartItemsModel.setUserName(loginSharedPref.getUsername(ctx));
+            cartItemsModels.add(cartItemsModel);
+
+        }
+        return cartItemsModels;
+    }
+
+    public double computeEstimatedTotal(List<ProductModel> productModels, List<CartItemsModel> cartItemsModels) {
+        double total = 0d;
+
+
+        for (CartItemsModel model : cartItemsModels) {
+            if (Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
+
+
+                ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(model, productModels);
+
+                if (matchedProductModel != null &&
+                        !matchedProductModel.getBrands().isEmpty()) {
+                    BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(model, matchedProductModel.getBrands(), matchedProductModel.getId());
+                    if (matchedBrandModel != null) {
+                        total += matchedBrandModel.getPrice() * model.getQuantity();
+                    }
+                }
+
+            }
+        }
+        return total;
+    }
 
 
 }

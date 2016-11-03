@@ -64,11 +64,15 @@
             android:text="@string/label_brand_qty"
             android:layout_gravity="center_vertical|right"
             />
-        <EditText
+
+        <TextView
+            android:id="@+id/tv_brand_qty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/et_brand_qty"
-            android:inputType="number"
+            android:textColor="#000"
+            android:layout_marginLeft="3dp"
+            android:background="@color/grey_500"
+            android:text="@string/label_brand_default_value"
             android:layout_gravity="center_vertical|right"/>
 
         <LinearLayout

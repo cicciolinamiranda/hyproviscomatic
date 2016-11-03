@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/light"-->
-        <!--android:paddingLeft="14dp"-->
-        <!--android:orientation="vertical">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light"
+        android:paddingLeft="14dp"
+        android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_item_history"
             android:layout_width="match_parent"
@@ -138,13 +138,17 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:text="@string/label_brand_qty"
-                        android:layout_gravity="center_vertical|right"
-                        />
-                    <EditText
+                        android:layout_gravity="center_vertical|right"/>
+
+                    <TextView
+                        android:id="@+id/tv_brand_qty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/et_brand_qty"
-                        android:inputType="number"
+                        android:textColor="#000"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/grey_500"
+                        android:textStyle="bold"
+                        android:text="0"
                         android:layout_gravity="center_vertical|right"/>
 
                     <LinearLayout
@@ -243,6 +247,6 @@
             android:src="@drawable/ic_delete_grey600_48dp"
             android:tint="@color/black_highlight" />
         </LinearLayout>
-    <!--</LinearLayout>-->
+    </LinearLayout>
 
 </GridLayout>

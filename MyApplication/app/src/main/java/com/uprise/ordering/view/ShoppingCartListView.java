@@ -6,14 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,19 +33,17 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     private List<CartItemsModel> cartItemsModels;
     private Activity context;
     private Resources resources;
-//    private LayoutInflater mLayoutInflater;
     private ImageButton plusBtn;
     private ImageButton minusBtn;
     private ImageButton deleteBtn;
-    private EditText etQuantity;
+    private TextView etQuantity;
     private ImageView itemImage;
-    private int oldQtyValue;
     private View rowView;
     private TextView tvBrandName;
     private TextView tvBrandPrice;
     private TextView tvProductName;
     private CartItemsModel savedCardItem;
-//    private DecimalFormat decimalFormat;
+
     private ShoppingCartListView.ShoppingCartListViewListener listener;
 
     private List<ProductModel> productModels;
@@ -76,11 +71,10 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         itemImage = (ImageView) rowView.findViewById(R.id.iv_brand_image);
         tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
         tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
-        etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
+        etQuantity = (TextView) rowView.findViewById(R.id.tv_brand_qty);
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
-//        decimalFormat = new DecimalFormat("#.##");
 
         if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
 
@@ -95,12 +89,15 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                         tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
                         new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
                         etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
+                        minusBtn.setVisibility(View.GONE);
+                        if(cartItemsModels.get(position).getQuantity()>1) {
+                            minusBtn.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
         }
         ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBranchId(), cartItemsModels.get(position).getProductModelId());
-        etQuantity.addTextChangedListener(count);
         minusBtn.setOnClickListener(count);
         plusBtn.setOnClickListener(count);
         deleteBtn.setOnClickListener(count);
@@ -151,9 +148,9 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
     }
 
 
-    private class CountListener implements View.OnClickListener, TextWatcher {
+    private class CountListener implements View.OnClickListener {
         int count;
-        EditText etQuantity;
+        TextView etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
         ImageButton deleteBtn;
@@ -168,12 +165,13 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         public CountListener(View itemView, String brandId, String productId) {
             this.count = 0;
             this.itemView = itemView;
-            etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
+            etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_delete_cart_item) ;
             this.brandId = brandId;
             this.productId = productId;
+
         }
         @Override
         public void onClick(View view) {
@@ -183,7 +181,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
             switch(view.getId()) {
                 case R.id.btn_minus_brand_qty:
-                    if(count > 0) count--;
+                    if(count > 1) count--;
                     saveItem();
                     listener.editCartItem(savedCardItem);
                     break;
@@ -208,42 +206,36 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
 
         private void isCountZero() {
-            minusBtn.setVisibility(View.GONE);
-//            addToCartBtn.setVisibility(View.GONE);
-//            saveEditBtn.setVisibility(View.GONE);
-            if(count > 0) {
-                minusBtn.setVisibility(View.VISIBLE);
-//                addToCartBtn.setVisibility(View.VISIBLE);
+            minusBtn.setVisibility(View.VISIBLE);
+            if(count <= 1) {
+                minusBtn.setVisibility(View.GONE);
             }
-
-//            if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0) saveEditBtn.setVisibility(View.VISIBLE);
 
             etQuantity.setText(count+"");
         }
 
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            beforeTextChanged = etQuantity.getText().toString();
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            if(!etQuantity.getText().toString().isEmpty() && !etQuantity.getText().toString().contentEquals(beforeTextChanged)) {
-                count = Integer.parseInt(etQuantity.getText().toString());
-                isCountZero();
-            }
-        }
+//        @Override
+//        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            beforeTextChanged = etQuantity.getText().toString();
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable editable) {
+//            if(!etQuantity.getText().toString().isEmpty() && !etQuantity.getText().toString().contentEquals(beforeTextChanged)) {
+//                count = Integer.parseInt(etQuantity.getText().toString());
+//                isCountZero();
+//            }
+//        }
 
         private void saveItem() {
             savedCardItem.setQuantity(count);
             savedCardItem.setBranchId(brandId);
             savedCardItem.setProductModelId(productId);
-            oldQtyValue = count;
         }
     }
 

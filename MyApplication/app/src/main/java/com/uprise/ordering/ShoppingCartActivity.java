@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.shared.CartItemsSharedPref;
@@ -19,7 +18,6 @@ import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShoppingCartActivity extends BaseAuthenticatedActivity implements ShoppingCartListView.ShoppingCartListViewListener,
 View.OnClickListener {
@@ -92,7 +90,7 @@ View.OnClickListener {
             lvShoppingCartList.setAdapter(cartItemsModelArrayAdapter);
             registerForContextMenu(lvShoppingCartList);
 
-            double total = computeEstimatedTotal(cartItemsModelArrayList);
+            double total = Util.getInstance().computeEstimatedTotal(productModels, cartItemsModelArrayList);
             tvEstimatedTotal.setText(String.format("%.2f", total)+" Php");
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
@@ -126,27 +124,5 @@ View.OnClickListener {
         }
     }
 
-    private double computeEstimatedTotal(List<CartItemsModel> cartItemsModels) {
-        double total = 0d;
-
-
-        for (CartItemsModel model : cartItemsModels) {
-            if (Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
-
-
-                ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(model, productModels);
-
-                if (matchedProductModel != null &&
-                        !matchedProductModel.getBrands().isEmpty()) {
-                    BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(model, matchedProductModel.getBrands(), matchedProductModel.getId());
-                    if (matchedBrandModel != null) {
-                        total += matchedBrandModel.getPrice() * model.getQuantity();
-                    }
-                }
-
-            }
-        }
-        return total;
-    }
 }
 

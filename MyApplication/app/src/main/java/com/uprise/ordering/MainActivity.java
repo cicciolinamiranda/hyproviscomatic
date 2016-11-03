@@ -107,6 +107,10 @@ public class MainActivity extends BaseAuthenticatedActivity
                 finish();
                 startActivity(new Intent(MainActivity.this, ExistingBranch.class));
                 break;
+            case R.id.nav_orders:
+                finish();
+                startActivity(new Intent(MainActivity.this, OrderListActivity.class));
+                break;
             case R.id.nav_logout:
 
                 if(loginSharedPref.isLoggedIn(MainActivity.this)) {
