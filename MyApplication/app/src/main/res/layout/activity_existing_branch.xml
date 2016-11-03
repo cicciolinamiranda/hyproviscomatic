@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:background="@color/light"
     tools:context="com.uprise.ordering.ExistingBranch">
@@ -10,6 +11,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:background="@color/light"
         android:layout_height="match_parent">
 
         <LinearLayout

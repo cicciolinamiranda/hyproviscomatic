@@ -12,6 +12,7 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import com.uprise.ordering.OrderStatus;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.NotificationsModel;
@@ -169,7 +170,7 @@ public class Util {
     //Mock only
     public ArrayList<BrandModel> generateBrands() {
         ArrayList<BrandModel> brands = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
+        for (int i = 1; i < 11; i++) {
             BrandModel brandModel = new BrandModel();
             brandModel.setId("brand_"+i);
             brandModel.setBrandName("Brand " + i);
@@ -213,7 +214,7 @@ public class Util {
     public ArrayList<NotificationsModel> generateNotifications() {
         ArrayList<NotificationsModel> notificationsModelArrayList = new ArrayList<>();
 
-        for (int i = 0; i < 11; i++) {
+        for (int i = 1; i < 11; i++) {
             NotificationsModel notificationsModel = new NotificationsModel();
             notificationsModel.setTitle("Title "+i);
             notificationsModel.setMessage("Message "+i);
@@ -230,13 +231,14 @@ public class Util {
 
     public ArrayList<OrderModel> generateOrders(Context ctx) {
         ArrayList<OrderModel> orderModels = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
+        for (int i = 1; i < 11; i++) {
             OrderModel orderModel = new OrderModel();
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, -i);
             long daysAgo = cal.getTimeInMillis();
             orderModel.setOrderId(UUID.randomUUID().toString());
             orderModel.setDate(daysAgo+"");
+            orderModel.setOrderStatus(OrderStatus.APPROVED);
             orderModel.setCartItemsModels(generateCartItems(ctx));
             orderModels.add(orderModel);
         }
@@ -248,7 +250,7 @@ public class Util {
         LoginSharedPref loginSharedPref = new LoginSharedPref();
 
         ArrayList<CartItemsModel> cartItemsModels = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
+        for (int i = 1; i < 11; i++) {
         CartItemsModel cartItemsModel = new CartItemsModel();
             cartItemsModel.setProductModelId("product_"+i);
             cartItemsModel.setBranchId("brand_"+i);

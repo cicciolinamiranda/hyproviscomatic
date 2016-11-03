@@ -1,7 +1,10 @@
 package com.uprise.ordering.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.uprise.ordering.OrderStatus;
 
 import java.util.ArrayList;
 
@@ -16,6 +19,7 @@ public class OrderModel implements Parcelable {
     private ArrayList<CartItemsModel> cartItemsModels;
     private int quantity;
     private double totalAmount;
+    private OrderStatus orderStatus;
 
     public OrderModel() {}
 
@@ -26,14 +30,18 @@ public class OrderModel implements Parcelable {
         dest.writeInt(quantity);
         dest.writeDouble(totalAmount);
         dest.writeTypedList(cartItemsModels);
+        dest.writeInt(orderStatus.getOrderStatus());
     }
 
+
+    @SuppressLint("NewApi")
     protected OrderModel(Parcel in) {
         orderId = in.readString();
         date = in.readString();
         quantity = in.readInt();
         totalAmount = in.readDouble();
         cartItemsModels = in.createTypedArrayList(CartItemsModel.CREATOR);
+        orderStatus = in.readTypedObject(OrderStatus.CREATOR);
     }
 
     public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
@@ -86,6 +94,14 @@ public class OrderModel implements Parcelable {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     @Override

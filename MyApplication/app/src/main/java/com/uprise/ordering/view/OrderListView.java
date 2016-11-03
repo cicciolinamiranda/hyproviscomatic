@@ -43,8 +43,9 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         rowView = inflater.inflate(R.layout.custom_orderlist, null, true);
         TextView tvOrderNumber = (TextView) rowView.findViewById(R.id.tv_order_number);
         TextView tvOrderDate = (TextView) rowView.findViewById(R.id.tv_order_date);
+        TextView tvOrderStatus = (TextView) rowView.findViewById(R.id.tv_order_status);
         tvOrderNumber.setText(web.get(position).getOrderId());
-
+        tvOrderStatus.setText(web.get(position).getOrderStatus().getLabel());
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
         tvOrderDate.setText(dateFormat.format(new Date(Long.parseLong(web.get(position).getDate()))));
         return rowView;

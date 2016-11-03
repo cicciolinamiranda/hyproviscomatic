@@ -1,14 +1,11 @@
 package com.uprise.ordering;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
@@ -97,37 +94,37 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
                 registerForContextMenu(listViewBranch);
             }
         });
-        listViewBranch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, final View view, final int i, final long l) {
-
-                AlertDialog.Builder listViewDialog = new AlertDialog.Builder(
-                        ExistingBranch.this);
-                listViewDialog.setPositiveButton("Edit",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                Intent editBranch = new Intent(ExistingBranch.this, AddBranchActivity.class);
-                                editBranch.putExtra("branchModel", branchModelList.get(i));
-                                editBranch.putExtra("id",i);
-                                editBranch.putExtra(("resultCode"), ApplicationConstants.RESULT_EDIT_BRANCH);
-                                startActivityForResult(editBranch, ApplicationConstants.RESULT_EDIT_BRANCH );
-
-//                                            finish();
-                            }
-                        });
-
-                listViewDialog.setNegativeButton("Delete",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                branchModelList.remove(branchModelList.get(i));
-                                adapterBranchModelList = new BranchList(ExistingBranch.this, branchModelList);
-                                adapterBranchModelList.notifyDataSetChanged();
-                                listViewBranch.setAdapter(adapterBranchModelList);
-                            }
-                        });
-                listViewDialog.show();
-            }
-        });
+//        listViewBranch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, final View view, final int i, final long l) {
+//
+//                AlertDialog.Builder listViewDialog = new AlertDialog.Builder(
+//                        ExistingBranch.this);
+//                listViewDialog.setPositiveButton("Edit",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                Intent editBranch = new Intent(ExistingBranch.this, AddBranchActivity.class);
+//                                editBranch.putExtra("branchModel", branchModelList.get(i));
+//                                editBranch.putExtra("id",i);
+//                                editBranch.putExtra(("resultCode"), ApplicationConstants.RESULT_EDIT_BRANCH);
+//                                startActivityForResult(editBranch, ApplicationConstants.RESULT_EDIT_BRANCH );
+//
+////                                            finish();
+//                            }
+//                        });
+//
+//                listViewDialog.setNegativeButton("Delete",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                branchModelList.remove(branchModelList.get(i));
+//                                adapterBranchModelList = new BranchList(ExistingBranch.this, branchModelList);
+//                                adapterBranchModelList.notifyDataSetChanged();
+//                                listViewBranch.setAdapter(adapterBranchModelList);
+//                            }
+//                        });
+//                listViewDialog.show();
+//            }
+//        });
     }
 
     private void showAddBranchDialog() {

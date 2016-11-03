@@ -79,6 +79,7 @@
             android:id="@+id/ll_item_qty_buttons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
             android:orientation="vertical"
             android:layout_weight="0.1"
             android:layout_gravity="center_vertical">
