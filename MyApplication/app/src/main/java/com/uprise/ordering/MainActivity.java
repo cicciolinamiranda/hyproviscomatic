@@ -1,8 +1,12 @@
 package com.uprise.ordering;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,13 +15,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.uprise.ordering.fragment.ProductsFragment;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.model.LatLng;
+import com.uprise.ordering.base.LocationTrackingActivity;
+import com.uprise.ordering.base.MapLocationListener;
+import com.uprise.ordering.fragment.MapLocationFragment;
+import com.uprise.ordering.model.ShopOnMapModel;
 import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.util.Util;
 
-public class MainActivity extends BaseAuthenticatedActivity
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends LocationTrackingActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ProductsFragment productsFragment;
+    private MapLocationFragment mapLocationFragment;
     private LoginSharedPref loginSharedPref;
     private View headerLayout;
     @Override
@@ -45,11 +58,45 @@ public class MainActivity extends BaseAuthenticatedActivity
             finish();
         } else {
             tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
+
+            mapLocationFragment = new MapLocationFragment();
+            mapLocationFragment.setOnFocusChangedListener(new MapLocationListener() {
+                @Override
+                public void onFocusChanged(boolean isFocused) {
+                    /**isScrollBlocked = isFocused;**/
+                }
+
+                @Override
+                public void onLatLngChanged(LatLng latLng) {
+                    //
+                }
+
+                @Override
+                public List<ShopOnMapModel> getShopsLocation() {
+
+                    //TODO: replaced with api call
+                    ArrayList<ShopOnMapModel> shopOnMapModels = new ArrayList<>();
+
+                    for (int i = 0; i < 11; i++) {
+                        ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
+                        Location location = Util.getInstance().getLocationInLatLngRad(15d, locationTrackingBase.getLastLocation());
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        shopOnMapModel.setTitle("Location "+i);
+                        shopOnMapModel.setLocation(latLng);
+                        shopOnMapModels.add(shopOnMapModel);
+                    }
+
+                    return shopOnMapModels;
+                }
+
+
+
+            });
 //            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
 //            productsFragment = new ProductsFragment();
-//            FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
-//            tx.replace(R.id.content_frame, productsFragment);
-//            tx.commit();
+            FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
+            tx.replace(R.id.content_frame, mapLocationFragment);
+            tx.commit();
         }
     }
 
@@ -132,5 +179,30 @@ public class MainActivity extends BaseAuthenticatedActivity
         return super.onOptionsItemSelected(item);
 
 
+    }
+
+    @Override
+    public Context getIContext() {
+        return MainActivity.this;
+    }
+
+    @Override
+    public Activity getIActivity() {
+        return this;
+    }
+
+    @Override
+    public GoogleApiClient.ConnectionCallbacks getConnectionCallbacks() {
+        return this;
+    }
+
+    @Override
+    public GoogleApiClient.OnConnectionFailedListener getOnConnectionFailedListener() {
+        return this;
+    }
+
+    @Override
+    public void setLocation(LatLng latlng) {
+        mapLocationFragment.setLocation(latlng);
     }
 }

@@ -1,5 +1,6 @@
 package com.uprise.ordering.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -7,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.location.Location;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -170,7 +174,7 @@ public class Util {
     //Mock only
     public ArrayList<BrandModel> generateBrands() {
         ArrayList<BrandModel> brands = new ArrayList<>();
-        for (int i = 1; i < 11; i++) {
+        for (int i = 0; i < 11; i++) {
             BrandModel brandModel = new BrandModel();
             brandModel.setId("brand_"+i);
             brandModel.setBrandName("Brand " + i);
@@ -214,7 +218,7 @@ public class Util {
     public ArrayList<NotificationsModel> generateNotifications() {
         ArrayList<NotificationsModel> notificationsModelArrayList = new ArrayList<>();
 
-        for (int i = 1; i < 11; i++) {
+        for (int i = 0; i < 11; i++) {
             NotificationsModel notificationsModel = new NotificationsModel();
             notificationsModel.setTitle("Title "+i);
             notificationsModel.setMessage("Message "+i);
@@ -231,7 +235,7 @@ public class Util {
 
     public ArrayList<OrderModel> generateOrders(Context ctx) {
         ArrayList<OrderModel> orderModels = new ArrayList<>();
-        for (int i = 1; i < 11; i++) {
+        for (int i = 0; i < 11; i++) {
             OrderModel orderModel = new OrderModel();
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, -i);
@@ -284,6 +288,53 @@ public class Util {
         }
         return total;
     }
+
+    public static void requestPermission(Activity activity){
+        ActivityCompat.requestPermissions(activity,
+                new String[]{Manifest.permission.ACCESS_NETWORK_STATE
+                        , Manifest.permission.ACCESS_COARSE_LOCATION
+                        , Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.CAMERA
+                        , Manifest.permission.READ_PHONE_STATE
+                        , Manifest.permission.READ_EXTERNAL_STORAGE
+                        , Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+
+    }
+
+    public static Location getLocationInLatLngRad(double radiusInMeters, Location currentLocation) {
+        double x0 = currentLocation.getLongitude();
+        double y0 = currentLocation.getLatitude();
+
+        Random random = new Random();
+
+        // Convert radius from meters to degrees.
+        double radiusInDegrees = radiusInMeters / 111320f;
+
+        // Get a random distance and a random angle.
+        double u = random.nextDouble();
+        double v = random.nextDouble();
+        double w = radiusInDegrees * Math.sqrt(u);
+        double t = 2 * Math.PI * v;
+        // Get the x and y delta values.
+        double x = w * Math.cos(t);
+        double y = w * Math.sin(t);
+
+        // Compensate the x value.
+        double new_x = x / Math.cos(Math.toRadians(y0));
+
+        double foundLatitude;
+        double foundLongitude;
+
+        foundLatitude = y0 + y;
+        foundLongitude = x0 + new_x;
+
+        Location copy = new Location(currentLocation);
+        copy.setLatitude(foundLatitude);
+        copy.setLongitude(foundLongitude);
+        return copy;
+    }
+
 
 
 }

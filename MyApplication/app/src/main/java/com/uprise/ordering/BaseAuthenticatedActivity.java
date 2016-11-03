@@ -1,31 +1,45 @@
 package com.uprise.ordering;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.util.Util;
 
 /**
  * Created by cicciolina on 10/29/16.
  */
 
-public class BaseAuthenticatedActivity extends AppCompatActivity {
+public class BaseAuthenticatedActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     protected CartItemsSharedPref cartItemsSharedPref;
     protected LoginSharedPref loginSharedPref;
+
+    // Google client to interact with Google API
+    protected GoogleApiClient mGoogleApiClient;
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         cartItemsSharedPref = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         checkPermissions();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
 
     }
 
@@ -50,20 +64,25 @@ public class BaseAuthenticatedActivity extends AppCompatActivity {
                         Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermission(this);
+            Util.requestPermission(this);
         } else {
 //            requestStatus();
         }
     }
 
 
-    public static void requestPermission(Activity activity){
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_PHONE_STATE
-                        , Manifest.permission.READ_EXTERNAL_STORAGE
-                        , Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }
