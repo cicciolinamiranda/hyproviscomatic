@@ -35,12 +35,6 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
         loginSharedPref = new LoginSharedPref();
         checkPermissions();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
     }
 
     public void checkPermissions() {
@@ -54,7 +48,12 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
          Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED
          ||**/
 
+
                 ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
                         Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(this,
                                 Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
@@ -84,5 +83,24 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 }

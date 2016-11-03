@@ -8,13 +8,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PointF;
-import android.location.Location;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.OrderStatus;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
@@ -302,9 +302,9 @@ public class Util {
 
     }
 
-    public static Location getLocationInLatLngRad(double radiusInMeters, Location currentLocation) {
-        double x0 = currentLocation.getLongitude();
-        double y0 = currentLocation.getLatitude();
+    public static LatLng getLocationInLatLngRad(double radiusInMeters, LatLng currentLocation) {
+        double x0 = currentLocation.longitude;
+        double y0 = currentLocation.latitude;
 
         Random random = new Random();
 
@@ -329,9 +329,11 @@ public class Util {
         foundLatitude = y0 + y;
         foundLongitude = x0 + new_x;
 
-        Location copy = new Location(currentLocation);
-        copy.setLatitude(foundLatitude);
-        copy.setLongitude(foundLongitude);
+//        Location copy = new Location(currentLocation);
+//        copy.setLatitude(foundLatitude);
+//        copy.setLongitude(foundLongitude);
+
+        LatLng copy = new LatLng(foundLatitude, foundLongitude);
         return copy;
     }
 

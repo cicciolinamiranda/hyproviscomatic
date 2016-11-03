@@ -3,7 +3,6 @@ package com.uprise.ordering;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -79,8 +78,7 @@ public class MainActivity extends LocationTrackingActivity
 
                     for (int i = 0; i < 11; i++) {
                         ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
-                        Location location = Util.getInstance().getLocationInLatLngRad(15d, locationTrackingBase.getLastLocation());
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        LatLng latLng = Util.getInstance().getLocationInLatLngRad(15d, getLocation());
                         shopOnMapModel.setTitle("Location "+i);
                         shopOnMapModel.setLocation(latLng);
                         shopOnMapModels.add(shopOnMapModel);
@@ -92,8 +90,7 @@ public class MainActivity extends LocationTrackingActivity
 
 
             });
-//            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
-//            productsFragment = new ProductsFragment();
+
             FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
             tx.replace(R.id.content_frame, mapLocationFragment);
             tx.commit();

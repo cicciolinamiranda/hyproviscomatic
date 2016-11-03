@@ -1,13 +1,16 @@
 package com.uprise.ordering.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,8 +118,20 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         mMap = mapView.getMap();
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        currPoint = new LatLng(sharedPreferences.getFloat("latitude", 0.0f)
-                , sharedPreferences.getFloat("longitude", 0.0f));
+        currPoint = new LatLng( 0.0f
+                , 0.0f);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
         try {
             mMap.setMyLocationEnabled(true);
         }
@@ -244,7 +259,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public boolean isCurrPointExisting() {
-        return (currPoint != null) && (currPoint.latitude != 0 && currPoint.longitude != 0);
+        return (currPoint != null) && (currPoint.latitude != 0 && currPoint.longitude != 0) && (marker != null);
     }
 
 }
