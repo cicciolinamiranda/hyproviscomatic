@@ -6,7 +6,7 @@
     <string name="prompt_email">Username/Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_short">Login</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -14,8 +14,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="action_register">Register</string>
-    <string name="action_shops">Shops</string>
+    <string name="action_register">Create New Account?</string>
+    <string name="action_shops">Distributor Shop</string>
     <string name="welcome">Welcome</string>
     <string name="reg_shopname">Shop Name or \n Name Of Owner</string>
     <string name="reg_shopaddress">Shop address</string>
@@ -75,5 +75,6 @@
     <string name="service_not_available">Sorry, Address is currently unavailable when not connected to a network.</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
     <string name="no_geocoder_available">No geocoder available</string>
+    <string name="label_sign_in_here">Sign in here</string>
 
 </resources>
