@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -19,15 +20,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.LocationTrackingActivity;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.fragment.MapLocationFragment;
-import com.uprise.ordering.model.ShopOnMapModel;
 import com.uprise.ordering.shared.LoginSharedPref;
-import com.uprise.ordering.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends LocationTrackingActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MapLocationListener {
 
     private MapLocationFragment mapLocationFragment;
     private LoginSharedPref loginSharedPref;
@@ -44,7 +41,7 @@ public class MainActivity extends LocationTrackingActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().setTitle("Shops");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -59,37 +56,8 @@ public class MainActivity extends LocationTrackingActivity
             tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
 
             mapLocationFragment = new MapLocationFragment();
-            mapLocationFragment.setOnFocusChangedListener(new MapLocationListener() {
-                @Override
-                public void onFocusChanged(boolean isFocused) {
-                    /**isScrollBlocked = isFocused;**/
-                }
+            mapLocationFragment.setOnFocusChangedListener(this);
 
-                @Override
-                public void onLatLngChanged(LatLng latLng) {
-                    //
-                }
-
-                @Override
-                public List<ShopOnMapModel> getShopsLocation() {
-
-                    //TODO: replaced with api call
-                    ArrayList<ShopOnMapModel> shopOnMapModels = new ArrayList<>();
-
-                    for (int i = 0; i < 11; i++) {
-                        ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
-                        LatLng latLng = Util.getInstance().getLocationInLatLngRad(15d, getLocation());
-                        shopOnMapModel.setTitle("Location "+i);
-                        shopOnMapModel.setLocation(latLng);
-                        shopOnMapModels.add(shopOnMapModel);
-                    }
-
-                    return shopOnMapModels;
-                }
-
-
-
-            });
 
             FragmentTransaction tx =  getSupportFragmentManager().beginTransaction();
             tx.replace(R.id.content_frame, mapLocationFragment);
@@ -107,7 +75,12 @@ public class MainActivity extends LocationTrackingActivity
         }
     }
 
-//    @Override
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        super.onConnected(bundle);
+    }
+
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.main, menu);
@@ -200,6 +173,32 @@ public class MainActivity extends LocationTrackingActivity
 
     @Override
     public void setLocation(LatLng latlng) {
+
         mapLocationFragment.setLocation(latlng);
+//        mapLocationFragment.setOnFocusChangedListener(this);
     }
+
+    @Override
+    public void onFocusChanged(boolean isFocused) {
+    }
+
+    @Override
+    public void onLatLngChanged(LatLng latLng) {
+
+    }
+
+//    @Override
+//    public List<ShopOnMapModel> getShopsLocation() {
+//        ArrayList<ShopOnMapModel> shopOnMapModels = new ArrayList<>();
+//
+//                    for (int i = 0; i < 11; i++) {
+//                        ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
+//                        LatLng latLng = Util.getInstance().getLocationInLatLngRad(15d, getLocation());
+//                        shopOnMapModel.setTitle("Location "+i);
+//                        shopOnMapModel.setLocation(latLng);
+//                        shopOnMapModels.add(shopOnMapModel);
+//                    }
+//
+//                    return shopOnMapModels;
+//    }
 }

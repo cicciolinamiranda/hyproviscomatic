@@ -16,12 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -32,6 +34,10 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.model.ShopOnMapModel;
+import com.uprise.ordering.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cicciolina on 11/3/16.
@@ -87,10 +93,24 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title(MARKER_TITLE));
         marker.setVisible(true);
+
+        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
+
+        //TODO: replace with API call
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                    .title(shopOnMap.getTitle()));
+            shopMaker.setVisible(true);
+
+        }
+
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerDragListener(this);
             mMap.setOnCameraChangeListener(this);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 18.0f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 14.0f));
         saveLatLng();
     }
 
@@ -139,14 +159,20 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             e.printStackTrace();
         }
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currPoint, 10.0f));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        MapsInitializer.initialize(this.getActivity());
+
         BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
-        for(ShopOnMapModel shopOnMap: listener.getShopsLocation()) {
-            mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+        //TODO: replace with API call
+         for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
                 .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
                     .title(shopOnMap.getTitle()));
+             shopMaker.setVisible(true);
 
         }
 
@@ -155,11 +181,40 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title("My Location"));
 
+        //TODO: replace with API call
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                    .title(shopOnMap.getTitle()));
+            shopMaker.setVisible(true);
+
+        }
+
         marker.setVisible(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerDragListener(this);
 
+        if (mapView != null &&
+                mapView.findViewById(Integer.parseInt("1")) != null) {
+            // Get the button view
+            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            View zoomButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("1"));
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams locLayoutParams = (RelativeLayout.LayoutParams)
+                    locationButton.getLayoutParams();
+            // position on right bottom
+            locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            locLayoutParams.setMargins(0, 0, 35, 450);
+
+//
+//            RelativeLayout.LayoutParams zoomLayoutParams = (RelativeLayout.LayoutParams)
+//                    zoomButton.getLayoutParams();
+//            // position on right bottom
+//            zoomLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+//            zoomLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+        }
 
     }
 
@@ -260,6 +315,22 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     public boolean isCurrPointExisting() {
         return (currPoint != null) && (currPoint.latitude != 0 && currPoint.longitude != 0) && (marker != null);
+    }
+
+    private List<ShopOnMapModel> getShopsLocation() {
+        ArrayList<ShopOnMapModel> shopOnMapModels = new ArrayList<>();
+
+
+        //TODO replace with REST api call
+        for (int i = 0; i < Util.latLngs.size(); i++) {
+            ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
+            LatLng latLng = Util.latLngs.get(i);
+            shopOnMapModel.setTitle("Location "+i);
+            shopOnMapModel.setLocation(latLng);
+            shopOnMapModels.add(shopOnMapModel);
+        }
+
+        return shopOnMapModels;
     }
 
 }

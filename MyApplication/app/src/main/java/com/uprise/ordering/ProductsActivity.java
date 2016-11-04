@@ -50,6 +50,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
 
         List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
         populateProductList(items);
+        getSupportActionBar().setTitle("Products");
     }
 
     @Override

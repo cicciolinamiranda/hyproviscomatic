@@ -37,6 +37,17 @@ public class Util {
 
     private static Util instance;
 
+    public static List<LatLng> latLngs = Arrays.asList(new LatLng(14.520445d, 121.053886d)
+                                                        , new LatLng(14.5406258d, 121.063888d)
+                                                    ,new LatLng(14.5235562d, 121.0511223d)
+                                                    ,new LatLng(14.530399d, 121.053896)
+                                                    ,new LatLng(14.5211223d, 121.055423d)
+                                                    , new LatLng(14.5406253d, 121.063838d)
+                                                    ,new LatLng(14.520125d, 121.053336d)
+                                                    ,new LatLng(14.556399d, 121.054896)
+                                            , new LatLng(14.5426253d, 121.063838d)
+                                            ,new LatLng(14.520145d, 121.053336d)
+                                            ,new LatLng(14.556699d, 121.054396));
     private static List<String> url = Arrays.asList("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg"
                                     ,"http://www.trappsclassichumidors.com/wp-content/uploads/2014/08/shutterstock_116632465.jpg"
                                     , "http://i.imgur.com/z4FaR3m.png"
@@ -48,8 +59,6 @@ public class Util {
                                     ,"http://e-cigarette-starter-kit.info/wp-content/uploads/2011/04/ecigarettebrands.png"
                                     ,"http://www.cigarettesbrands.com/wp-content/uploads/2013/12/e-cigarette.png"
                                     ,"http://www.ego-cigarettes.com/photo/pc889464-black_mini_affordable_brands_of_disposable_electric_cigarette_for_green_smoking.jpg");
-
-
 
     private Util() {
 
