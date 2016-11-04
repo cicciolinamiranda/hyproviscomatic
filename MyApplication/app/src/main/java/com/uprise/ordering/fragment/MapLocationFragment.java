@@ -3,11 +3,16 @@ package com.uprise.ordering.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.GpsStatus;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,8 +38,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.uprise.ordering.R;
 import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.ShopOnMapModel;
+import com.uprise.ordering.service.FetchAddressIntentService;
 import com.uprise.ordering.util.Util;
+import com.uprise.ordering.util.WifiScanManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +72,14 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     private View v;
     private int markerSize = 150;
 
+    /** Location name purposes **/
+    private static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
+    private static final String LOCATION_ADDRESS_KEY = "location-address";
+    private String mAddressOutput;
+    private boolean mAddressRequested;
+
+    private AddressResultReceiver mResultReceiver;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,6 +91,31 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         mapView.getMapAsync(this);
         mapView.setOnFocusChangeListener(this);
         currPoint = null;
+
+        mAddressOutput = "";
+        updateValuesFromBundle(savedInstanceState);
+
+        LocationManager lm = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        try
+        {
+            lm.addGpsStatusListener(new android.location.GpsStatus.Listener() {
+                public void onGpsStatusChanged(int event) {
+                    switch (event) {
+                        case GpsStatus.GPS_EVENT_STARTED:
+                            MapLocationFragment.this.getCurrPoint();
+                            break;
+                        case GpsStatus.GPS_EVENT_STOPPED:
+                            WifiScanManager.getInstance().checkGPS(MapLocationFragment.this.getActivity());
+                            break;
+                    }
+                }
+            });}
+        catch (SecurityException s){
+            s.printStackTrace();
+            Log.d(ApplicationConstants.APP_CODE, "permission onError:" + s.getMessage());
+        }
+
+
         return v;
     }
 
@@ -89,11 +130,6 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     public void onMapClick(LatLng latLng) {
         marker.remove();
 
-        marker = mMap.addMarker(new MarkerOptions().position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .title(MARKER_TITLE));
-        marker.setVisible(true);
-
         BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
@@ -102,16 +138,26 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         for(ShopOnMapModel shopOnMap: getShopsLocation()) {
             Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
                     .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                    .title(shopOnMap.getTitle()));
+                    .title(shopOnMap.getAddress()));
             shopMaker.setVisible(true);
+            startIntentService(shopOnMap);
 
         }
+
+        marker = mMap.addMarker(new MarkerOptions().position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .title(MARKER_TITLE));
+        marker.setVisible(true);
 
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerDragListener(this);
             mMap.setOnCameraChangeListener(this);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 14.0f));
         saveLatLng();
+
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            startIntentService(shopOnMap);
+        }
     }
 
     @Override
@@ -168,28 +214,16 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
         //TODO: replace with API call
-         for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
             Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                    .title(shopOnMap.getTitle()));
-             shopMaker.setVisible(true);
-
+                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                    .title(shopOnMap.getAddress()));
+            shopMaker.setVisible(true);
         }
-
 
         marker = mMap.addMarker(new MarkerOptions().position(currPoint)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title("My Location"));
-
-        //TODO: replace with API call
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                    .title(shopOnMap.getTitle()));
-            shopMaker.setVisible(true);
-
-        }
-
         marker.setVisible(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setOnMapClickListener(this);
@@ -214,8 +248,13 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 //            // position on right bottom
 //            zoomLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 //            zoomLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+
+
         }
 
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            startIntentService(shopOnMap);
+        }
     }
 
     @Override
@@ -251,9 +290,13 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    public LatLng getCurrPoint() {
+        return currPoint;
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        mAddressRequested = true;
     }
 
     @Override
@@ -306,6 +349,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
         currPoint = marker.getPosition();
         locationTrackingBase.setLatLng(currPoint);
+
     }
 
     @Override
@@ -331,6 +375,90 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         }
 
         return shopOnMapModels;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save whether the address has been requested.
+        outState.putBoolean(ADDRESS_REQUESTED_KEY, mAddressRequested);
+
+        // Save the address string.
+        outState.putString(LOCATION_ADDRESS_KEY, mAddressOutput);
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Updates fields based on data stored in the bundle.
+     */
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            // Check savedInstanceState to see if the address was previously requested.
+            if (savedInstanceState.keySet().contains(ADDRESS_REQUESTED_KEY)) {
+                mAddressRequested = savedInstanceState.getBoolean(ADDRESS_REQUESTED_KEY);
+            }
+            // Check savedInstanceState to see if the location address string was previously found
+            // and stored in the Bundle. If it was found, display the address string in the UI.
+            if (savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY)) {
+                mAddressOutput = savedInstanceState.getString(LOCATION_ADDRESS_KEY);
+//                displayAddressOutput();
+            }
+        }
+    }
+    private class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+//            // Display the address string or an error message sent from the intent service.
+//            mAddressOutput = resultData.getString(EndpointConstants.RESULT_DATA_KEY);
+//            displayAddressOutput();
+//
+//            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+//            mAddressRequested = false;
+            listener.address((ShopOnMapModel) resultData.getParcelable(ApplicationConstants.RESULT_DATA_KEY));
+
+        }
+    }
+
+    protected void startIntentService(ShopOnMapModel shopOnMapModel) {
+        // Create an intent for passing to the intent service responsible for fetching the address.
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        mResultReceiver = new AddressResultReceiver(new Handler());
+        // Pass the result receiver as an extra to the service.
+        intent.putExtra(ApplicationConstants.RECEIVER, mResultReceiver);
+
+        // Pass the location data as an extra to the service.
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+
+//            Location loc = new Location(ApplicationConstants.APP_CODE);
+//            loc.setLatitude(shopOnMap.getLocation().latitude);
+//            loc.setLongitude(shopOnMap.getLocation().longitude);
+            intent.putExtra(ApplicationConstants.LOCATION_DATA_EXTRA, shopOnMapModel);
+
+            // Start the service. If the service isn't already running, it is instantiated and started
+            // (creating a process for it if needed); if it is running then it remains running. The
+            // service kills itself automatically once all intents are processed.
+            getActivity().startService(intent);
+
+
     }
 
 }

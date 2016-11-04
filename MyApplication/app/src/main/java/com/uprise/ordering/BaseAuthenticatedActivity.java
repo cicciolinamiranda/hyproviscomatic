@@ -48,8 +48,9 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
          Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED
          ||**/
 
-
                 ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
+                ||ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

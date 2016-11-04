@@ -1,6 +1,7 @@
 package com.uprise.ordering.base;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.uprise.ordering.model.ShopOnMapModel;
 
 /**
  * Created by cicciolina on 11/3/16.
@@ -9,5 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 public interface MapLocationListener {
     void onFocusChanged(boolean isFocused);
     void onLatLngChanged(LatLng latLng);
-//    List<ShopOnMapModel> getShopsLocation();
+    void address(ShopOnMapModel shopOnMapModel);
+
+
 }
