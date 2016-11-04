@@ -1,4 +1,4 @@
-package com.uprise.ordering;
+package com.uprise.ordering.enums;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -22,7 +22,6 @@ public class OrderListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
 
-        getSupportActionBar().setTitle("My Orders");
         orderList = (ListView) findViewById(R.id.list_orders);
 
         orderModelArrayAdapter = new OrderListView(OrderListActivity.this,

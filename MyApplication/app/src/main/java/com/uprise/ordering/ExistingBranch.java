@@ -28,7 +28,6 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_existing_branch);
-        getSupportActionBar().setTitle("Branches");
 
         llNoBranchAvail =(LinearLayout) findViewById(R.id.ll_existing_branch_no_records);
         llExistingBranch =(LinearLayout) findViewById(R.id.ll_existing_branch);

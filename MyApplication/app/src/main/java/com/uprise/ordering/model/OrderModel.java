@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.uprise.ordering.OrderStatus;
+import com.uprise.ordering.enums.OrderStatus;
 
 import java.util.ArrayList;
 

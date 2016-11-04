@@ -92,11 +92,13 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
                 attemptLogin();
                 break;
             case R.id.tv_create_new_account:
+                tvCreateNewAccount.setTextColor(getResources().getColor(R.color.material_orange));
                 startActivity(new Intent(LandingActivity.this, RegistrationActivity.class));
                 finish();
                 break;
             case R.id.tv_distributor_shop:
-//                startActivity(new Intent(LandingActivity.this, LoginActivity.class));
+                tvDistributorShop.setTextColor(getResources().getColor(R.color.material_orange));
+                startActivity(new Intent(LandingActivity.this, DistributorShopActivity.class));
                 finish();
                 break;
         }

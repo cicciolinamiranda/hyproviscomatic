@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -48,6 +49,10 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private String productId;
     private CartItemsModel savedCardItem;
     private List<CartItemsModel> cartItemsModelList;
+    private LinearLayout llBrandPrice;
+    private LinearLayout llBrandQty;
+    private LinearLayout llQtyButtons;
+    private LinearLayout llTransacBtn;
 
     public BrandsPagerAdapter(Context context, List<BrandModel> web, List<CartItemsModel> cartItemsModelList, BrandsPagerAdapter.BrandsAdapterListener listener, String productId) {
         this.mContext = context;
@@ -90,6 +95,20 @@ public class BrandsPagerAdapter extends PagerAdapter {
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
         BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId);
+
+
+        LoginSharedPref loginSharedPref = new LoginSharedPref();
+        llBrandPrice = (LinearLayout) itemView.findViewById(R.id.ll_brand_price);
+        llBrandQty = (LinearLayout) itemView.findViewById(R.id.ll_brand_qty);
+        llQtyButtons = (LinearLayout) itemView.findViewById(R.id.ll_item_qty_buttons);
+        llTransacBtn = (LinearLayout) itemView.findViewById(R.id.ll_transac_buttons);
+        if(!loginSharedPref.isLoggedIn(mContext)) {
+            llBrandPrice.setVisibility(View.INVISIBLE);
+            llBrandQty.setVisibility(View.INVISIBLE);
+            llQtyButtons.setVisibility(View.INVISIBLE);
+            llTransacBtn.setVisibility(View.INVISIBLE);
+        }
+
         saveEditBtn.setOnClickListener(count);
         etQuantity.addTextChangedListener(count);
         minusBtn.setOnClickListener(count);

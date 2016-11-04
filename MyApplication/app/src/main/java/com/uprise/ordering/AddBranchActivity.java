@@ -70,7 +70,6 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         btnAddBranch.setOnClickListener(this);
         btnPicsOfStore.setOnClickListener(this);
         btnPicsOfPermit.setOnClickListener(this);
-        getSupportActionBar().setTitle("Branch Details");
 
         BranchModel branchModel = getIntent().getParcelableExtra("branchModel");
         findViewById(R.id.ll_photo_store_imageExcessDisplay).setOnClickListener(this);

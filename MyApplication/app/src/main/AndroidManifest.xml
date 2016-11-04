@@ -61,6 +61,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/shops_searchable" />
@@ -71,35 +72,44 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AddBranchActivity"
+            android:label="@string/title_activity_add_branch"
             android:parentActivityName=".RegistrationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ShoppingCartActivity"
+            android:label="@string/title_activity_cart"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ProductsActivity"
+            android:label="@string/title_activity_products"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NotificationActivity"
+            android:label="@string/title_activity_notif"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NotifMsgActivity"
+            android:label="@string/title_activity_notif"
             android:parentActivityName=".NotificationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ExistingBranch"
+            android:label="@string/title_activity_branches"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".OrderListActivity"
+            android:label="@string/title_activity_orders"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OrderDetailsActivity"
+        <activity
+            android:name=".OrderDetailsActivity"
+            android:label="@string/title_activity_orders"
             android:parentActivityName=".OrderListActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -109,6 +119,10 @@
             android:name=".service.FetchAddressIntentService"
             android:exported="false" />
 
+        <activity android:name=".DistributorShopActivity"
+            android:label="@string/title_activity_products_distributor"
+            android:parentActivityName=".LandingActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

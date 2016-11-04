@@ -23,8 +23,6 @@ public class NotificationActivity extends BaseAuthenticatedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        getSupportActionBar().setTitle("Notifications");
-
         lvNotificationsList = (ListView) findViewById(R.id.list_notifications);
         //TODO: to be replaced by REST CALL API
         notificationsModelArrayList = Util.getInstance().generateNotifications();

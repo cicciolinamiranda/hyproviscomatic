@@ -16,7 +16,6 @@ public class NotifMsgActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notif_msg);
-        getSupportActionBar().setTitle("Notifications");
 
         NotificationsModel notificationsModel = getIntent().getParcelableExtra("notificationsModel");
 

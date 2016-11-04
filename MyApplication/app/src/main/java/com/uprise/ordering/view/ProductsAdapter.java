@@ -71,7 +71,8 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
 
     @Override
     //gets the name of each item
-    public Object getChild(int i, int i1) {
+    public Object
+    getChild(int i, int i1) {
         return mParent.get(i).getBrands().get(i1);
     }
     @Override

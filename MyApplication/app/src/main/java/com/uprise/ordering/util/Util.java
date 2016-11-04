@@ -15,7 +15,7 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.uprise.ordering.OrderStatus;
+import com.uprise.ordering.enums.OrderStatus;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.NotificationsModel;
