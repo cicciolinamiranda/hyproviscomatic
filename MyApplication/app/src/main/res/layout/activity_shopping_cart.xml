@@ -9,7 +9,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/ll_shopping_cart_no_records"
         android:layout_width="match_parent"
@@ -38,8 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/list_shopping_cart"
-            android:descendantFocusability="blocksDescendants"
-            android:layout_alignParentTop="true"/>
+            android:descendantFocusability="blocksDescendants"/>
     </RelativeLayout>
 </LinearLayout>
     <LinearLayout

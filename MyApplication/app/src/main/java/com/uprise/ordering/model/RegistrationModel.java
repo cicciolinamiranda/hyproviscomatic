@@ -1,9 +1,12 @@
 package com.uprise.ordering.model;
 
+import java.util.List;
+
 /**
  * Created by cicciolina on 10/15/16.
  */
 public class RegistrationModel {
+
 
     private String shopName;
     private String shopAddress;
@@ -11,6 +14,11 @@ public class RegistrationModel {
     private String shippingAddress;
     private String email;
     private String password;
+    private List<BranchModel> branchModels;
+
+    public RegistrationModel() {
+        super();
+    }
 
     public String getShopName() {
         return shopName;
@@ -58,5 +66,13 @@ public class RegistrationModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<BranchModel> getBranchModels() {
+        return branchModels;
+    }
+
+    public void setBranchModels(List<BranchModel> branchModels) {
+        this.branchModels = branchModels;
     }
 }

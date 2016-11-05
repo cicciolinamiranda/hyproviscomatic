@@ -8,14 +8,12 @@ import android.widget.LinearLayout;
 
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DistributorShopActivity extends LandingSubPageBaseActivity implements ExpandableListView.OnChildClickListener,
         BrandsPagerAdapter.BrandsAdapterListener,
@@ -37,11 +35,10 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
         loginSharedPref = new LoginSharedPref();
-        cartItemsSharedPref = new CartItemsSharedPref();
+//        cartItemsSharedPref = new CartItemsSharedPref();
         username = loginSharedPref.getUsername(this);
 
-        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
-        populateProductList(items);
+        populateProductList();
 //        getSupportActionBar().setTitle("Products");
     }
 
@@ -80,19 +77,6 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
             }
         }
         parent.invalidateViews();
-//        for(int i=0; i < productsAdapter.getChildrenCount(groupPosition); i++) {
-//            LinearLayout llBrandPrice = (LinearLayout) v.findViewById(R.id.ll_brand_price);
-//            LinearLayout llBrandQty = (LinearLayout) v.findViewById(R.id.ll_brand_qty);
-//            LinearLayout llQtyButtons = (LinearLayout) v.findViewById(R.id.ll_item_qty_buttons);
-//            LinearLayout llTransacBtn = (LinearLayout) v.findViewById(R.id.ll_transac_buttons);
-//
-//            if(i == childPosition) {
-//                llBrandPrice.setVisibility(View.GONE);
-//                llQtyButtons.setVisibility(View.GONE);
-//                llBrandQty.setVisibility(View.GONE);
-//                llTransacBtn.setVisibility(View.GONE);
-//            }
-//        }
 
 
         return false;
@@ -124,22 +108,9 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         return 0;
     }
 
-    private void populateProductList(List<CartItemsModel> items) {
-//        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
-
-        if(items !=null && !items.isEmpty()) {
-            productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this, items);
-            productsAdapter.notifyDataSetChanged();
-        }
-        else {
-            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
-            productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
-        }
+    private void populateProductList() {
+        productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         expandableListView.setAdapter(productsAdapter);
-
-//        if(lastExpandedPosition != -1) {
-//            expandableListView.expandGroup(lastExpandedPosition);
-//        }
     }
 
 }

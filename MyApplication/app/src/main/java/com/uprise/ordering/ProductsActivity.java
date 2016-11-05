@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
@@ -45,11 +45,12 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
         loginSharedPref = new LoginSharedPref();
-        cartItemsSharedPref = new CartItemsSharedPref();
+//        cartItemsSharedPref = new CartItemsSharedPref();
         username = loginSharedPref.getUsername(this);
 
-        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
-        populateProductList(items);
+//        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
+        sqlDatabaseHelper = new SqlDatabaseHelper(ProductsActivity.this);
+        populateProductList();
         getSupportActionBar().setTitle("Products");
     }
 
@@ -67,9 +68,10 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     @Override
     public void addToCart(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(username);
-        cartItemsSharedPref.addCartItems(this, cartItemsModel);
-        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
-        populateProductList(items);
+//        cartItemsSharedPref.addCartItems(this, cartItemsModel);
+//        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
+        sqlDatabaseHelper.createCartItems(cartItemsModel);
+        populateProductList();
         isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(this, getString(R.string.changes_saved));
 
@@ -78,9 +80,10 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(username);
-        cartItemsSharedPref.editCardItem(this, cartItemsModel);
-        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
-        populateProductList(items);
+//        cartItemsSharedPref.editCardItem(this, cartItemsModel);
+//        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
+        sqlDatabaseHelper.updateCartItems(cartItemsModel);
+        populateProductList();
         isAddOrSaved = true;
         Util.getInstance().showSnackBarToast(this, getString(R.string.changes_saved));
 
@@ -102,15 +105,15 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         return lastViewPagerPosition;
     }
 
-    private void populateProductList(List<CartItemsModel> items) {
-//        List<CartItemsModel> items = sharedPreferences.loadCartItems(getContext(), username);
+    private void populateProductList() {
+        List<CartItemsModel> items = sqlDatabaseHelper.getAllUserCartItems(username);
 
         if(items !=null && !items.isEmpty()) {
             productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this, items);
             productsAdapter.notifyDataSetChanged();
         }
         else {
-            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
+//            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
             productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         }
         expandableListView.setAdapter(productsAdapter);

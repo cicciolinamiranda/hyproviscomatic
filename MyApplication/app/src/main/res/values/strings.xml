@@ -83,5 +83,7 @@
     <string name="title_activity_cart">Cart Items</string>
     <string name="title_activity_notif">Notifications</string>
     <string name="title_activity_add_branch">Branch Details</string>
+    <string name="endpoint_post_registration">/api/registration</string>
+    <string name="endpoint_server">http://130.211.249.66</string>
 
 </resources>

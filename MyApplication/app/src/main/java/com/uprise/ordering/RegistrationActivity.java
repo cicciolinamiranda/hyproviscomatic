@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.RegistrationModel;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BranchList;
 import com.uprise.ordering.view.ExpandableHeightListView;
@@ -23,7 +25,7 @@ import com.uprise.ordering.view.ExpandableHeightListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegistrationActivity extends LandingSubPageBaseActivity implements View.OnClickListener {
+public class RegistrationActivity extends LandingSubPageBaseActivity implements View.OnClickListener, RestCallServices.RestServiceListener {
 
     private static int NUM_IMAGES = 3;
 
@@ -101,46 +103,6 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                     branchModel = data.getParcelableExtra("branchModel");
                     branchModelList.add(branchModel);
                     populateBranchListView();
-//                    adapterBranchModelList = new BranchList(this, branchModelList);
-//
-//                    this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            listViewBranch.setAdapter(adapterBranchModelList);
-//                            adapterBranchModelList.notifyDataSetChanged();
-//                            registerForContextMenu(listViewBranch);
-//                        }
-//                    });
-//                    listViewBranch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView, final View view, final int i, final long l) {
-//
-//                            AlertDialog.Builder listViewDialog = new AlertDialog.Builder(
-//                                    RegistrationActivity.this);
-//                            listViewDialog.setPositiveButton("Edit",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface arg0, int arg1) {
-//                                            Intent editBranch = new Intent(RegistrationActivity.this, BranchActivity.class);
-//                                            editBranch.putExtra("branchModel", branchModelList.get(i));
-//                                            editBranch.putExtra("id",i);
-//                                            editBranch.putExtra(("resultCode"), ApplicationConstants.RESULT_EDIT_BRANCH);
-//                                            setResult(RESULT_OK, editBranch );
-////                                            finish();
-//                                        }
-//                                    });
-//
-//                            listViewDialog.setNegativeButton("Delete",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface arg0, int arg1) {
-//                                            branchModelList.remove(branchModelList.get(i));
-//                                            adapterBranchModelList = new BranchList(RegistrationActivity.this, branchModelList);
-//                                            adapterBranchModelList.notifyDataSetChanged();
-//                                            listViewBranch.setAdapter(adapterBranchModelList);
-//                                        }
-//                                    });
-//                            listViewDialog.show();
-//                        }
-//                    });
                 }
                 break;
             case ApplicationConstants.RESULT_EDIT_BRANCH:
@@ -210,4 +172,18 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     }
 
 
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+    }
 }

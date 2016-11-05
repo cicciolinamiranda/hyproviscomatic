@@ -10,9 +10,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.CartItemsSharedPref;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
@@ -48,12 +48,14 @@ View.OnClickListener {
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_total_value);
         llProceedToCheckout = (LinearLayout) findViewById(R.id.ll_shopping_cart_proceed_checkout);
         llProceedToCheckout.setOnClickListener(this);
-        cartItemsSharedPref = new CartItemsSharedPref();
+//        cartItemsSharedPref = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
-        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
-                loginSharedPref.getUsername(ShoppingCartActivity.this));
+//        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
+//                loginSharedPref.getUsername(ShoppingCartActivity.this));
+
+        sqlDatabaseHelper = new SqlDatabaseHelper(ShoppingCartActivity.this);
         populateList();
         getSupportActionBar().setTitle("Cart Items");
 
@@ -63,18 +65,17 @@ View.OnClickListener {
     @Override
     public void deleteCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(loginSharedPref.getUsername(ShoppingCartActivity.this));
-        cartItemsSharedPref.removeCardItem(ShoppingCartActivity.this, cartItemsModel);
-        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
-                loginSharedPref.getUsername(ShoppingCartActivity.this));
+//        cartItemsSharedPref.removeCardItem(ShoppingCartActivity.this, cartItemsModel);
+
+        sqlDatabaseHelper.deleteCartItem(cartItemsModel);
+//        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginSharedPref.getUsername(ShoppingCartActivity.this));
         populateList();
     }
 
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(loginSharedPref.getUsername(ShoppingCartActivity.this));
-        cartItemsSharedPref.editCardItem(ShoppingCartActivity.this, cartItemsModel);
-        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
-                loginSharedPref.getUsername(ShoppingCartActivity.this));
+        sqlDatabaseHelper.updateCartItems(cartItemsModel);
         populateList();
     }
 
@@ -82,7 +83,7 @@ View.OnClickListener {
         llNoRecords.setVisibility(View.GONE);
         llShopCartList.setVisibility(View.VISIBLE);
         llLowerLayouts.setVisibility(View.VISIBLE);
-
+        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginSharedPref.getUsername(ShoppingCartActivity.this));
         if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
                     productModels, this);
@@ -117,7 +118,7 @@ View.OnClickListener {
                 Util.getInstance().showSnackBarToast(this, getString(R.string.action_checkout));
 
                 //TODO: Must transfer in MyOrders
-                cartItemsSharedPref.removeAll(ShoppingCartActivity.this, loginSharedPref.getUsername(ShoppingCartActivity.this));
+//                cartItemsSharedPref.removeAll(ShoppingCartActivity.this, loginSharedPref.getUsername(ShoppingCartActivity.this));
                 finish();
                 startActivity(getIntent());
                 break;

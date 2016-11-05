@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.uprise.ordering.shared.CartItemsSharedPref;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 
@@ -23,16 +23,18 @@ import com.uprise.ordering.util.Util;
 public class BaseAuthenticatedActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    protected CartItemsSharedPref cartItemsSharedPref;
+//    protected CartItemsSharedPref cartItemsSharedPref;
     protected LoginSharedPref loginSharedPref;
 
     // Google client to interact with Google API
     protected GoogleApiClient mGoogleApiClient;
+    protected SqlDatabaseHelper sqlDatabaseHelper;
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        cartItemsSharedPref = new CartItemsSharedPref();
+//        cartItemsSharedPref = new CartItemsSharedPref();
         loginSharedPref = new LoginSharedPref();
+        sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
         checkPermissions();
 
     }
