@@ -248,7 +248,9 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
         File dir = new File(ApplicationConstants.DATA_STORAGE_STORE_PATH);
 
-        if(requestCode == ApplicationConstants.RESULT_GALLERY_PERMIT) dir = new File(ApplicationConstants.DATA_STORAGE_PERMIT_PATH);
+        if(requestCode == ApplicationConstants.RESULT_PICK_FROM_CAMERA_PERMIT) {
+            dir = new File(ApplicationConstants.DATA_STORAGE_PERMIT_PATH);
+        }
         if(!dir.exists()){
             dir.mkdir();
         }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
 //    private ImageButton btnPicsOfPermit;
 //    private LinearLayout llPicsOfStore;
 //    private LinearLayout llPicsOfPermit;
+    View focusView = null;
     private Button btnSubmit;
     private Button btnAddBranch;
     private BranchModel branchModel;
@@ -82,6 +84,13 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                 if(isFormCanBeSaved()) {
                     RegistrationModel registrationModel = new RegistrationModel();
 
+                    registrationModel.setBranchModels(branchModelList);
+                    registrationModel.setContactNum(contactNum.getText().toString());
+                    registrationModel.setEmail(email.getText().toString());
+                    registrationModel.setPassword(password.getText().toString());
+                    registrationModel.setShippingAddress(shippingAddress.getText().toString());
+                    registrationModel.setShopName(shopName.getText().toString());
+                    registrationModel.setShopAddress(shopAddress.getText().toString());
                     restCallServices.postRegistration(RegistrationActivity.this, registrationModel, this);
                 }
 
@@ -199,8 +208,14 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
 
     @Override
     public void onFailure(RestCalls callType, String string) {
-
-        Util.getInstance().showSnackBarToast(RegistrationActivity.this, getString(R.string.unable_to_register));
+        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+//        Util.getInstance().showSnackBarToast(RegistrationActivity.this, getString(R.string.unable_to_register));
     }
 
     private boolean isFormCanBeSaved() {
@@ -220,6 +235,27 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
             canBeAdded = false;
         }
 
+        String emailStr = email.getText().toString();
+        String passwordStr = password.getText().toString();
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(emailStr)) {
+            email.setError(getString(R.string.error_field_required));
+            focusView = email;
+            canBeAdded = false;
+        } else if (!isEmailValid(emailStr)) {
+            email.setError(getString(R.string.error_invalid_email));
+            focusView = email;
+            canBeAdded = false;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(passwordStr) && !isPasswordValid(passwordStr)) {
+            password.setError(getString(R.string.error_invalid_password));
+            focusView = password;
+            canBeAdded = false;
+        }
+
         if(branchModelList == null || branchModelList.isEmpty()) {
             Util.getInstance().showDialog(this, "Please add atleast one(1) Branch", this.getString(R.string.action_ok),
                     new DialogInterface.OnClickListener() {
@@ -230,6 +266,19 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                     });
             canBeAdded = false;
         }
+
+        if(canBeAdded && focusView != null) focusView.requestFocus();
+
         return canBeAdded;
+    }
+
+    private boolean isEmailValid(String email) {
+        //TODO: Replace this with your own logic
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 4;
     }
 }

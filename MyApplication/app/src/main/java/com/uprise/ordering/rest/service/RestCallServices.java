@@ -122,7 +122,7 @@ public class RestCallServices {
         }
 
         params.add(new NameValuePair("profile", profileObj.toString()));
-
+        JSONArray branchJsonArray = new JSONArray();
         for (BranchModel branchModel: registrationModel.getBranchModels()) {
             JSONObject branchJsonObj = new JSONObject();
             JSONArray photosJsonArray = new JSONArray();
@@ -135,7 +135,7 @@ public class RestCallServices {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                     storePhotoJson.put("image", bitmapToBase64(storeBmpImage));
-                    storePhotoJson.put("description", branchModel.getName());
+                    storePhotoJson.put("description", branchModel.getName() + " "+storeImgPath);
                     photosJsonArray.put(storePhotoJson);
                 }
 
@@ -144,17 +144,19 @@ public class RestCallServices {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", bitmapToBase64(permitBmpImage));
-                    permitPhotoJsonObj.put("description", branchModel.getName());
+                    permitPhotoJsonObj.put("description", branchModel.getName() + " "+permitImgPath);
                     photosJsonArray.put(permitPhotoJsonObj);
                 }
 
                 branchJsonObj.put("photos", photosJsonArray);
-
+                branchJsonArray.put(branchJsonObj);
+//                params.add(new NameValuePair("branches", branchJsonObj.toString()));
 
             } catch (JSONException e) {
                 Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
             }
         }
+        params.add(new NameValuePair("branches", branchJsonArray.toString()));
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String jsonResults;
@@ -169,7 +171,7 @@ public class RestCallServices {
             public void result() {
                 if (jsonResults == null) {
                     RestCallServices.this.failedPost(listener, RestCalls.REGISTRATION
-                            , "failed sending picture in " + registrationEndpoint, params);
+                            , ctx.getString(R.string.unable_to_register), params);
                 } else {
 
                     listener.onSuccess(RestCalls.REGISTRATION, jsonResults);
