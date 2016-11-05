@@ -94,7 +94,7 @@ public class RestCallServices {
         return imageBitmap;
     }
 
-    private String postRegistration(final Context ctx, final RegistrationModel registrationModel, final RestServiceListener listener) {
+    public String postRegistration(final Context ctx, final RegistrationModel registrationModel, final RestServiceListener listener) {
         String response = "";
         final String registrationEndpoint = ctx.getResources().getString(R.string.endpoint_server)
                 + ctx.getResources().getString(R.string.endpoint_post_registration);

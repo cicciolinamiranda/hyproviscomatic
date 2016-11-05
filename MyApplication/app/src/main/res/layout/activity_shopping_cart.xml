@@ -9,7 +9,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/ll_shopping_cart_no_records"
         android:layout_width="match_parent"
@@ -38,9 +38,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/list_shopping_cart"
-            android:descendantFocusability="blocksDescendants"/>
+            android:descendantFocusability="blocksDescendants"
+            android:layout_alignParentTop="true"/>
     </RelativeLayout>
-</LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_shopping_cart_lower_layout"
         android:layout_width="match_parent"
@@ -97,5 +98,7 @@
             android:layout_marginLeft="20dp"
             />
         </LinearLayout>
+    </LinearLayout>
+
     </LinearLayout>
 </FrameLayout>

@@ -10,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.BranchModel;
@@ -33,13 +31,14 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     private EditText shopAddress;
     private EditText contactNum;
     private EditText shippingAddress;
-    private ImageButton btnPicsOfStore;
-    private ImageButton btnPicsOfPermit;
-    private LinearLayout llPicsOfStore;
-    private LinearLayout llPicsOfPermit;
+    private EditText email;
+    private EditText password;
+//    private ImageButton btnPicsOfStore;
+//    private ImageButton btnPicsOfPermit;
+//    private LinearLayout llPicsOfStore;
+//    private LinearLayout llPicsOfPermit;
     private Button btnSubmit;
     private Button btnAddBranch;
-    private RegistrationModel registrationModel;
     private BranchModel branchModel;
     private List<BranchModel> branchModelList;
     private ArrayAdapter<BranchModel> adapterBranchModelList;
@@ -47,6 +46,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     private BranchModel editBranchModel;
     private int editId;
     private int editResultCode;
+    private RestCallServices restCallServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +58,17 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
         shopAddress=(EditText) findViewById(R.id.et_reg_shopaddress);
         contactNum=(EditText) findViewById(R.id.et_reg_shop_contact_num);
         shippingAddress=(EditText) findViewById(R.id.et_reg_shop_shipping_address);
+        email = (EditText) findViewById(R.id.et_reg_email);
+        password = (EditText) findViewById(R.id.et_reg_password);
         btnAddBranch = (Button) findViewById(R.id.btn_add_branch);
         btnAddBranch.setOnClickListener(this);
         btnSubmit=(Button) findViewById(R.id.btn_reg_submit);
         btnSubmit.setOnClickListener(this);
         listViewBranch = (ExpandableHeightListView) findViewById(R.id.list_reg_branch);
         listViewBranch.setExpanded(true);
-        registrationModel = new RegistrationModel();
         branchModelList = new ArrayList<>();
 
-
+        restCallServices = new RestCallServices(this);
 
 
     }
@@ -77,11 +78,16 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
         switch(view.getId()) {
             case R.id.btn_reg_submit:
                 //TODO: More work. Call Api when available
-                Util.getInstance().showSnackBarToast(RegistrationActivity.this, "Registration Submitted");
-                startActivity(new Intent(RegistrationActivity.this, LandingActivity.class));
-                finish();
-                break;
-            case R.id.ll_photo_store_imageExcessDisplay:
+
+                if(isFormCanBeSaved()) {
+                    RegistrationModel registrationModel = new RegistrationModel();
+
+                    restCallServices.postRegistration(RegistrationActivity.this, registrationModel, this);
+                }
+
+//                Util.getInstance().showSnackBarToast(RegistrationActivity.this, "Registration Submitted");
+//                startActivity(new Intent(RegistrationActivity.this, LandingActivity.class));
+//                finish();
                 break;
             case R.id.btn_add_branch:
                 showAddBranchDialog();
@@ -179,11 +185,51 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
-
+        Util.getInstance().showDialog(this, "Registration Submitted. Please wait" +
+                "for your Email Notification for its approval", this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        startActivity(new Intent(RegistrationActivity.this, LandingActivity.class));
+        finish();
     }
 
     @Override
     public void onFailure(RestCalls callType, String string) {
 
+        Util.getInstance().showSnackBarToast(RegistrationActivity.this, getString(R.string.unable_to_register));
+    }
+
+    private boolean isFormCanBeSaved() {
+        boolean canBeAdded = true;
+
+        if (shopName.getText().toString().isEmpty()) {
+            shopName.setError(RegistrationActivity.this.getString(R.string.is_required));
+            canBeAdded = false;
+        }
+        if (shopAddress.getText().toString().isEmpty()) {
+            shopAddress.setError(RegistrationActivity.this.getString(R.string.is_required));
+            canBeAdded = false;
+        }
+
+        if (shippingAddress.getText().toString().isEmpty()) {
+            shippingAddress.setError(RegistrationActivity.this.getString(R.string.is_required));
+            canBeAdded = false;
+        }
+
+        if(branchModelList == null || branchModelList.isEmpty()) {
+            Util.getInstance().showDialog(this, "Please add atleast one(1) Branch", this.getString(R.string.action_ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            canBeAdded = false;
+        }
+        return canBeAdded;
     }
 }

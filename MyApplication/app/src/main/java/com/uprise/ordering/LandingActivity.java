@@ -166,7 +166,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         }
 
 
-        if(!loginSharedPref.isLoggedIn(LandingActivity.this)) {
+        if(!cancel && !loginSharedPref.isLoggedIn(LandingActivity.this)) {
             loginSharedPref.login(LandingActivity.this, email);
             finish();
             startActivity(new Intent(LandingActivity.this, MainActivity.class));

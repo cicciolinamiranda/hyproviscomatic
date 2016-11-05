@@ -85,5 +85,6 @@
     <string name="title_activity_add_branch">Branch Details</string>
     <string name="endpoint_post_registration">/api/registration</string>
     <string name="endpoint_server">http://130.211.249.66</string>
+    <string name="unable_to_register">Unable to Register. Please Try Again.</string>
 
 </resources>

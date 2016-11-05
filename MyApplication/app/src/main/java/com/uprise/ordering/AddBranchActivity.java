@@ -93,7 +93,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_shop_picture_camera:
 
                 if(etBranchName.getText().toString().isEmpty()) {
-                    etBranchName.setError("Branch Name is required in adding a branch");
+                    etBranchName.setError("Branch Name is required in adding a photo");
                 }
                 else {
                     AlertDialog.Builder photoOfStoreDialog = new AlertDialog.Builder(
@@ -121,7 +121,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_shop_picture_permit_camera:
 
                 if(etBranchName.getText().toString().isEmpty()) {
-                    etBranchName.setError("Branch Name is required in adding a branch");
+                    etBranchName.setError("Branch Name is required in adding a photo");
                 }
                 else {
                     AlertDialog.Builder photoOfPermitDialog = new AlertDialog.Builder(
