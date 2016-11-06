@@ -222,7 +222,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
             progressDialog.dismiss();
         }
 
-        Util.getInstance().showDialog(this, string+getString(R.string.try_again), this.getString(R.string.action_ok),
+        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
