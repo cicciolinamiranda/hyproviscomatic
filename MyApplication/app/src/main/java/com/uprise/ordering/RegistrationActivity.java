@@ -1,5 +1,6 @@
 package com.uprise.ordering;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     private int editId;
     private int editResultCode;
     private RestCallServices restCallServices;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,8 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                     registrationModel.setShopName(shopName.getText().toString());
                     registrationModel.setShopAddress(shopAddress.getText().toString());
                     restCallServices.postRegistration(RegistrationActivity.this, registrationModel, this);
+                    progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), shopName.getText().toString()));
+
                 }
 
 //                Util.getInstance().showSnackBarToast(RegistrationActivity.this, "Registration Submitted");
@@ -194,6 +198,11 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
+
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
         Util.getInstance().showDialog(this, "Registration Submitted. Please wait" +
                 "for your Email Notification for its approval", this.getString(R.string.action_ok),
                 new DialogInterface.OnClickListener() {
@@ -202,13 +211,18 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                         dialog.dismiss();
                     }
                 });
-        startActivity(new Intent(RegistrationActivity.this, LandingActivity.class));
+        startActivity(getIntent());
         finish();
     }
 
     @Override
     public void onFailure(RestCalls callType, String string) {
-        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
+
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
+        Util.getInstance().showDialog(this, string+getString(R.string.try_again), this.getString(R.string.action_ok),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

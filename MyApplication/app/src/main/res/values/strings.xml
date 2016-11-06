@@ -86,5 +86,9 @@
     <string name="endpoint_post_registration">/api/registration</string>
     <string name="endpoint_server">http://130.211.249.66</string>
     <string name="unable_to_register">Unable to Register. Please Try Again.</string>
+    <string name="registration_inp">Please wait...</string>
+    <string name="currently_registering">Submitting request</string>
+    <string name="try_again">Please try again.</string>
+    <string name="max_of_three_photos">Max of 3 photos only</string>
 
 </resources>

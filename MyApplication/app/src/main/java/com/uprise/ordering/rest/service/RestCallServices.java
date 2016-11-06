@@ -562,6 +562,8 @@ public class RestCallServices {
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setAllowUserInteraction(true);
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(

@@ -115,6 +115,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             Log.d(ApplicationConstants.APP_CODE, "permission onError:" + s.getMessage());
         }
 
+        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+            startIntentService(shopOnMap);
+        }
 
         return v;
     }
@@ -155,9 +158,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 14.0f));
         saveLatLng();
 
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            startIntentService(shopOnMap);
-        }
+//        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
+//            startIntentService(shopOnMap);
+//        }
     }
 
     @Override
