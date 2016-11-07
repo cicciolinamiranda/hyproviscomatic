@@ -101,27 +101,35 @@ public class RestCallServices {
 
         Log.d(ApplicationConstants.APP_CODE, "registration api url:" + registrationEndpoint);
 
-        InputStream inputStream = null;
-        HttpURLConnection urlConnection = null;
+//        InputStream inputStream = null;
+//        HttpURLConnection urlConnection = null;
 
-        final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        JSONObject profileObj=new JSONObject();
+        final ArrayList<NameValuePair> params = new ArrayList<>();
 
-        params.add(new NameValuePair("username", registrationModel.getEmail()));
-        params.add(new NameValuePair("password", registrationModel.getPassword()));
-        params.add(new NameValuePair("email", registrationModel.getEmail()));
-        params.add(new NameValuePair("first_name", registrationModel.getShopName()));
+        JSONObject body = new JSONObject();
+        JSONObject shopObj = new JSONObject();
+
+//        params.add(new NameValuePair("username", registrationModel.getEmail()));
+//        params.add(new NameValuePair("password", registrationModel.getPassword()));
+//        params.add(new NameValuePair("email", registrationModel.getEmail()));
+//        params.add(new NameValuePair("first_name", registrationModel.getShopName()));
 
 //               Profile
         try {
-            profileObj.put("address", registrationModel.getShopAddress());
-            profileObj.put("phone", registrationModel.getContactNum());
-            profileObj.put("shipping_address", registrationModel.getShippingAddress());
+            body.put("username", registrationModel.getEmail());
+            body.put("password", registrationModel.getPassword());
+            body.put("email", registrationModel.getEmail());
+
+            shopObj.put("shop_address", registrationModel.getShopAddress());
+            shopObj.put("phone", registrationModel.getContactNum());
+            shopObj.put("shipping_address", registrationModel.getShippingAddress());
+            shopObj.put("shop_name", registrationModel.getShopName());
+            body.put("shop", shopObj);
         } catch (JSONException e) {
             Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
         }
 
-        params.add(new NameValuePair("profile", profileObj.toString()));
+//        params.add(new NameValuePair("shop", shopObj.toString()));
         JSONArray branchJsonArray = new JSONArray();
         for (BranchModel branchModel: registrationModel.getBranchModels()) {
             JSONObject branchJsonObj = new JSONObject();
@@ -135,6 +143,7 @@ public class RestCallServices {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                     storePhotoJson.put("image", bitmapToBase64(storeBmpImage));
+                    storePhotoJson.put("phone", registrationModel.getContactNum());
                     storePhotoJson.put("description", branchModel.getName() + " "+storeImgPath);
                     photosJsonArray.put(storePhotoJson);
                 }
@@ -144,6 +153,7 @@ public class RestCallServices {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", bitmapToBase64(permitBmpImage));
+                    permitPhotoJsonObj.put("phone", registrationModel.getContactNum());
                     permitPhotoJsonObj.put("description", branchModel.getName() + " "+permitImgPath);
                     photosJsonArray.put(permitPhotoJsonObj);
                 }
@@ -156,7 +166,15 @@ public class RestCallServices {
                 Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
             }
         }
-        params.add(new NameValuePair("branches", branchJsonArray.toString()));
+//        params.add(new NameValuePair("branches", branchJsonArray.toString()));
+
+        try {
+            body.put("branches", branchJsonArray);
+        } catch (JSONException e) {
+            Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
+        }
+
+        params.add(new NameValuePair("Body", body.toString()));
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String jsonResults;
