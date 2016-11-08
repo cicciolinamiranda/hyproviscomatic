@@ -300,7 +300,8 @@ public class Util {
 
     public static void requestPermission(Activity activity){
         ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_NETWORK_STATE
+                new String[]{Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE
                         , Manifest.permission.ACCESS_COARSE_LOCATION
                         , Manifest.permission.ACCESS_FINE_LOCATION
                         , Manifest.permission.CAMERA

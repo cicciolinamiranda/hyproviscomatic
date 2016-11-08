@@ -203,16 +203,16 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
             progressDialog.dismiss();
         }
 
-        Util.getInstance().showDialog(this, "Registration Submitted. Please wait" +
+        Util.getInstance().showDialog(this, "Registration Submitted. Please wait " +
                 "for your Email Notification for its approval", this.getString(R.string.action_ok),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                                startActivity(getIntent());
+                                finish();
                     }
                 });
-        startActivity(getIntent());
-        finish();
     }
 
     @Override

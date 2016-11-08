@@ -15,11 +15,14 @@ import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.RegistrationModel;
+import com.uprise.ordering.rest.HttpClient;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.listeners.RestAsyncTaskListener;
 import com.uprise.ordering.rest.tasks.RestAsyncTask;
+import com.uprise.ordering.util.ImageBase64;
 import com.uprise.ordering.util.NameValuePair;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +63,7 @@ public class RestCallServices {
 
     DataOutputStream dos;
     SqlDatabaseHelper sqlDatabaseHelper;
-
+    private final String USER_AGENT = "Mozilla/5.0";
     public RestCallServices(){
 
     }
@@ -106,8 +109,8 @@ public class RestCallServices {
 
         final ArrayList<NameValuePair> params = new ArrayList<>();
 
-        JSONObject body = new JSONObject();
-        JSONObject shopObj = new JSONObject();
+        final JSONObject body = new JSONObject();
+        final JSONObject shopObj = new JSONObject();
 
 //        params.add(new NameValuePair("username", registrationModel.getEmail()));
 //        params.add(new NameValuePair("password", registrationModel.getPassword()));
@@ -116,34 +119,36 @@ public class RestCallServices {
 
 //               Profile
         try {
-            body.put("username", registrationModel.getEmail());
-            body.put("password", registrationModel.getPassword());
-            body.put("email", registrationModel.getEmail());
+//            body.put("email", registrationModel.getEmail().toString());
 
-            shopObj.put("shop_address", registrationModel.getShopAddress());
-            shopObj.put("phone", registrationModel.getContactNum());
-            shopObj.put("shipping_address", registrationModel.getShippingAddress());
-            shopObj.put("shop_name", registrationModel.getShopName());
-            body.put("shop", shopObj);
+            shopObj.put("shop_address", registrationModel.getShopAddress().toString());
+            shopObj.put("phone", registrationModel.getContactNum().toString());
+            shopObj.put("shipping_address", registrationModel.getShippingAddress().toString());
+            shopObj.put("shop_name", registrationModel.getShopName().toString());
+
+//            params.add(new NameValuePair("shop", shopObj.toString()));
         } catch (JSONException e) {
             Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
         }
 
-//        params.add(new NameValuePair("shop", shopObj.toString()));
-        JSONArray branchJsonArray = new JSONArray();
+        final JSONArray branchJsonArray = new JSONArray();
         for (BranchModel branchModel: registrationModel.getBranchModels()) {
             JSONObject branchJsonObj = new JSONObject();
             JSONArray photosJsonArray = new JSONArray();
             try {
-                branchJsonObj.put("address", branchModel.getAddress());
+                branchJsonObj.put("address", branchModel.getAddress().toString());
 
 
 //                      Photos of store
                 for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
-                    storePhotoJson.put("image", bitmapToBase64(storeBmpImage));
-                    storePhotoJson.put("phone", registrationModel.getContactNum());
+                    String imgBase64 = ImageBase64
+                            .with(ctx)
+                            .requestSize(512, 512)
+                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
+                    storePhotoJson.put("image", bitmapToBase64(storeBmpImage).toString());
+                    Log.i(TAG, "STORE IMAGE:-->" + bitmapToBase64(storeBmpImage).toString());
                     storePhotoJson.put("description", branchModel.getName() + " "+storeImgPath);
                     photosJsonArray.put(storePhotoJson);
                 }
@@ -152,42 +157,45 @@ public class RestCallServices {
                 for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
-                    permitPhotoJsonObj.put("image", bitmapToBase64(permitBmpImage));
-                    permitPhotoJsonObj.put("phone", registrationModel.getContactNum());
+                    String imgBase64 = ImageBase64
+                            .with(ctx)
+                            .requestSize(512, 512)
+                            .encodeFile(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                    permitPhotoJsonObj.put("image", bitmapToBase64(permitBmpImage).toString());
+                    Log.i(TAG, "PERMIT IMAGE:--->" + bitmapToBase64(permitBmpImage).toString());
                     permitPhotoJsonObj.put("description", branchModel.getName() + " "+permitImgPath);
                     photosJsonArray.put(permitPhotoJsonObj);
                 }
 
                 branchJsonObj.put("photos", photosJsonArray);
+//                branchJsonObj.put("photos", new JSONArray());
                 branchJsonArray.put(branchJsonObj);
-//                params.add(new NameValuePair("branches", branchJsonObj.toString()));
+                body.put("username", registrationModel.getEmail().toString());
+                body.put("password", registrationModel.getPassword().toString());
+                body.put("branches", branchJsonArray);
+                body.put("shop", shopObj);
+//                params.add(new NameValuePair("branches", branchJsonArray.toString()));
 
             } catch (JSONException e) {
                 Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         }
-//        params.add(new NameValuePair("branches", branchJsonArray.toString()));
 
-        try {
-            body.put("branches", branchJsonArray);
-        } catch (JSONException e) {
-            Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
-        }
-
-        params.add(new NameValuePair("Body", body.toString()));
+//        params.add(new NameValuePair("Body", body.toString()));
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String jsonResults;
             @Override
             public void doInBackground() {
-                jsonResults = get(registrationEndpoint, params);
-                Log.d(ApplicationConstants.APP_CODE,"registrationEndpoint:"+registrationEndpoint);
-
+                JSONObject obj = HttpClient.SendHttpPost(registrationEndpoint, body);
+                if (obj != null ) jsonResults = obj.toString();
             }
 
             @Override
             public void result() {
-                if (jsonResults == null) {
+                if (jsonResults == null || jsonResults.isEmpty()) {
                     RestCallServices.this.failedPost(listener, RestCalls.REGISTRATION
                             , ctx.getString(R.string.unable_to_register), params);
                 } else {
@@ -195,62 +203,13 @@ public class RestCallServices {
                     listener.onSuccess(RestCalls.REGISTRATION, jsonResults);
                 }
 
-//                int z= index + 1;
-//                if (z < images.size()) {
-//                    submitImage(ctx, listener, phoneNumber, id, images, z);
-//                }
             }
         }).execute();
 
-//        try {
-//            urlConnection = (HttpURLConnection) new URL(registrationEndpoint).openConnection();
-//            urlConnection.setRequestProperty("Accept", "application/json");
-//            urlConnection.setRequestProperty("Connection", "close");
-//            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 ( compatible ) ");
-//            //urlConnection.setRequestProperty("Authorization", "Bearer " + Config.getConfigInstance().getAccessToken());
-//            urlConnection.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
-//
-//            urlConnection.setDoOutput(true);
-//            urlConnection.setDoInput(true);
-//            urlConnection.setUseCaches(false);
-//            urlConnection.setChunkedStreamingMode(1024);
-//            urlConnection.setRequestMethod("POST");
-//            dos = new DataOutputStream(urlConnection.getOutputStream());
-//
-//            //add id to data
-//            Iterator<String> keys = postData.keys();
-//            while (keys.hasNext()) {
-//                try {
-//                    String id = String.valueOf(keys.next());
-//                    addFormField(id, "" + postData.get(id));
-//                    System.out.println(id + " : " + postData.get(id));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            try {
-//                dos.writeBytes(LINE_FEED);
-//                dos.flush();
-//                dos.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (null != inputStream) {
-//                    inputStream.close();
-//                }
-//            } catch (IOException e) {
-//            }
-//        }
 
         return response;
     }
+
 
     public void submitImage(final Context ctx, final RestServiceListener listener
             , final String phoneNumber, final String id, final List<String>images, final int index) {
@@ -703,6 +662,15 @@ public class RestCallServices {
         return newBitmap;
     }
 
+//    public String bitmapToBase641(Bitmap bitmap) {
+////        Bitmap bm = BitmapFactory.decodeFile(bitmap);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+//        byte[] b = baos.toByteArray();
+//
+//        return Base64.encodeToString(b, Base64.NO_WRAP);
+//    }
+
     public String bitmapToBase64(Bitmap bitmap) {
 
         bitmap = scaleDown(bitmap, 1200, false);
@@ -754,6 +722,18 @@ public class RestCallServices {
 
     private void failedPost(final RestServiceListener listener, RestCalls callType, String strResult
             , final ArrayList<NameValuePair> params) {
+//        switch (callType) {
+//            case PICTURE:
+//                sqlDatabaseHelper.createImage(new RestData(imgUrl, params));
+//                break;
+//        }
+        listener.onFailure(callType, strResult);
+
+
+    }
+
+    private void failedBasicNameValuePairPost(final RestServiceListener listener, RestCalls callType, String strResult
+            , final ArrayList<BasicNameValuePair> params) {
 //        switch (callType) {
 //            case PICTURE:
 //                sqlDatabaseHelper.createImage(new RestData(imgUrl, params));
