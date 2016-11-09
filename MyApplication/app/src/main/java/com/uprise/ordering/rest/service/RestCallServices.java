@@ -19,7 +19,6 @@ import com.uprise.ordering.rest.HttpClient;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.listeners.RestAsyncTaskListener;
 import com.uprise.ordering.rest.tasks.RestAsyncTask;
-import com.uprise.ordering.util.ImageBase64;
 import com.uprise.ordering.util.NameValuePair;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -136,6 +135,13 @@ public class RestCallServices {
             JSONObject branchJsonObj = new JSONObject();
             JSONArray photosJsonArray = new JSONArray();
             try {
+                branchJsonObj.put("name", branchModel.getName());
+
+                //TODO: create a latlng. map on the fe
+                branchJsonObj.put("lat", "0");
+                branchJsonObj.put("lng","0");
+                //TODO: add phone
+                branchJsonObj.put("phone", branchModel.getContactNum());
                 branchJsonObj.put("address", branchModel.getAddress().toString());
 
 
@@ -143,12 +149,12 @@ public class RestCallServices {
                 for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
-                    String imgBase64 = ImageBase64
-                            .with(ctx)
-                            .requestSize(512, 512)
-                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
-                    storePhotoJson.put("image", bitmapToBase64(storeBmpImage).toString());
-                    Log.i(TAG, "STORE IMAGE:-->" + bitmapToBase64(storeBmpImage).toString());
+//                    String imgBase64 = ImageBase64
+//                            .with(ctx)
+//                            .requestSize(512, 512)
+//                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
+                    storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
+                    Log.i(TAG, "STORE IMAGE:-->" + "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
                     storePhotoJson.put("description", branchModel.getName() + " "+storeImgPath);
                     photosJsonArray.put(storePhotoJson);
                 }
@@ -157,12 +163,12 @@ public class RestCallServices {
                 for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
-                    String imgBase64 = ImageBase64
-                            .with(ctx)
-                            .requestSize(512, 512)
-                            .encodeFile(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
-                    permitPhotoJsonObj.put("image", bitmapToBase64(permitBmpImage).toString());
-                    Log.i(TAG, "PERMIT IMAGE:--->" + bitmapToBase64(permitBmpImage).toString());
+//                    String imgBase64 = ImageBase64
+//                            .with(ctx)
+//                            .requestSize(512, 512)
+//                            .encodeFile(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                    permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
+                    Log.i(TAG, "PERMIT IMAGE:--->" + "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
                     permitPhotoJsonObj.put("description", branchModel.getName() + " "+permitImgPath);
                     photosJsonArray.put(permitPhotoJsonObj);
                 }
@@ -178,8 +184,6 @@ public class RestCallServices {
 
             } catch (JSONException e) {
                 Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
         }
 
@@ -673,20 +677,20 @@ public class RestCallServices {
 
     public String bitmapToBase64(Bitmap bitmap) {
 
-        bitmap = scaleDown(bitmap, 1200, false);
+//       bitmap = scaleDown(bitmap, 1200, false);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmaps object
-        bitmap.recycle();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmaps object
+       // bitmap.recycle();
         byte[] b = baos.toByteArray();
-
-        try {
-            baos.close();
-            baos = null;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            baos.close();
+//            baos = null;
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
