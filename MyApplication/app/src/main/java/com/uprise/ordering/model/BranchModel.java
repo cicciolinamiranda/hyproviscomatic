@@ -13,6 +13,8 @@ public class BranchModel implements Parcelable {
     private String name;
     private String address;
     private String contactNum;
+    private String lat;
+    private String lng;
     private ImageModel  branchsPic;
     private ImageModel permitsPic;
 
@@ -25,6 +27,8 @@ public class BranchModel implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(address);
         parcel.writeString(contactNum);
+        parcel.writeString(lat);
+        parcel.writeString(lng);
         parcel.writeParcelable(branchsPic, ApplicationConstants.BRANCH_PICS);
         parcel.writeParcelable(permitsPic, ApplicationConstants.BRANCH_PICS);
     }
@@ -34,6 +38,8 @@ public class BranchModel implements Parcelable {
         name = in.readString();
         address = in.readString();
         contactNum = in.readString();
+        lat = in.readString();
+        lng = in.readString();
         branchsPic = in.readParcelable(ImageModel.class.getClassLoader());
         permitsPic = in.readParcelable(ImageModel.class.getClassLoader());
     }
@@ -88,6 +94,22 @@ public class BranchModel implements Parcelable {
 
     public void setPermitsPic(ImageModel permitsPic) {
         this.permitsPic = permitsPic;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
     }
 
     @Override

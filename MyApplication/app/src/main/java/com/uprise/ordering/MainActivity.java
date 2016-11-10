@@ -28,7 +28,7 @@ import com.uprise.ordering.base.LocationTrackingActivity;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.fragment.MapLocationFragment;
-import com.uprise.ordering.model.ShopOnMapModel;
+import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.shared.LoginSharedPref;
 
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class MainActivity extends LocationTrackingActivity
     private View headerLayout;
     private SearchView searchShopsView;
     protected SimpleCursorAdapter shopsAdapter;
-    private List<ShopOnMapModel> shopOnMapModelList;
-    private List<ShopOnMapModel> matchedResults;
+    private List<LocationDetailsModel> shopOnMapModelList;
+    private List<LocationDetailsModel> matchedResults;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,7 +200,7 @@ public class MainActivity extends LocationTrackingActivity
     @Override
     public void setLocation(LatLng latlng) {
 
-        ShopOnMapModel shopOnMapModel = getIntent().getParcelableExtra("shopOnMapModel");
+        LocationDetailsModel shopOnMapModel = getIntent().getParcelableExtra("shopOnMapModel");
         if(shopOnMapModel != null) {
             mapLocationFragment.setLocation(shopOnMapModel.getLocation());
         }
@@ -210,10 +210,20 @@ public class MainActivity extends LocationTrackingActivity
     }
 
 
-    @Override
-    public void onFocusChanged(boolean isFocused) {
+//    @Override
+//    public void onFocusChanged(boolean isFocused) {
+//
+//    }
+//
+//    @Override
+//    public void onLatLngChanged(LatLng latLng) {
+//
+//    }
 
-    }
+//    @Override
+//    public void onLatLngChanged(LatLng latLng) {
+//        //nothing to do
+//    }
 
     @Override
     public void onLatLngChanged(LatLng latLng) {
@@ -221,9 +231,36 @@ public class MainActivity extends LocationTrackingActivity
     }
 
     @Override
-    public void address(ShopOnMapModel shopOnMapModel) {
+    public void address(LocationDetailsModel shopOnMapModel) {
         shopOnMapModelList.add(shopOnMapModel);
     }
+
+    @Override
+    public boolean isOnShopNowPage() {
+        return true;
+    }
+
+//    @Override
+//    public List<LocationDetailsModel> getLocationsModel() {
+//        ArrayList<LocationDetailsModel> shopOnMapModels = new ArrayList<>();
+//
+//
+//        //TODO replace with REST api call
+//        for (int i = 0; i < Util.latLngs.size(); i++) {
+//            LocationDetailsModel shopOnMapModel = new LocationDetailsModel();
+//            LatLng latLng = Util.latLngs.get(i);
+////            shopOnMapModel.setTitle("Location "+i);
+//            shopOnMapModel.setLocation(latLng);
+//            shopOnMapModels.add(shopOnMapModel);
+//        }
+//
+//        return shopOnMapModels;
+//    }
+
+//    @Override
+//    public boolean isGlobalAddressSearch() {
+//        return false;
+//    }
 
 
     @Override
@@ -310,17 +347,18 @@ public class MainActivity extends LocationTrackingActivity
 
         switch (requestCode) {
             case ApplicationConstants.RESULT_FROM_SEARCH_SELECTED_ADDRESS:
-                ShopOnMapModel shopOnMapModel = data.getParcelableExtra("shopOnMapModel");
+                LocationDetailsModel shopOnMapModel = data.getParcelableExtra("shopOnMapModel");
                 mapLocationFragment.setLocation(shopOnMapModel.getLocation());
                 break;
         }
     }
 
     private boolean setSelectedShopAddress(int position) {
-        Intent intent = getIntent();
-        intent.putExtra("shopOnMapModel", matchedResults.get(position));
-        finish();
-        startActivity(intent);
+//        Intent intent = getIntent();
+//        intent.putExtra("shopOnMapModel", matchedResults.get(position));
+//        finish();
+//        startActivity(intent);
+        mapLocationFragment.onMapClick(matchedResults.get(position).getLocation());
         return false;
     }
 }

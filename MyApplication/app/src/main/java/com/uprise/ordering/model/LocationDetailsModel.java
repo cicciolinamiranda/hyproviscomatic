@@ -9,47 +9,47 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by cicciolina on 11/3/16.
  */
 
-public class ShopOnMapModel implements Parcelable {
+public class LocationDetailsModel implements Parcelable {
 
-    private String title;
+//    private String title;
     private String address;
     private LatLng location;
 
-    public ShopOnMapModel() {
+    public LocationDetailsModel() {
 
     }
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
+//        dest.writeString(title);
         dest.writeString(address);
         dest.writeParcelable(location, flags);
     }
 
-    protected ShopOnMapModel(Parcel in) {
-        title = in.readString();
+    protected LocationDetailsModel(Parcel in) {
+//        title = in.readString();
         address = in.readString();
         location = in.readParcelable(LatLng.class.getClassLoader());
     }
 
-    public static final Creator<ShopOnMapModel> CREATOR = new Creator<ShopOnMapModel>() {
+    public static final Creator<LocationDetailsModel> CREATOR = new Creator<LocationDetailsModel>() {
         @Override
-        public ShopOnMapModel createFromParcel(Parcel in) {
-            return new ShopOnMapModel(in);
+        public LocationDetailsModel createFromParcel(Parcel in) {
+            return new LocationDetailsModel(in);
         }
 
         @Override
-        public ShopOnMapModel[] newArray(int size) {
-            return new ShopOnMapModel[size];
+        public LocationDetailsModel[] newArray(int size) {
+            return new LocationDetailsModel[size];
         }
     };
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
     public LatLng getLocation() {
         return location;

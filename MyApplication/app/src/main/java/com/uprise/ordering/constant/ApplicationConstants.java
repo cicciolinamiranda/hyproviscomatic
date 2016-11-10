@@ -12,6 +12,7 @@ public class ApplicationConstants {
     public static String APP_CODE = "Hyprviscomatic";
     public static String CART_ITEMS = "Cart_items";
     public static String IS_LOGIN = "Is_login";
+    public static String IS_LOGIN_TOKEN = "Is_login_token";
     public static final int RESULT_PICK_FROM_CAMERA_STORE = 0x03;
     public static final int RESULT_GALLERY_PICTURE_STORE = 0x02;
     public static final int RESULT_GALLERY_STORE = 0x05;
@@ -44,5 +45,15 @@ public class ApplicationConstants {
     public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
 
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME + ".LOCATION_DATA_EXTRA";
+
+    /**
+     * Request code for the autocomplete activity. This will be used to identify results from the
+     * autocomplete activity in onActivityResult.
+     */
+    public static final int REQUEST_CODE_AUTOCOMPLETE = 0X15;
+
+    public static final int REQUEST_CODE_ADD_BRANCH_LAT_LNG = 0X16;
+
+    public static final int REQUEST_CODE_EDIT_BRANCH_LAT_LNG = 0x17;
 
 }

@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
-import com.uprise.ordering.model.ShopOnMapModel;
+import com.uprise.ordering.model.LocationDetailsModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class FetchAddressIntentService extends IntentService {
         }
 
         // Get the location passed to this service through an extra.
-        ShopOnMapModel location = intent.getParcelableExtra(ApplicationConstants.LOCATION_DATA_EXTRA);
+        LocationDetailsModel location = intent.getParcelableExtra(ApplicationConstants.LOCATION_DATA_EXTRA);
 
         // Make sure that the location data was really sent over through an extra. If it wasn't,
         // send an error error message and return.
@@ -146,7 +146,7 @@ public class FetchAddressIntentService extends IntentService {
     /**
      * Sends a resultCode and message to the receiver.
      */
-    private void deliverResultToReceiver(int resultCode, ShopOnMapModel shopOnMapModel) {
+    private void deliverResultToReceiver(int resultCode, LocationDetailsModel shopOnMapModel) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(ApplicationConstants.RESULT_DATA_KEY, shopOnMapModel);
         mReceiver.send(resultCode, bundle);

@@ -7,14 +7,21 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.PointF;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.uprise.ordering.R;
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.enums.OrderStatus;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
@@ -345,6 +352,18 @@ public class Util {
 
         LatLng copy = new LatLng(foundLatitude, foundLongitude);
         return copy;
+    }
+
+    /**
+     * Helper method to format information about a place nicely.
+     */
+    public static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+        Log.e(ApplicationConstants.APP_CODE, res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
+        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
+
     }
 
 

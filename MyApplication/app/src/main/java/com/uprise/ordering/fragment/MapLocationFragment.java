@@ -39,7 +39,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
-import com.uprise.ordering.model.ShopOnMapModel;
+import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.service.FetchAddressIntentService;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.util.WifiScanManager;
@@ -115,10 +115,6 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             Log.d(ApplicationConstants.APP_CODE, "permission onError:" + s.getMessage());
         }
 
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            startIntentService(shopOnMap);
-        }
-
         return v;
     }
 
@@ -138,13 +134,15 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
         //TODO: replace with API call
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                    .title(shopOnMap.getAddress()));
-            shopMaker.setVisible(true);
-            startIntentService(shopOnMap);
+        if(listener.isOnShopNowPage()) {
+            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+                Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                        .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                        .title(shopOnMap.getAddress()));
+                shopMaker.setVisible(true);
+                startIntentService(shopOnMap);
 
+            }
         }
 
         marker = mMap.addMarker(new MarkerOptions().position(latLng)
@@ -170,14 +168,13 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMarkerDrag(Marker marker) {
-         listener.onFocusChanged(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        listener.onFocusChanged(false);
-        saveLatLng();
+//        listener.onFocusChanged(false);
+          saveLatLng();
     }
 
     @Override
@@ -217,11 +214,13 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
         //TODO: replace with API call
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                    .title(shopOnMap.getAddress()));
-            shopMaker.setVisible(true);
+        if(listener.isOnShopNowPage()) {
+            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+                Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                        .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                        .title(shopOnMap.getAddress()));
+                shopMaker.setVisible(true);
+            }
         }
 
         marker = mMap.addMarker(new MarkerOptions().position(currPoint)
@@ -255,14 +254,11 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
         }
 
-        for(ShopOnMapModel shopOnMap: getShopsLocation()) {
-            startIntentService(shopOnMap);
-        }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        listener.onFocusChanged(hasFocus);
+//        listener.onFocusChanged(hasFocus);
     }
 
     @Override
@@ -348,11 +344,16 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void saveLatLng() {
-        listener.onLatLngChanged(marker.getPosition());
 
         currPoint = marker.getPosition();
         locationTrackingBase.setLatLng(currPoint);
+        listener.onLatLngChanged(currPoint);
+        if(listener.isOnShopNowPage()) {
+            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+                startIntentService(shopOnMap);
+            }
 
+        }
     }
 
     @Override
@@ -364,15 +365,15 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         return (currPoint != null) && (currPoint.latitude != 0 && currPoint.longitude != 0) && (marker != null);
     }
 
-    private List<ShopOnMapModel> getShopsLocation() {
-        ArrayList<ShopOnMapModel> shopOnMapModels = new ArrayList<>();
+    private List<LocationDetailsModel> getShopsLocation() {
+        ArrayList<LocationDetailsModel> shopOnMapModels = new ArrayList<>();
 
 
         //TODO replace with REST api call
         for (int i = 0; i < Util.latLngs.size(); i++) {
-            ShopOnMapModel shopOnMapModel = new ShopOnMapModel();
+            LocationDetailsModel shopOnMapModel = new LocationDetailsModel();
             LatLng latLng = Util.latLngs.get(i);
-            shopOnMapModel.setTitle("Location "+i);
+//            shopOnMapModel.setTitle("Location "+i);
             shopOnMapModel.setLocation(latLng);
             shopOnMapModels.add(shopOnMapModel);
         }
@@ -425,12 +426,12 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 //
 //            // Reset. Enable the Fetch Address button and stop showing the progress bar.
 //            mAddressRequested = false;
-            listener.address((ShopOnMapModel) resultData.getParcelable(ApplicationConstants.RESULT_DATA_KEY));
+            listener.address((LocationDetailsModel) resultData.getParcelable(ApplicationConstants.RESULT_DATA_KEY));
 
         }
     }
 
-    protected void startIntentService(ShopOnMapModel shopOnMapModel) {
+    protected void startIntentService(LocationDetailsModel shopOnMapModel) {
         // Create an intent for passing to the intent service responsible for fetching the address.
         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
         mResultReceiver = new AddressResultReceiver(new Handler());

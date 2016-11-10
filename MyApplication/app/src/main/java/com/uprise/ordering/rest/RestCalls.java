@@ -14,7 +14,8 @@ public enum RestCalls {
 //    MAINTENANCE(0x08),
 //    UNINSTALL(0x09),
     PICTURE(0x69),
-    REGISTRATION(0x70);
+    REGISTRATION(0x70),
+    LOGIN(0x71);
 //    SPEEDTEST_SERVER_LIST(0x11),
 //    DEVICE_DETAILS(0x12);
 

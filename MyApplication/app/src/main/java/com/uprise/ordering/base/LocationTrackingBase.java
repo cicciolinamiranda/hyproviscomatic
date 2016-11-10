@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.util.Util;
 
@@ -42,6 +43,7 @@ public class LocationTrackingBase {
                     .addConnectionCallbacks(getConnectionCallbacks())
                     .addOnConnectionFailedListener(getOnConnectionFailedListener())
                     .addApi(LocationServices.API)
+                    .addApi(Places.GEO_DATA_API)
 //                    .addScope(Plus.SCOPE_PLUS_LOGIN)
 //                    .addScope(Plus.SCOPE_PLUS_PROFILE)
                     .build();

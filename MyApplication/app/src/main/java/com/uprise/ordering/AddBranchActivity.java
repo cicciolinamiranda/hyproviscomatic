@@ -11,18 +11,23 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.camera.CameraImageActivity;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.ImageModel;
+import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 
@@ -47,27 +52,48 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     private EditText etBranchName;
     private EditText etBranchAdd;
     private  EditText etBranchPhone;
-    private Button btnAddBranch;
+//    private Button btnAddBranch;
     private ImageButton btnPicsOfStore;
     private  ImageButton btnPicsOfPermit;
     private int selectedBranchId;
     private int resultCode;
+
+    //Maps with address
+    private ImageButton addLatLngBtn;
+    private ImageButton editLatlngBtn;
+    private TextView tvLatValue;
+    private TextView tvLngValue;
+    private LocationDetailsModel selectedAddressLocation;
+    private LinearLayout llEditTextAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_add_branch);
         imageStoreModel  = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
         imagePermitModel = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
-//        shopName = getIntent().getStringExtra("shopName");
         etBranchName = (EditText) findViewById(R.id.et_dialog_add_branch_name);
         etBranchAdd = (EditText) findViewById(R.id.et_dialog_add_branch_address);
+        llEditTextAddress = (LinearLayout) findViewById(R.id.ll_edittext_address);
+        llEditTextAddress.setVisibility(View.GONE);
         etBranchPhone = (EditText) findViewById(R.id.et_dialog_add_branch_phone);
         btnPicsOfStore = (ImageButton) findViewById(R.id.btn_shop_picture_camera);
         btnPicsOfPermit=(ImageButton) findViewById(R.id.btn_shop_picture_permit_camera);
-//        llPicsOfStore=(LinearLayout) findViewById(R.id.ll_shop_picture_camera);
-//        llPicsOfPermit=(LinearLayout) findViewById(R.id.ll_shop_picture_permit_camera);
-        btnAddBranch = (Button) findViewById(R.id.btn_branch_add);
-        btnAddBranch.setOnClickListener(this);
+
+        addLatLngBtn=(ImageButton) findViewById(R.id.btn_add_lat_lng) ;
+        addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+        addLatLngBtn.setOnClickListener(this);
+
+        editLatlngBtn=(ImageButton) findViewById(R.id.btn_edit_lat_lng);
+        editLatlngBtn.setVisibility(View.GONE);
+        editLatlngBtn.setOnClickListener(this);
+        editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+        editLatlngBtn.setOnClickListener(this);
+        tvLatValue=(TextView) findViewById(R.id.tv_lat_add_branch);
+        tvLngValue=(TextView) findViewById(R.id.tv_lng_val_add_branch);
+
+//        btnAddBranch = (Button) findViewById(R.id.btn_branch_add);
+//        btnAddBranch.setVisibility(View.GONE);
+//        btnAddBranch.setOnClickListener(this);
         btnPicsOfStore.setOnClickListener(this);
         btnPicsOfPermit.setOnClickListener(this);
 
@@ -78,13 +104,29 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             resultCode = ApplicationConstants.RESULT_EDIT_BRANCH;
             etBranchName.setText(branchModel.getName());
             etBranchAdd.setText(branchModel.getAddress());
+            editLatlngBtn.setVisibility(View.VISIBLE);
+            addLatLngBtn.setVisibility(View.GONE);
+            llEditTextAddress.setVisibility(View.VISIBLE);
+            tvLatValue.setVisibility(View.VISIBLE);
+            tvLngValue.setVisibility(View.VISIBLE);
+
+            tvLatValue.setText(branchModel.getLat());
+            tvLngValue.setText(branchModel.getLng());
+
+
+            selectedAddressLocation = new LocationDetailsModel();
+            selectedAddressLocation.setAddress(branchModel.getAddress());
+            selectedAddressLocation.setLocation(new LatLng(Double.parseDouble(branchModel.getLat()), Double.parseDouble(branchModel.getLng())));
             etBranchPhone.setText(branchModel.getContactNum());
             imageStoreModel = branchModel.getBranchsPic();
             imagePermitModel = branchModel.getPermitsPic();
             if(ApplicationConstants.RESULT_EDIT_BRANCH == getIntent().getIntExtra("resultCode",0)) selectedBranchId = getIntent().getIntExtra("id",0);
             refreshImageList("iv_cam_store_", R.id.tv_max_of_three_pic_store, R.id.btn_shop_picture_camera, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
             refreshImageList("iv_cam_permit_", R.id.tv_max_of_three_pic_permit, R.id.btn_shop_picture_permit_camera, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
+
         }
+
+
     }
 
     @Override
@@ -152,21 +194,39 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //            case R.id.ll_photo_permit_imageExcessDisplay:
 //                clickImageExcess(imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
 //                break;
-            case R.id.btn_branch_add:
-                if(isFormCanBeSaved()) {
-                    Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
-                    branchIntent.putExtra("branchModel",toBeSaved());
-
-                    if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
-                        branchIntent.putExtra("id",selectedBranchId);
-                        branchIntent.putExtra("resultCode", ApplicationConstants.RESULT_EDIT_BRANCH);
-//                        startActivity(branchIntent);
+//            case R.id.btn_branch_add:
+//                if(isFormCanBeSaved()) {
+//                    Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
+//                    branchIntent.putExtra("branchModel",toBeSaved());
+//
+//                    if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
+//                        branchIntent.putExtra("id",selectedBranchId);
+//                        branchIntent.putExtra("resultCode", ApplicationConstants.RESULT_EDIT_BRANCH);
+////                        startActivity(branchIntent);
+////                        finish();
+//                    }
+//                        setResult(RESULT_OK, branchIntent);
 //                        finish();
-                    }
-                        setResult(RESULT_OK, branchIntent);
-                        finish();
+//
+//
+//                }
+//                break;
 
-
+            case R.id.btn_add_lat_lng:
+                addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+                Intent searchAddressIntent = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
+//                finish();
+//                startActivity(searchAddressIntent);
+                startActivityForResult(searchAddressIntent, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
+                break;
+            case R.id.btn_edit_lat_lng:
+                editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+                if(selectedAddressLocation != null) {
+                    Intent searchAddressIntentEdit = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
+                    searchAddressIntentEdit.putExtra("locationDetailsModel", selectedAddressLocation);
+//                    finish();
+//                    startActivity(searchAddressIntentEdit);
+                    startActivityForResult(searchAddressIntentEdit, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
                 }
                 break;
         }
@@ -226,16 +286,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                 }
                 refreshImageList("iv_cam_permit_", R.id.tv_max_of_three_pic_permit, R.id.btn_shop_picture_permit_camera,   imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
                 break;
-//            case ApplicationConstants.RESULT_EDIT_BRANCH:
-//                BranchModel branchModel = data.getParcelableExtra("branchModel");
-//                etBranchName.setText(branchModel.getName());
-//                etBranchAdd.setText(branchModel.getAddress());
-//                etBranchPhone.setText(branchModel.getContactNum());
-//                imageStoreModel = branchModel.getBranchsPic();
-//                imagePermitModel = branchModel.getPermitsPic();
-//                refreshImageList("iv_cam_store_",  imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
-//                refreshImageList("iv_cam_permit_",  imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
-//                break;
+            case ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG:
+
+                fromAddedLocationFromMap(data);
+                break;
         }
     }
 
@@ -391,10 +445,34 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.add_branch_menu, menu);
+        return true;
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_add_branch:
+                if(isFormCanBeSaved()) {
+                    Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
+                    branchIntent.putExtra("branchModel",toBeSaved());
+
+                    if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
+                        branchIntent.putExtra("id",selectedBranchId);
+                        branchIntent.putExtra("resultCode", ApplicationConstants.RESULT_EDIT_BRANCH);
+//                        startActivity(branchIntent);
+//                        finish();
+                    }
+                    setResult(RESULT_OK, branchIntent);
+                    finish();
+
+
+                }
                 break;
         }
         return true;
@@ -411,6 +489,23 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             etBranchAdd.setError(AddBranchActivity.this.getString(R.string.is_required));
             canBeAdded = false;
         }
+
+        if(tvLngValue.getText().toString().isEmpty()) {
+            tvLngValue.setError(AddBranchActivity.this.getString(R.string.is_required));
+            canBeAdded = false;
+        }
+
+        if(tvLatValue.getText().toString().isEmpty()) {
+            Util.getInstance().showDialog(this, "Address and its coordinates are required", this.getString(R.string.action_ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            canBeAdded = false;
+        }
+
         if (imageStoreModel.getIntegerBase().isEmpty()) {
             Util.getInstance().showDialog(this, "Please upload atleast 1 photo of your Branch", this.getString(R.string.action_ok),
                     new DialogInterface.OnClickListener() {
@@ -438,7 +533,9 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         BranchModel branchModel = new BranchModel();
         branchModel.setName(etBranchName.getText().toString());
         branchModel.setContactNum(etBranchPhone.getText().toString());
-        branchModel.setAddress(etBranchAdd.getText().toString());
+        branchModel.setLat(selectedAddressLocation.getLocation().latitude+"");
+        branchModel.setLng(selectedAddressLocation.getLocation().longitude+"");
+        branchModel.setAddress(selectedAddressLocation.getAddress());
         branchModel.setPermitsPic(imagePermitModel);
         branchModel.setBranchsPic(imageStoreModel);
         return branchModel;
@@ -448,5 +545,35 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         Intent intent = new Intent(AddBranchActivity.this, CameraImageActivity.class);
         intent.putExtra("bitmaps", imageModel.getStringBase());
         startActivityForResult(intent, resultCode);
+    }
+
+    private void fromAddedLocationFromMap(Intent data) {
+        String lat = "";
+        String lng = "";
+        String address = "";
+        selectedAddressLocation = null;
+        if(null != data && data.getParcelableExtra("locationDetailsModel") != null) selectedAddressLocation = data.getParcelableExtra("locationDetailsModel");
+        if(null != selectedAddressLocation) {
+            addLatLngBtn.setVisibility(View.GONE);
+            editLatlngBtn.setVisibility(View.VISIBLE);
+            lat = selectedAddressLocation.getLocation().latitude+"";
+            lng = selectedAddressLocation.getLocation().longitude+"";
+            address = selectedAddressLocation.getAddress();
+        }
+
+        if(!address.isEmpty()) {
+            llEditTextAddress.setVisibility(View.VISIBLE);
+            etBranchAdd.setText(selectedAddressLocation.getAddress());
+        }
+
+        if(!lat.isEmpty()) {
+            tvLatValue.setVisibility(View.VISIBLE);
+            tvLatValue.setText("Lat: "+lat);
+        }
+
+        if(!lng.isEmpty()) {
+            tvLngValue.setVisibility(View.VISIBLE);
+            tvLngValue.setText("Lng: "+lng);
+        }
     }
 }

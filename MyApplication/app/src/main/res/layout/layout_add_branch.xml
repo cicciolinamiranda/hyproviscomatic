@@ -1,17 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_margin="20dp"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <!--Branch Name-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_edittext_branch_name"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:gravity="bottom"
+            android:text="@string/label_branch_name"
+            android:layout_gravity="center_vertical"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_dialog_add_branch_name"
-        android:hint="@string/label_branch_name"
         android:lines="1"
         android:layout_gravity="center_horizontal"
          />
+        </LinearLayout>
+
+        <!--Address with Map Coordinate-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_address_lat_lng"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:gravity="bottom"
+            android:text="@string/reg_address_lat_lng"
+            android:layout_gravity="center_vertical"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:textSize="12dp"-->
+            <!--android:visibility="gone"-->
+            <!--android:text="lat"-->
+            <!--android:id="@+id/tv_lat_add_branch"-->
+            <!--android:layout_gravity="center_vertical"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:textSize="18dp"-->
+            <!--android:text="lng"-->
+            <!--android:id="@+id/tv_lng_val_add_branch"-->
+            <!--android:layout_gravity="center_vertical"/>-->
+        <ImageButton
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add_location_black_48dp"
+            android:id="@+id/btn_add_lat_lng"
+            android:textColor="@color/colorAccent"
+            android:background="@null"/>
+
+        <ImageButton
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:visibility="visible"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_edit_googblue_48dp"
+            android:id="@+id/btn_edit_lat_lng"
+            android:textColor="@color/colorAccent"
+            android:background="@null"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="2dp"
+                android:textSize="12dp"
+                android:visibility="gone"
+                android:text="lat"
+                android:id="@+id/tv_lat_add_branch"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:visibility="gone"
+                android:layout_marginRight="2dp"
+                android:textSize="12dp"
+                android:text="lng"
+                android:id="@+id/tv_lng_val_add_branch"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_edittext_address"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="@string/reg_shop_branch_address"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +139,9 @@
         android:hint="@string/label_branch_address"
         android:lines="1"
         android:layout_gravity="center_horizontal"
-         />
+        />
+        </LinearLayout>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -162,11 +284,19 @@
             android:layout_height="wrap_content"
             android:text="@string/reg_shop_picture_permit"
             android:layout_gravity="center_vertical"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical|end">
+            <TextView
+                android:id="@+id/tv_max_of_three_pic_permit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/max_of_three_photos"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"/>
         <ImageButton
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
@@ -251,30 +381,24 @@
             </LinearLayout>
         </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="30dp">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginTop="30dp">-->
 
-        <TextView
-            android:id="@+id/tv_max_of_three_pic_permit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/max_of_three_photos"
-            android:visibility="gone"
-            android:layout_gravity="center_vertical"/>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_max_of_three_pic_permit"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/max_of_three_photos"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_gravity="center_vertical"/>-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:id="@+id/btn_branch_add"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:padding="20dp" />
+    <!--</LinearLayout>-->
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

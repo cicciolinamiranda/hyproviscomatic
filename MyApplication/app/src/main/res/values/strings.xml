@@ -83,12 +83,34 @@
     <string name="title_activity_cart">Cart Items</string>
     <string name="title_activity_notif">Notifications</string>
     <string name="title_activity_add_branch">Branch Details</string>
-    <string name="endpoint_post_registration">/api/registration</string>
-    <string name="endpoint_server">http://130.211.249.66</string>
     <string name="unable_to_register">Unable to Register. Please Try Again.</string>
     <string name="registration_inp">Please wait...</string>
     <string name="currently_registering">Submitting request : %s</string>
     <string name="try_again">Please try again.</string>
     <string name="max_of_three_photos">Max of 3 photos only</string>
+    <string name="title_activity_search_address">Search Location</string>
+    <string name="reg_address_lat_lng">Address Map Coordinates</string>
+    <string name="place_details">
+    <![CDATA[
+        <b>%1$s</b>
+        <br/>
+        <i>Place Id: %2$s</i>
+        <br/>
+        Address: %3$s
+        <br/>
+        Phone: %4$s
+        <br/>
+        Website: %5$s
+    ]]>
+    </string>
+    <string name="gPlaces_url">\"https://maps.googleapis.com/maps/api/place\"</string>
+    <string name="reg_shop_branch_address">Address</string>
+    <string name="autocomplete_hint">Search Location</string>
 
+
+<!--Endpoints-->
+    <string name="endpoint_post_registration">/api/registration</string>
+    <string name="endpoint_server">http://130.211.249.66</string>
+    <string name="endpoint_post_login">/api-token-auth</string>
+    <string name="unable_to_login">Unable to Login. Username or password maybe incorrect\\nPlease Try Again</string>
 </resources>

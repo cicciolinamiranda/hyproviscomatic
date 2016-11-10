@@ -3,6 +3,7 @@ package com.uprise.ordering;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,9 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.util.Util;
 
-public class LandingActivity extends BaseAuthenticatedActivity implements View.OnClickListener {
+public class LandingActivity extends BaseAuthenticatedActivity implements View.OnClickListener, RestCallServices.RestServiceListener {
 
 
     // UI references.
@@ -28,11 +32,9 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
     private Button btnSignIn;
     private TextView tvCreateNewAccount;
     private TextView tvDistributorShop;
+    private RestCallServices restCallServices;
+    boolean cancel;
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private LoginActivity.UserLoginTask mAuthTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         mProgressView = findViewById(R.id.login_loading_layout);
 
         loginSharedPref = new LoginSharedPref();
+        restCallServices = new RestCallServices(this);
     }
 
     @Override
@@ -118,9 +121,6 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -129,8 +129,6 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -154,7 +152,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
+            if(focusView != null) focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -163,14 +161,16 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             //TODO: WHEN API IS AVAILABLE
 //            mAuthTask = new UserLoginTask(email, password);
 //            mAuthTask.execute((Void) null);
+
+            restCallServices.postLogin(LandingActivity.this, this, email, password);
         }
 
 
-        if(!cancel && !loginSharedPref.isLoggedIn(LandingActivity.this)) {
-            loginSharedPref.login(LandingActivity.this, email);
-            finish();
-            startActivity(new Intent(LandingActivity.this, MainActivity.class));
-        }
+//        if(!cancel && !loginSharedPref.isLoggedIn(LandingActivity.this)) {
+//            loginSharedPref.login(LandingActivity.this, email);
+//            finish();
+//            startActivity(new Intent(LandingActivity.this, MainActivity.class));
+//        }
     }
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -226,5 +226,32 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String token) {
+        if(!cancel && !token.isEmpty() && !loginSharedPref.isLoggedIn(LandingActivity.this)) {
+            loginSharedPref.login(LandingActivity.this, mEmailView.getText().toString(), token);
+            finish();
+            startActivity(new Intent(LandingActivity.this, MainActivity.class));
+        }
+
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String msg) {
+        showProgress(false);
+        Util.getInstance().showDialog(this, msg, this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
     }
 }

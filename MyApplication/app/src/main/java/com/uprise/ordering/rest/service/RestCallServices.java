@@ -21,7 +21,6 @@ import com.uprise.ordering.rest.listeners.RestAsyncTaskListener;
 import com.uprise.ordering.rest.tasks.RestAsyncTask;
 import com.uprise.ordering.util.NameValuePair;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +57,7 @@ public class RestCallServices {
     public static boolean isDebugMode = true;
     private String TAG = ApplicationConstants.APP_CODE;
     private String mainUrl = "", number = "", imgUrl = "";
+    private String gPlacesUrl;
     private Context context;
 
     DataOutputStream dos;
@@ -137,15 +137,16 @@ public class RestCallServices {
             try {
                 branchJsonObj.put("name", branchModel.getName());
 
-                //TODO: create a latlng. map on the fe
-                branchJsonObj.put("lat", "0");
-                branchJsonObj.put("lng","0");
-                //TODO: add phone
+                branchJsonObj.put("lat", "");
+                Log.i(TAG, "LAT:-->" + branchModel.getLat());
+                branchJsonObj.put("lng", "");
+                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                 branchJsonObj.put("phone", branchModel.getContactNum());
-                branchJsonObj.put("address", branchModel.getAddress().toString());
+                branchJsonObj.put("address", branchModel.getAddress());
 
 
 //                      Photos of store
+                int numStorePics = 0;
                 for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
@@ -155,11 +156,13 @@ public class RestCallServices {
 //                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                     storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
                     Log.i(TAG, "STORE IMAGE:-->" + "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
-                    storePhotoJson.put("description", branchModel.getName() + " "+storeImgPath);
+                    storePhotoJson.put("description", "Photo of Permit No. "+ numStorePics);
                     photosJsonArray.put(storePhotoJson);
+                    numStorePics++;
                 }
 
 //                       Photos of permit
+                int numPermitPics = 0;
                 for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
@@ -169,8 +172,9 @@ public class RestCallServices {
 //                            .encodeFile(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
                     Log.i(TAG, "PERMIT IMAGE:--->" + "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
-                    permitPhotoJsonObj.put("description", branchModel.getName() + " "+permitImgPath);
+                    permitPhotoJsonObj.put("description", "Photo of Permit No. "+ numPermitPics);
                     photosJsonArray.put(permitPhotoJsonObj);
+                    numPermitPics++;
                 }
 
                 branchJsonObj.put("photos", photosJsonArray);
@@ -180,7 +184,6 @@ public class RestCallServices {
                 body.put("password", registrationModel.getPassword().toString());
                 body.put("branches", branchJsonArray);
                 body.put("shop", shopObj);
-//                params.add(new NameValuePair("branches", branchJsonArray.toString()));
 
             } catch (JSONException e) {
                 Log.d(ApplicationConstants.APP_CODE, "JSONException :" + e.getMessage());
@@ -212,6 +215,40 @@ public class RestCallServices {
 
 
         return response;
+    }
+
+    public void postLogin(final Context ctx, final RestServiceListener listener, String username, String password) {
+        final JSONObject userJson = new JSONObject();
+        final String loginEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_post_login);
+        try {
+            userJson.put("username", username);
+            userJson.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            String resultStr;
+            @Override
+            public void doInBackground() {
+                JSONObject obj = HttpClient.SendHttpPost(loginEndpoint, userJson);
+                if(obj != null) resultStr = obj.toString();
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty()) {
+                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            , ctx.getString(R.string.unable_to_login));
+                } else {
+
+                    listener.onSuccess(RestCalls.LOGIN, resultStr);
+                }
+
+
+            }
+        }).execute();
     }
 
 
@@ -736,8 +773,7 @@ public class RestCallServices {
 
     }
 
-    private void failedBasicNameValuePairPost(final RestServiceListener listener, RestCalls callType, String strResult
-            , final ArrayList<BasicNameValuePair> params) {
+    private void failedPost(final RestServiceListener listener, RestCalls callType, String strResult) {
 //        switch (callType) {
 //            case PICTURE:
 //                sqlDatabaseHelper.createImage(new RestData(imgUrl, params));

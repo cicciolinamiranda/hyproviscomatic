@@ -16,12 +16,13 @@ public class LoginSharedPref {
 
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
-    public void login(Context context, String username) {
+    public void login(Context context, String username, String token) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
         settings = context.getSharedPreferences(ApplicationConstants.APP_CODE,Context.MODE_PRIVATE);
         editor = settings.edit();
         editor.putString(ApplicationConstants.IS_LOGIN, username);
+        editor.putString(ApplicationConstants.IS_LOGIN_TOKEN, token);
         editor.putBoolean(IS_USER_LOGIN, true);
         editor.commit();
     }
