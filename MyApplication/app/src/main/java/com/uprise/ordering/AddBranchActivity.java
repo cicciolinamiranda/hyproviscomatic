@@ -80,13 +80,13 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         btnPicsOfPermit=(ImageButton) findViewById(R.id.btn_shop_picture_permit_camera);
 
         addLatLngBtn=(ImageButton) findViewById(R.id.btn_add_lat_lng) ;
-        addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
         addLatLngBtn.setOnClickListener(this);
 
         editLatlngBtn=(ImageButton) findViewById(R.id.btn_edit_lat_lng);
         editLatlngBtn.setVisibility(View.GONE);
         editLatlngBtn.setOnClickListener(this);
-        editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
         editLatlngBtn.setOnClickListener(this);
         tvLatValue=(TextView) findViewById(R.id.tv_lat_add_branch);
         tvLngValue=(TextView) findViewById(R.id.tv_lng_val_add_branch);
@@ -533,8 +533,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         BranchModel branchModel = new BranchModel();
         branchModel.setName(etBranchName.getText().toString());
         branchModel.setContactNum(etBranchPhone.getText().toString());
-        branchModel.setLat(selectedAddressLocation.getLocation().latitude+"");
-        branchModel.setLng(selectedAddressLocation.getLocation().longitude+"");
+        branchModel.setLat(String.format("%d",selectedAddressLocation.getLocation().latitude));
+        branchModel.setLng(String.format("%d",selectedAddressLocation.getLocation().longitude));
         branchModel.setAddress(selectedAddressLocation.getAddress());
         branchModel.setPermitsPic(imagePermitModel);
         branchModel.setBranchsPic(imageStoreModel);
@@ -552,8 +552,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         String lng = "";
         String address = "";
         selectedAddressLocation = null;
+        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
+        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
         if(null != data && data.getParcelableExtra("locationDetailsModel") != null) selectedAddressLocation = data.getParcelableExtra("locationDetailsModel");
-        if(null != selectedAddressLocation) {
+        if(null != selectedAddressLocation && selectedAddressLocation.getLocation() != null) {
             addLatLngBtn.setVisibility(View.GONE);
             editLatlngBtn.setVisibility(View.VISIBLE);
             lat = selectedAddressLocation.getLocation().latitude+"";

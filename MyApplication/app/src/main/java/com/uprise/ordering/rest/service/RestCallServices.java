@@ -137,9 +137,9 @@ public class RestCallServices {
             try {
                 branchJsonObj.put("name", branchModel.getName());
 
-                branchJsonObj.put("lat", "");
+                branchJsonObj.put("lat", branchModel.getLat());
                 Log.i(TAG, "LAT:-->" + branchModel.getLat());
-                branchJsonObj.put("lng", "");
+                branchJsonObj.put("lng", branchModel.getLng());
                 Log.i(TAG, "LNG:-->" + branchModel.getLng());
                 branchJsonObj.put("phone", branchModel.getContactNum());
                 branchJsonObj.put("address", branchModel.getAddress());
@@ -155,7 +155,6 @@ public class RestCallServices {
 //                            .requestSize(512, 512)
 //                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                     storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
-                    Log.i(TAG, "STORE IMAGE:-->" + "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
                     storePhotoJson.put("description", "Photo of Permit No. "+ numStorePics);
                     photosJsonArray.put(storePhotoJson);
                     numStorePics++;

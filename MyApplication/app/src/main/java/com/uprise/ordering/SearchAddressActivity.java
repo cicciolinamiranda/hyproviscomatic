@@ -138,6 +138,9 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
             isFromSuggestion = false;
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this,
+                    e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
 
 

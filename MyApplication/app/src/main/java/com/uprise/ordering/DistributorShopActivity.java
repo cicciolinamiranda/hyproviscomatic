@@ -1,7 +1,10 @@
 package com.uprise.ordering;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -111,6 +114,30 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     private void populateProductList() {
         productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         expandableListView.setAdapter(productsAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final Intent mainIntent;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mainIntent = new Intent(this, LandingActivity.class);
+                startActivity(mainIntent);
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            Intent mainIntent = new Intent(this, LandingActivity.class);
+            startActivity(mainIntent);
+            finish();
+            return true;
+        }
+        return false;
     }
 
 }
