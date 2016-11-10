@@ -533,8 +533,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         BranchModel branchModel = new BranchModel();
         branchModel.setName(etBranchName.getText().toString());
         branchModel.setContactNum(etBranchPhone.getText().toString());
-        branchModel.setLat(String.format("%d",selectedAddressLocation.getLocation().latitude));
-        branchModel.setLng(String.format("%d",selectedAddressLocation.getLocation().longitude));
+        branchModel.setLat(Double.toString(selectedAddressLocation.getLocation().latitude));
+        branchModel.setLng(Double.toString(selectedAddressLocation.getLocation().longitude));
         branchModel.setAddress(selectedAddressLocation.getAddress());
         branchModel.setPermitsPic(imagePermitModel);
         branchModel.setBranchsPic(imageStoreModel);

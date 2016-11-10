@@ -122,6 +122,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                     branchModel = data.getParcelableExtra("branchModel");
                     branchModelList.add(branchModel);
                     populateBranchListView();
+                    checkBranchListIfNotEmpty();
                 }
                 break;
             case ApplicationConstants.RESULT_EDIT_BRANCH:
@@ -134,6 +135,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                         branchModelList.set(editId, editBranchModel);
                         populateBranchListView();
                     }
+                    checkBranchListIfNotEmpty();
                 }
                 break;
         }
@@ -183,6 +185,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                                 adapterBranchModelList = new BranchList(RegistrationActivity.this, branchModelList);
                                 adapterBranchModelList.notifyDataSetChanged();
                                 listViewBranch.setAdapter(adapterBranchModelList);
+                                checkBranchListIfNotEmpty();
                             }
                         });
                 listViewDialog.show();
@@ -294,5 +297,19 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
+    }
+
+    private void checkBranchListIfNotEmpty() {
+        btnAddBranch.setVisibility(View.VISIBLE);
+        if(branchModelList.size() >= 1) {
+            btnAddBranch.setVisibility(View.GONE);
+            Util.getInstance().showDialog(this, "Only One(1) Branch is required", this.getString(R.string.action_ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+        }
     }
 }

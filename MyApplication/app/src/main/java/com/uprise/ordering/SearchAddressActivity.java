@@ -140,7 +140,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
             e.printStackTrace();
             Toast.makeText(this,
                     e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
         }
 
 
@@ -259,7 +259,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
                 break;
             case R.id.action_select_address:
 
-                if(locationDetailsModel != null) {
+                if(locationDetailsModel != null && locationDetailsModel.getAddress() != null) {
                 Intent result = new Intent(SearchAddressActivity.this, AddBranchActivity.class);
                        result.putExtra("locationDetailsModel", locationDetailsModel);
                      setResult(ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG, result);

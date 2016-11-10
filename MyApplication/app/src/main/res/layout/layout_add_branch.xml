@@ -142,15 +142,28 @@
         />
         </LinearLayout>
 
+        <!--Contact num-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_edittext_branch_contact_num"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="@string/label_branch_phone"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_dialog_add_branch_phone"
-        android:hint="@string/label_branch_phone"
         android:inputType="phone"
         android:lines="1"
         android:layout_gravity="center_horizontal"
          />
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
