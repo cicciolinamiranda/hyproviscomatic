@@ -4,16 +4,21 @@ import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 /**
  * Created by cicciolina on 11/8/16.
@@ -21,6 +26,59 @@ import java.io.InputStreamReader;
 
 public class HttpClient {
     private static final String TAG = "HttpClient";
+
+    public static JSONObject SendHttpPost(String URL, ArrayList<NameValuePair> nameValuePairs) {
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPostRequest = new HttpPost(URL);
+
+//            StringEntity se;
+//            se = new StringEntity(jsonObjSend.toString());
+
+            httpPostRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPostRequest.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+//            httpPostRequest.setHeader("Accept-Encoding", "gzip"); // only set this parameter if you would like to use gzip compression
+
+            long t = System.currentTimeMillis();
+            HttpResponse response = (HttpResponse) httpclient.execute(httpPostRequest);
+            Log.i(TAG, "HTTPResponse received in [" + (System.currentTimeMillis() - t) + "ms]");
+
+            // Get hold of the response entity (-> the data):
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                // Read the content stream
+                InputStream instream = entity.getContent();
+//                Header contentEncoding = response.getFirstHeader("Content-Encoding");
+//                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+//                    instream = new GZIPInputStream(instream);
+//                }
+
+                // convert content stream to a String
+                String resultString = convertStreamToString(instream);
+                instream.close();
+//                resultString = resultString.substring(1,resultString.length()-1); // remove wrapping "[" and "]"
+
+                // Transform the String into a JSONObject
+                JSONObject jsonObjRecv = new JSONObject(resultString);
+                // Raw DEBUG output of our received JSON object:
+                Log.i(TAG, "<JSONObject>\n" + jsonObjRecv.toString() + "\n</JSONObject>");
+
+                return jsonObjRecv;
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
 
     public static JSONObject SendHttpPost(String URL, JSONObject jsonObjSend) {
 

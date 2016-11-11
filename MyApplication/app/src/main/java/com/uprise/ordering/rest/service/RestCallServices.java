@@ -21,6 +21,7 @@ import com.uprise.ordering.rest.listeners.RestAsyncTaskListener;
 import com.uprise.ordering.rest.tasks.RestAsyncTask;
 import com.uprise.ordering.util.NameValuePair;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -216,7 +217,7 @@ public class RestCallServices {
         return response;
     }
 
-    public void postLogin(final Context ctx, final RestServiceListener listener, String username, String password) {
+    public void postLogin(final Context ctx, final RestServiceListener listener, final String username, final String password) {
         final JSONObject userJson = new JSONObject();
         final String loginEndpoint = ctx.getResources().getString(R.string.endpoint_server)
                 + ctx.getResources().getString(R.string.endpoint_post_login);
@@ -228,26 +229,46 @@ public class RestCallServices {
         }
 
         new RestAsyncTask(new RestAsyncTaskListener() {
-            String resultStr;
+            ArrayList<org.apache.http.NameValuePair> params = new ArrayList<>();
+//            String resultStr;
+            String token;
             @Override
             public void doInBackground() {
-                JSONObject obj = HttpClient.SendHttpPost(loginEndpoint, userJson);
-                if(obj != null) resultStr = obj.toString();
+                params.add(new BasicNameValuePair("username", username));
+                params.add(new BasicNameValuePair("password", password));
+//                String resultStr = getLogin(loginEndpoint,params);
+                JSONObject obj = HttpClient.SendHttpPost(loginEndpoint, params);
+//                if(obj != null) resultStr = obj.toString();
+                    try {
+
+                        if(obj.getString("token") != null )token = obj.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                , ctx.getString(R.string.unable_to_login));
+                    }
+
+
             }
 
             @Override
             public void result() {
-                if (resultStr == null || resultStr.isEmpty()) {
+                if (token == null || token.isEmpty()) {
+
                     RestCallServices.this.failedPost(listener, RestCalls.LOGIN
                             , ctx.getString(R.string.unable_to_login));
                 } else {
 
-                    listener.onSuccess(RestCalls.LOGIN, resultStr);
+                    listener.onSuccess(RestCalls.LOGIN, token);
                 }
 
 
             }
         }).execute();
+    }
+
+    public void getProducts(final Context ctx, final RestServiceListener listener) {
+
     }
 
 
@@ -560,6 +581,65 @@ public class RestCallServices {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    /***
+     * @return string of JSON
+     */
+    public String getLogin(final String strUrl, final ArrayList<NameValuePair> params) {
+
+        Log.d(ApplicationConstants.APP_CODE, "url:" + strUrl);
+        HttpURLConnection conn = null;
+        StringBuilder jsonResults = new StringBuilder();
+        try {
+
+            URL url = new URL(strUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(30000);
+            conn.setConnectTimeout(30000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Accept", "application/x-www-form-urlencoded");
+            conn.setAllowUserInteraction(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getQuery(params));
+            writer.flush();
+            writer.close();
+            os.close();
+
+            conn.connect();
+
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+            int read;
+            char[] buff = new char[1024];
+            while ((read = in.read(buff)) != -1) {
+                jsonResults.append(buff, 0, read);
+            }
+
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "Error processing URL", e);
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error connecting API", e);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Log.e(TAG, "Error connecting API", e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        return jsonResults.toString();
+
     }
 
     /***
