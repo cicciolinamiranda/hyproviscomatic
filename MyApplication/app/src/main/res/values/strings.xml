@@ -89,7 +89,7 @@
     <string name="try_again">Please try again.</string>
     <string name="max_of_three_photos">Max of 3 photos only</string>
     <string name="title_activity_search_address">Search Location</string>
-    <string name="reg_address_lat_lng">Address Map Coordinates</string>
+    <string name="reg_address_lat_lng">Map Location</string>
     <string name="place_details">
     <![CDATA[
         <b>%1$s</b>
@@ -104,7 +104,7 @@
     ]]>
     </string>
     <string name="gPlaces_url">\"https://maps.googleapis.com/maps/api/place\"</string>
-    <string name="reg_shop_branch_address">Address</string>
+    <string name="reg_shop_branch_address">Complete Address</string>
     <string name="autocomplete_hint">Search Location</string>
 
 

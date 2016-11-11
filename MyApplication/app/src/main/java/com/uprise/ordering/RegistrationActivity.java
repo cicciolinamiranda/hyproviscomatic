@@ -94,7 +94,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
                     registrationModel.setShopName(shopName.getText().toString());
                     registrationModel.setShopAddress(shopAddress.getText().toString());
                     restCallServices.postRegistration(RegistrationActivity.this, registrationModel, this);
-                    progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), shopName.getText().toString()));
+                    progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), email.getText().toString()));
 
                 }
 

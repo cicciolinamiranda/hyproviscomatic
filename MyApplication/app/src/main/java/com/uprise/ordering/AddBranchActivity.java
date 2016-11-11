@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -61,8 +60,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     //Maps with address
     private ImageButton addLatLngBtn;
     private ImageButton editLatlngBtn;
-    private TextView tvLatValue;
-    private TextView tvLngValue;
+//    private TextView tvLatValue;
+//    private TextView tvLngValue;
     private LocationDetailsModel selectedAddressLocation;
     private LinearLayout llEditTextAddress;
     @Override
@@ -88,8 +87,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         editLatlngBtn.setOnClickListener(this);
         editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
         editLatlngBtn.setOnClickListener(this);
-        tvLatValue=(TextView) findViewById(R.id.tv_lat_add_branch);
-        tvLngValue=(TextView) findViewById(R.id.tv_lng_val_add_branch);
+//        tvLatValue=(TextView) findViewById(R.id.tv_lat_add_branch);
+//        tvLngValue=(TextView) findViewById(R.id.tv_lng_val_add_branch);
 
 //        btnAddBranch = (Button) findViewById(R.id.btn_branch_add);
 //        btnAddBranch.setVisibility(View.GONE);
@@ -107,11 +106,11 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             editLatlngBtn.setVisibility(View.VISIBLE);
             addLatLngBtn.setVisibility(View.GONE);
             llEditTextAddress.setVisibility(View.VISIBLE);
-            tvLatValue.setVisibility(View.VISIBLE);
-            tvLngValue.setVisibility(View.VISIBLE);
-
-            tvLatValue.setText(branchModel.getLat());
-            tvLngValue.setText(branchModel.getLng());
+//            tvLatValue.setVisibility(View.VISIBLE);
+//            tvLngValue.setVisibility(View.VISIBLE);
+//
+//            tvLatValue.setText(branchModel.getLat());
+//            tvLngValue.setText(branchModel.getLng());
 
 
             selectedAddressLocation = new LocationDetailsModel();
@@ -490,21 +489,21 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             canBeAdded = false;
         }
 
-        if(tvLngValue.getText().toString().isEmpty()) {
-            tvLngValue.setError(AddBranchActivity.this.getString(R.string.is_required));
-            canBeAdded = false;
-        }
-
-        if(tvLatValue.getText().toString().isEmpty()) {
-            Util.getInstance().showDialog(this, "Address and its coordinates are required", this.getString(R.string.action_ok),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            canBeAdded = false;
-        }
+//        if(tvLngValue.getText().toString().isEmpty()) {
+//            tvLngValue.setError(AddBranchActivity.this.getString(R.string.is_required));
+//            canBeAdded = false;
+//        }
+//
+//        if(tvLatValue.getText().toString().isEmpty()) {
+//            Util.getInstance().showDialog(this, "Address and its coordinates are required", this.getString(R.string.action_ok),
+//                    new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//            canBeAdded = false;
+//        }
 
         if (imageStoreModel.getIntegerBase().isEmpty()) {
             Util.getInstance().showDialog(this, "Please upload atleast 1 photo of your Branch", this.getString(R.string.action_ok),
@@ -568,14 +567,14 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             etBranchAdd.setText(selectedAddressLocation.getAddress());
         }
 
-        if(!lat.isEmpty()) {
-            tvLatValue.setVisibility(View.VISIBLE);
-            tvLatValue.setText("Lat: "+lat);
-        }
+//        if(!lat.isEmpty()) {
+//            tvLatValue.setVisibility(View.VISIBLE);
+//            tvLatValue.setText("Lat: "+lat);
+//        }
 
-        if(!lng.isEmpty()) {
-            tvLngValue.setVisibility(View.VISIBLE);
-            tvLngValue.setText("Lng: "+lng);
-        }
+//        if(!lng.isEmpty()) {
+//            tvLngValue.setVisibility(View.VISIBLE);
+//            tvLngValue.setText("Lng: "+lng);
+//        }
     }
 }

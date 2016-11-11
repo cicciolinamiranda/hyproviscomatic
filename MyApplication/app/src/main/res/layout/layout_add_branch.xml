@@ -94,31 +94,31 @@
             android:background="@null"/>
 
         </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="2dp"
-                android:textSize="12dp"
-                android:visibility="gone"
-                android:text="lat"
-                android:id="@+id/tv_lat_add_branch"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:visibility="gone"
-                android:layout_marginRight="2dp"
-                android:textSize="12dp"
-                android:text="lng"
-                android:id="@+id/tv_lng_val_add_branch"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:layout_marginRight="2dp"-->
+                <!--android:textSize="12dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:text="lat"-->
+                <!--android:id="@+id/tv_lat_add_branch"-->
+                <!--android:layout_gravity="center_vertical"/>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="2dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_marginRight="2dp"-->
+                <!--android:textSize="12dp"-->
+                <!--android:text="lng"-->
+                <!--android:id="@+id/tv_lng_val_add_branch"-->
+                <!--android:layout_gravity="center_vertical"/>-->
+        <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
