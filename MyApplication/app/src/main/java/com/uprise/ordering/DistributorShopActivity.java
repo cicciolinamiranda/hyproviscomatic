@@ -11,37 +11,45 @@ import android.widget.LinearLayout;
 
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class DistributorShopActivity extends LandingSubPageBaseActivity implements ExpandableListView.OnChildClickListener,
         BrandsPagerAdapter.BrandsAdapterListener,
-        ProductsAdapter.ProductsAdapterListener {
+        ProductsAdapter.ProductsAdapterListener,
+        RestCallServices.RestServiceListener {
 
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
-    private String username;
+    private View mProgressView;
+    private RestCallServices restCallServices;
+    private LinearLayout llNoRecords;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_shop_now);
-
+        productModels = new ArrayList<>();
         expandableListView = (ExpandableListView) findViewById(R.id.el_shop_now_products);
 
         //TODO: to be replaced with Rest Call
-        productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
-//        loginSharedPref = new LoginSharedPref();
-//        cartItemsSharedPref = new CartItemsSharedPref();
-//        username = loginSharedPref.getUsername(this);
-
-        populateProductList();
-//        getSupportActionBar().setTitle("Products");
+        llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
+        restCallServices = new RestCallServices(this);
+        restCallServices.getProducts(this, this);
+        mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
+        mProgressView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -113,6 +121,8 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     private void populateProductList() {
         productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         expandableListView.setAdapter(productsAdapter);
+        mProgressView.setVisibility(View.GONE);
+        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -137,6 +147,44 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+                    populateProductList();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+        mProgressView.setVisibility(View.GONE);
+
+        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
+        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 
 }

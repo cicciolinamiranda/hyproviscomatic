@@ -6,9 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 
 import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.rest.RestCalls;
@@ -42,6 +42,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     private boolean isAddOrSaved;
     private RestCallServices restCallServices;
     private View mProgressView;
+    private LinearLayout llNoRecords;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
 //        username = loginSharedPref.getUsername(this);
         sqlDatabaseHelper = new SqlDatabaseHelper(ProductsActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
+        llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
 //        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
@@ -133,6 +135,8 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         }
         expandableListView.setAdapter(productsAdapter);
         mProgressView.setVisibility(View.GONE);
+
+        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
         if(lastExpandedPosition != -1) {
             expandableListView.expandGroup(lastExpandedPosition);
         }
@@ -167,7 +171,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        productModels.add(generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
                     }
                     populateProductList();
                 }
@@ -181,39 +185,8 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
 
     @Override
     public void onFailure(RestCalls callType, String string) {
+        mProgressView.setVisibility(View.GONE);
 
-    }
-
-    private ProductModel generateProductModelFromJson(JSONObject jsonObject) {
-        ProductModel productModel = new ProductModel();
-
-
-
-        try {
-            if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
-            if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
-
-            if(jsonObject.getString("brands") != null) {
-                JSONArray jsonBrandsArray = jsonObject.getJSONArray("brands");
-                ArrayList<BrandModel> brands = new ArrayList<>();
-
-                for(int i = 0; i < jsonBrandsArray.length(); i++) {
-                    BrandModel brandModel = new BrandModel();
-                    brandModel.setId(jsonBrandsArray.getJSONObject(i).getString("id"));
-                    brandModel.setBrandName(jsonBrandsArray.getJSONObject(i).getString("name"));
-
-                    //TODO INCORRECT!
-                    brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
-                    brandModel.setPrice(Double.parseDouble("100")*i);
-                    brands.add(brandModel);
-                }
-                productModel.setBrands(brands);
-            }
-            return productModel;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 }

@@ -31,6 +31,10 @@ import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -367,6 +371,39 @@ public class Util {
         return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
                 websiteUri));
 
+    }
+
+    public ProductModel generateProductModelFromJson(JSONObject jsonObject) {
+        ProductModel productModel = new ProductModel();
+
+
+
+        try {
+            if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
+
+            if(jsonObject.getString("brands") != null) {
+                JSONArray jsonBrandsArray = jsonObject.getJSONArray("brands");
+                ArrayList<BrandModel> brands = new ArrayList<>();
+
+                for(int i = 0; i < jsonBrandsArray.length(); i++) {
+                    BrandModel brandModel = new BrandModel();
+                    brandModel.setId(jsonBrandsArray.getJSONObject(i).getString("id"));
+                    brandModel.setBrandName(jsonBrandsArray.getJSONObject(i).getString("name"));
+
+                    //TODO INCORRECT!
+                    brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
+                    brandModel.setPrice(Double.parseDouble("100")*i);
+                    brands.add(brandModel);
+                }
+                productModel.setBrands(brands);
+            }
+            return productModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

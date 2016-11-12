@@ -13,13 +13,19 @@ import android.widget.TextView;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class ShoppingCartActivity extends BaseAuthenticatedActivity implements ShoppingCartListView.ShoppingCartListViewListener,
-View.OnClickListener {
+View.OnClickListener, RestCallServices.RestServiceListener {
 
     private LinearLayout llNoRecords;
     private RelativeLayout llShopCartList;
@@ -32,6 +38,8 @@ View.OnClickListener {
 //    private LoginSharedPref loginSharedPref;
     private ArrayList<ProductModel> productModels;
     private ArrayList<CartItemsModel> cartItemsModelArrayList;
+    private RestCallServices restCallServices;
+    private View mProgressView;
 //    private DecimalFormat decimalFormat;
 
     @Override
@@ -50,14 +58,18 @@ View.OnClickListener {
 //        cartItemsSharedPref = new CartItemsSharedPref();
 //        loginSharedPref = new LoginSharedPref();
         //TODO: to be replaced with Rest Call
-        productModels = Util.getInstance().generateProductModels();
+//        productModels = Util.getInstance().generateProductModels();
 //        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
 //                loginSharedPref.getUsername(ShoppingCartActivity.this));
 
         sqlDatabaseHelper = new SqlDatabaseHelper(ShoppingCartActivity.this);
+        productModels = new ArrayList<>();
+        restCallServices = new RestCallServices(this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
-        populateList();
-        getSupportActionBar().setTitle("Cart Items");
+        restCallServices.getProducts(this, this);
+//        populateList();
+        mProgressView = findViewById(R.id.rl_shopping_cart_loading_layout);
+        mProgressView.setVisibility(View.VISIBLE);
 
 
     }
@@ -84,7 +96,8 @@ View.OnClickListener {
         llShopCartList.setVisibility(View.VISIBLE);
         llLowerLayouts.setVisibility(View.VISIBLE);
         cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginModel.getUsername());
-        if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty()) {
+        if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty() &&
+                productModels != null && !productModels.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
                     productModels, this);
             cartItemsModelArrayAdapter.notifyDataSetChanged();
@@ -98,6 +111,7 @@ View.OnClickListener {
             llShopCartList.setVisibility(View.GONE);
             llLowerLayouts.setVisibility(View.GONE);
         }
+        mProgressView.setVisibility(View.GONE);
     }
 
     @Override
@@ -125,5 +139,41 @@ View.OnClickListener {
         }
     }
 
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+                    populateList();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+        mProgressView.setVisibility(View.GONE);
+        llNoRecords.setVisibility(View.VISIBLE);
+        llShopCartList.setVisibility(View.GONE);
+        llLowerLayouts.setVisibility(View.GONE);
+    }
 }
 
