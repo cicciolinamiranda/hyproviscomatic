@@ -89,7 +89,7 @@
             android:parentActivityName=".NotificationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ExistingBranch"
+            android:name=".ExistingBranchActivity"
             android:label="@string/title_activity_branches"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />

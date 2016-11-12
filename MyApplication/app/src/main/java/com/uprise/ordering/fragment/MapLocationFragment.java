@@ -451,7 +451,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        shopOnMapModels.add(generateBranchModelFromJson(jsonArray.getJSONObject(i)));
+                        shopOnMapModels.add(Util.getInstance().generateLocationDetailsModelFromJson(jsonArray.getJSONObject(i)));
                     }
 
                 }
@@ -463,26 +463,26 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    private LocationDetailsModel generateBranchModelFromJson(JSONObject jsonObject) {
-        LocationDetailsModel shopsLocation = new LocationDetailsModel();
-
-        try {
-            if(jsonObject.getString("lat") != null && jsonObject.getString("lng") != null) {
-                double lat = 0;
-                double lng = 0;
-                if(!jsonObject.getString("lat").isEmpty()) lat = Double.parseDouble(jsonObject.getString("lat"));
-                if(!jsonObject.getString("lng").isEmpty()) lng = Double.parseDouble(jsonObject.getString("lng"));
-                shopsLocation.setLocation(new LatLng(lat, lng));
-            }
-
-            if(jsonObject.getString("address") != null) shopsLocation.setAddress(jsonObject.getString("address"));
-            return shopsLocation;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
+//    private LocationDetailsModel generateBranchModelFromJson(JSONObject jsonObject) {
+//        LocationDetailsModel shopsLocation = new LocationDetailsModel();
+//
+//        try {
+//            if(jsonObject.getString("lat") != null && jsonObject.getString("lng") != null) {
+//                double lat = 0;
+//                double lng = 0;
+//                if(!jsonObject.getString("lat").isEmpty()) lat = Double.parseDouble(jsonObject.getString("lat"));
+//                if(!jsonObject.getString("lng").isEmpty()) lng = Double.parseDouble(jsonObject.getString("lng"));
+//                shopsLocation.setLocation(new LatLng(lat, lng));
+//            }
+//
+//            if(jsonObject.getString("address") != null) shopsLocation.setAddress(jsonObject.getString("address"));
+//            return shopsLocation;
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public void onFailure(RestCalls callType, String string) {

@@ -97,7 +97,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                 }
 
         }
-        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBranchId(), cartItemsModels.get(position).getProductModelId());
+        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBrandId(), cartItemsModels.get(position).getProductModelId());
         minusBtn.setOnClickListener(count);
         plusBtn.setOnClickListener(count);
         deleteBtn.setOnClickListener(count);
@@ -234,7 +234,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
 
         private void saveItem() {
             savedCardItem.setQuantity(count);
-            savedCardItem.setBranchId(brandId);
+            savedCardItem.setBrandId(brandId);
             savedCardItem.setProductModelId(productId);
         }
     }

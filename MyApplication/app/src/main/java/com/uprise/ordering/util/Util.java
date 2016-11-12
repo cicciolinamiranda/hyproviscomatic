@@ -24,8 +24,10 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.enums.OrderStatus;
+import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.model.OrderModel;
@@ -222,7 +224,7 @@ public class Util {
         BrandModel result = new BrandModel();
         for(int i=0; i<brandModels.size(); i++) {
             if(cartItemsModel.getProductModelId().equalsIgnoreCase(productId) &&
-                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBranchId())) {
+                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBrandId())) {
                 result = brandModels.get(i);
             }
         }
@@ -280,7 +282,7 @@ public class Util {
         for (int i = 1; i < 11; i++) {
         CartItemsModel cartItemsModel = new CartItemsModel();
             cartItemsModel.setProductModelId("product_"+i);
-            cartItemsModel.setBranchId("brand_"+i);
+            cartItemsModel.setBrandId("brand_"+i);
             cartItemsModel.setQuantity(i*2);
             cartItemsModel.setUserName(loginModel.getUsername());
             cartItemsModels.add(cartItemsModel);
@@ -391,14 +393,55 @@ public class Util {
                     brandModel.setId(jsonBrandsArray.getJSONObject(i).getString("id"));
                     brandModel.setBrandName(jsonBrandsArray.getJSONObject(i).getString("name"));
 
-                    //TODO INCORRECT!
+                    //TODO INCORRECT! MOCK DATA ONLY
                     brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
-                    brandModel.setPrice(Double.parseDouble("100")*i);
+
+                    //TODO Incorrect!! THIS IS A MOCK DATA
+                    brandModel.setPrice(Double.parseDouble("100.00"));
+                    if(jsonObject.getString("price") != null ) {
+                        brandModel.setPrice(Double.parseDouble(jsonObject.getString("price")));
+                    }
                     brands.add(brandModel);
                 }
                 productModel.setBrands(brands);
             }
             return productModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public LocationDetailsModel generateLocationDetailsModelFromJson(JSONObject jsonObject) {
+        LocationDetailsModel shopsLocation = new LocationDetailsModel();
+
+        try {
+            if(jsonObject.getString("lat") != null && jsonObject.getString("lng") != null) {
+                double lat = 0;
+                double lng = 0;
+                if(!jsonObject.getString("lat").isEmpty()) lat = Double.parseDouble(jsonObject.getString("lat"));
+                if(!jsonObject.getString("lng").isEmpty()) lng = Double.parseDouble(jsonObject.getString("lng"));
+                shopsLocation.setLocation(new LatLng(lat, lng));
+            }
+
+            if(jsonObject.getString("address") != null) shopsLocation.setAddress(jsonObject.getString("address"));
+            return shopsLocation;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public BranchModel generateBranchModelFromJson(JSONObject jsonObject) {
+        BranchModel branchModel = new BranchModel();
+
+        try {
+            if(jsonObject.getString("name") != null && !jsonObject.getString("name").isEmpty()) branchModel.setName(jsonObject.getString("name"));
+            if(jsonObject.getString("address") != null && !jsonObject.getString("address").isEmpty()) branchModel.setAddress(jsonObject.getString("address"));
+            if(jsonObject.getString("phone") != null && !jsonObject.getString("phone").isEmpty()) branchModel.setAddress(jsonObject.getString("phone"));
+            return branchModel;
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -99,7 +99,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
-        BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId);
+        BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId, web.get(position).getPrice());
 
 
 //        LoginSharedPref loginSharedPref = new LoginSharedPref();
@@ -125,7 +125,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
 //        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext, loginSharedPref.getUsername(mContext));
         if(cartItemsModelList != null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
-                if (cartItemsModel.getBranchId().equalsIgnoreCase(web.get(position).getId())
+                if (cartItemsModel.getBrandId().equalsIgnoreCase(web.get(position).getId())
                         && cartItemsModel.getProductModelId().equalsIgnoreCase(productId)) {
                     addToCartBtn.setEnabled(false);
                     addToCartBtn.setText(resources.getString(R.string.added_to_cart));
@@ -164,7 +164,9 @@ public class BrandsPagerAdapter extends PagerAdapter {
         String productId;
         String beforeTextChanged;
         View itemView;
-        public CountListener(View itemView, String brandId, String productId) {
+        double price;
+
+        public CountListener(View itemView, String brandId, String productId, double price) {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
@@ -174,6 +176,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
             saveEditBtn = (Button) itemView.findViewById(R.id.btn_save_edit_brand_item);
             this.brandId = brandId;
             this.productId = productId;
+            this.price = price;
         }
         @Override
         public void onClick(View view) {
@@ -246,8 +249,9 @@ public class BrandsPagerAdapter extends PagerAdapter {
 
         private void saveItem() {
             savedCardItem.setQuantity(count);
-            savedCardItem.setBranchId(brandId);
+            savedCardItem.setBrandId(brandId);
             savedCardItem.setProductModelId(productId);
+            savedCardItem.setPrice(price);
             oldQtyValue = count;
             addToCartBtn.setEnabled(false);
             saveEditBtn.setVisibility(View.GONE);

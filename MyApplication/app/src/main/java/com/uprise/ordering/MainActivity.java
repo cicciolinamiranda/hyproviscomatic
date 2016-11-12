@@ -152,7 +152,7 @@ public class MainActivity extends LocationTrackingActivity
                 break;
             case R.id.nav_branch:
                 finish();
-                startActivity(new Intent(MainActivity.this, ExistingBranch.class));
+                startActivity(new Intent(MainActivity.this, ExistingBranchActivity.class));
                 break;
             case R.id.nav_orders:
                 finish();

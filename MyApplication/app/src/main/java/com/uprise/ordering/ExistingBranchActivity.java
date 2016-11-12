@@ -8,17 +8,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
+import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
-import com.uprise.ordering.view.BranchList;
+import com.uprise.ordering.util.Util;
+import com.uprise.ordering.view.ExistingBranchList;
 import com.uprise.ordering.view.ExpandableHeightListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExistingBranch extends BaseAuthenticatedActivity {
+public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
+        RestCallServices.RestServiceListener{
 
     private LinearLayout llNoBranchAvail;
     private LinearLayout llExistingBranch;
@@ -26,6 +35,8 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
     private ArrayAdapter<BranchModel> adapterBranchModelList;
     private ExpandableHeightListView listViewBranch;
     private RestCallServices restCallServices;
+    private RelativeLayout loadingLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +45,23 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
         llNoBranchAvail =(LinearLayout) findViewById(R.id.ll_existing_branch_no_records);
         llExistingBranch =(LinearLayout) findViewById(R.id.ll_existing_branch);
         listViewBranch = (ExpandableHeightListView) findViewById(R.id.list_existing_branch);
+        loadingLayout = (RelativeLayout) findViewById(R.id.rl_branch_list_loading_layout);
         listViewBranch.setExpanded(true);
         branchModelList = new ArrayList<>();
 
-        llNoBranchAvail.setVisibility(View.VISIBLE);
+        llNoBranchAvail.setVisibility(View.GONE);
         llExistingBranch.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.VISIBLE);
 
         //TODO: add rest call api and determine if list is null. If yes, display no record layout.
+        sqlDatabaseHelper = new SqlDatabaseHelper(ExistingBranchActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        restCallServices = new RestCallServices(ExistingBranchActivity.this);
+
+        if(loginModel != null && loginModel.getUsername() != null) {
+            restCallServices.getBranch(ExistingBranchActivity.this, this, loginModel.getToken());
+        }
+
 
     }
 
@@ -58,7 +79,7 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(new Intent(ExistingBranch.this, MainActivity.class));
+                startActivity(new Intent(ExistingBranchActivity.this, MainActivity.class));
                 break;
 
             case R.id.existing_branch_add_new:
@@ -85,9 +106,16 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
     }
 
     private void populateBranchListView() {
-        adapterBranchModelList = new BranchList(this, branchModelList);
-        llExistingBranch.setVisibility(View.VISIBLE);
-        llNoBranchAvail.setVisibility(View.GONE);
+        adapterBranchModelList = new ExistingBranchList(this, branchModelList);
+        if(branchModelList != null && !branchModelList.isEmpty()) {
+            llNoBranchAvail.setVisibility(View.GONE);
+            llExistingBranch.setVisibility(View.VISIBLE);
+        } else {
+            llNoBranchAvail.setVisibility(View.VISIBLE);
+            llExistingBranch.setVisibility(View.GONE);
+        }
+        loadingLayout.setVisibility(View.GONE);
+
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -130,8 +158,42 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
     }
 
     private void showAddBranchDialog() {
-            Intent intent = new Intent(ExistingBranch.this, AddBranchActivity.class);
+            Intent intent = new Intent(ExistingBranchActivity.this, AddBranchActivity.class);
             startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
     }
 
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        branchModelList.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+
+                }
+                populateBranchListView();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+    }
 }

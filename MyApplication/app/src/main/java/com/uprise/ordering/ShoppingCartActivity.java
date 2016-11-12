@@ -1,5 +1,6 @@
 package com.uprise.ordering;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     private ArrayList<CartItemsModel> cartItemsModelArrayList;
     private RestCallServices restCallServices;
     private View mProgressView;
+    private double total;
 //    private DecimalFormat decimalFormat;
 
     @Override
@@ -104,7 +106,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
             lvShoppingCartList.setAdapter(cartItemsModelArrayAdapter);
             registerForContextMenu(lvShoppingCartList);
 
-            double total = Util.getInstance().computeEstimatedTotal(productModels, cartItemsModelArrayList);
+            total = Util.getInstance().computeEstimatedTotal(productModels, cartItemsModelArrayList);
             tvEstimatedTotal.setText(String.format("%.2f", total)+" Php");
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
@@ -129,12 +131,43 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_shopping_cart_proceed_checkout:
-                Util.getInstance().showSnackBarToast(this, getString(R.string.action_checkout));
 
                 //TODO: Must transfer in MyOrders
-//                cartItemsSharedPref.removeAll(ShoppingCartActivity.this, loginSharedPref.getUsername(ShoppingCartActivity.this));
-                finish();
-                startActivity(getIntent());
+                restCallServices.postPurchase(ShoppingCartActivity.this, new RestCallServices.RestServiceListener() {
+                    @Override
+                    public int getResultCode() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void onSuccess(RestCalls callType, String string) {
+                        finish();
+                        startActivity(getIntent());
+                        for(CartItemsModel cartItemsModel: cartItemsModelArrayList) {
+                            sqlDatabaseHelper.deleteCartItem(cartItemsModel);
+                        }
+                        Util.getInstance().showSnackBarToast(ShoppingCartActivity.this, getString(R.string.action_checkout));
+                        finish();
+                        startActivity(getIntent());
+                    }
+
+                    @Override
+                    public void onFailure(RestCalls callType, final String msg) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Util.getInstance().showDialog(ShoppingCartActivity.this, msg,ShoppingCartActivity.this.getString(R.string.action_ok),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                            }
+                        });
+                    }
+                }, loginModel, cartItemsModelArrayList, total);
+
                 break;
         }
     }

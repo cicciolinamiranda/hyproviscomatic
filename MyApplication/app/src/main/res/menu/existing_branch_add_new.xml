@@ -5,7 +5,7 @@
     <item
         android:id="@+id/existing_branch_add_new"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_add_grey600_48dp"
+        android:icon="@drawable/ic_add_white_24dp"
         android:title="@string/action_add_branch"
         app:showAsAction="always" />
 </menu>

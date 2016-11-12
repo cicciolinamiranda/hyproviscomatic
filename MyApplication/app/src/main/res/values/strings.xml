@@ -117,4 +117,6 @@
     <string name="unable_to_retrieve_branch">Unable to retrieve Branch(es)</string>
     <string name="endpoint_get_products">/api/product</string>
     <string name="label_existing_products_no_label">No Products Available</string>
+    <string name="endpoint_get_purchase">/api/purchase</string>
+    <string name="unable_to_checkout_order">Unable to process checkout your items. Please Try Again.</string>
 </resources>

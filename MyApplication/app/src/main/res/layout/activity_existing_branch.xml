@@ -3,14 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
     android:scrollbarAlwaysDrawVerticalTrack="true"
-    tools:context="com.uprise.ordering.ExistingBranch">
+    tools:context="com.uprise.ordering.ExistingBranchActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- Branch list progress -->
+        <RelativeLayout
+            android:id="@+id/rl_branch_list_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:visibility="visible">
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true"/>
+        </RelativeLayout>
+
 
         <LinearLayout
             android:id="@+id/ll_existing_branch_no_records"

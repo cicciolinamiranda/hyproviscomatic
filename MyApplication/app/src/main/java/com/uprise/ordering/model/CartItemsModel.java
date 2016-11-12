@@ -18,10 +18,13 @@ public class CartItemsModel implements Parcelable
     private String productModelId;
 
     @Expose
-    private String branchId;
+    private String brandId;
 
     @Expose
     private String userName;
+
+    @Expose
+    private double price;
 
     public CartItemsModel() {
         super();
@@ -31,15 +34,17 @@ public class CartItemsModel implements Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(quantity);
         dest.writeString(productModelId);
-        dest.writeString(branchId);
+        dest.writeString(brandId);
         dest.writeString(userName);
+        dest.writeDouble(price);
     }
 
     protected CartItemsModel(Parcel in) {
         quantity = in.readInt();
         productModelId = in.readString();
-        branchId = in.readString();
+        brandId = in.readString();
         userName = in.readString();
+        price = in.readDouble();
     }
 
     public static final Creator<CartItemsModel> CREATOR = new Creator<CartItemsModel>() {
@@ -70,12 +75,12 @@ public class CartItemsModel implements Parcelable
         this.productModelId = productModelId;
     }
 
-    public String getBranchId() {
-        return branchId;
+    public String getBrandId() {
+        return brandId;
     }
 
-    public void setBranchId(String branchId) {
-        this.branchId = branchId;
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
     }
 
     public String getUserName() {
@@ -84,6 +89,14 @@ public class CartItemsModel implements Parcelable
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
+import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.RegistrationModel;
 import com.uprise.ordering.rest.HttpClient;
 import com.uprise.ordering.rest.RestCalls;
@@ -131,9 +133,9 @@ public class RestCallServices {
                 branchJsonObj.put("name", branchModel.getName());
 
                 branchJsonObj.put("lat", branchModel.getLat());
-                Log.i(TAG, "LAT:-->" + branchModel.getLat());
+//                Log.i(TAG, "LAT:-->" + branchModel.getLat());
                 branchJsonObj.put("lng", branchModel.getLng());
-                Log.i(TAG, "LNG:-->" + branchModel.getLng());
+//                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                 branchJsonObj.put("phone", branchModel.getContactNum());
                 branchJsonObj.put("address", branchModel.getAddress());
 
@@ -143,10 +145,6 @@ public class RestCallServices {
                 for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
-//                    String imgBase64 = ImageBase64
-//                            .with(ctx)
-//                            .requestSize(512, 512)
-//                            .encodeFile(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                     storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
                     storePhotoJson.put("description", "Photo of Permit No. "+ numStorePics);
                     photosJsonArray.put(storePhotoJson);
@@ -158,10 +156,6 @@ public class RestCallServices {
                 for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
-//                    String imgBase64 = ImageBase64
-//                            .with(ctx)
-//                            .requestSize(512, 512)
-//                            .encodeFile(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
                     Log.i(TAG, "PERMIT IMAGE:--->" + "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
                     permitPhotoJsonObj.put("description", "Photo of Permit No. "+ numPermitPics);
@@ -170,7 +164,6 @@ public class RestCallServices {
                 }
 
                 branchJsonObj.put("photos", photosJsonArray);
-//                branchJsonObj.put("photos", new JSONArray());
                 branchJsonArray.put(branchJsonObj);
                 body.put("username", registrationModel.getEmail().toString());
                 body.put("password", registrationModel.getPassword().toString());
@@ -182,7 +175,6 @@ public class RestCallServices {
             }
         }
 
-//        params.add(new NameValuePair("Body", body.toString()));
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String jsonResults;
@@ -210,34 +202,23 @@ public class RestCallServices {
     }
 
     public void postLogin(final Context ctx, final RestServiceListener listener, final String username, final String password) {
-        final JSONObject userJson = new JSONObject();
         final String loginEndpoint = ctx.getResources().getString(R.string.endpoint_server)
                 + ctx.getResources().getString(R.string.endpoint_post_login);
-        try {
-            userJson.put("username", username);
-            userJson.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             ArrayList<org.apache.http.NameValuePair> params = new ArrayList<>();
-//            String resultStr;
             String token;
             @Override
             public void doInBackground() {
                 params.add(new BasicNameValuePair("username", username));
                 params.add(new BasicNameValuePair("password", password));
-//                String resultStr = getLogin(loginEndpoint,params);
                 JSONObject obj = HttpClient.SendHttpPost(loginEndpoint, params);
-//                if(obj != null) resultStr = obj.toString();
                     try {
 
                         if(obj.getString("token") != null )token = obj.getString("token");
                     } catch (JSONException e) {
                         e.printStackTrace();
-//                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
-//                                , ctx.getString(R.string.unable_to_login));
                     }
 
 
@@ -308,6 +289,67 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void postPurchase(final Context ctx, final RestServiceListener listener,
+                             final LoginModel loginModel, final List<CartItemsModel> cartItemsModels, double total) {
+        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_purchase);
+        final JSONObject purchaseObject = new JSONObject();
+        JSONArray itemsJsonArray = new JSONArray();
+        try {
+            purchaseObject.put("user", loginModel.getUsername());
+
+            if(cartItemsModels != null && cartItemsModels.size() >0) {
+
+                for(CartItemsModel cartItemsModel: cartItemsModels) {
+                   JSONObject itemObjJson = new JSONObject();
+                    itemObjJson.put("quantity", cartItemsModel.getQuantity());
+                    itemObjJson.put("price", cartItemsModel.getPrice());
+                    itemObjJson.put("product", cartItemsModel.getProductModelId());
+                    itemObjJson.put("brand", cartItemsModel.getBrandId());
+                    itemsJsonArray.put(itemObjJson);
+                }
+            }
+
+            purchaseObject.put("items", itemsJsonArray);
+            purchaseObject.put("total", total);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            ArrayList<org.apache.http.NameValuePair> params = new ArrayList<>();
+            String resultStr;
+
+
+            @Override
+            public void doInBackground() {
+                JSONObject obj = HttpClient.SenHttpPostWithAuthentication(purchaseEndpoint, purchaseObject, loginModel.getToken());
+                try {
+
+                    if(obj.getString("results") != null )resultStr = obj.getString("results");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            , ctx.getString(R.string.unable_to_checkout_order));
+                } else {
+
+                    listener.onSuccess(RestCalls.LOGIN, resultStr);
+                }
+
+
+            }
+        }).execute();
+    }
 
     public void getProducts(final Context ctx, final RestServiceListener listener) {
         final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
