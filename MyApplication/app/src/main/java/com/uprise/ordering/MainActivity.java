@@ -27,24 +27,26 @@ import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.LocationTrackingActivity;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.fragment.MapLocationFragment;
 import com.uprise.ordering.model.LocationDetailsModel;
-import com.uprise.ordering.shared.LoginSharedPref;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends LocationTrackingActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MapLocationListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
+        MapLocationListener, SearchView.OnQueryTextListener,
+        SearchView.OnSuggestionListener {
 
     private MapLocationFragment mapLocationFragment;
-    private LoginSharedPref loginSharedPref;
+//    private LoginSharedPref loginSharedPref;
     private View headerLayout;
     private SearchView searchShopsView;
     protected SimpleCursorAdapter shopsAdapter;
     private List<LocationDetailsModel> shopOnMapModelList;
     private List<LocationDetailsModel> matchedResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +66,14 @@ public class MainActivity extends LocationTrackingActivity
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
 
-        loginSharedPref = new LoginSharedPref();
-        if(!loginSharedPref.isLoggedIn(MainActivity.this)) {
+//        loginSharedPref = new LoginSharedPref();
+        sqlDatabaseHelper = new SqlDatabaseHelper(MainActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        if(loginModel == null || loginModel.getUsername() == null) {
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
             finish();
         } else {
-            tvEmail.setText(loginSharedPref.getUsername(MainActivity.this).toString());
+            tvEmail.setText(loginModel.getUsername());
 
             mapLocationFragment = new MapLocationFragment();
             mapLocationFragment.setOnFocusChangedListener(this);
@@ -156,8 +160,8 @@ public class MainActivity extends LocationTrackingActivity
                 break;
             case R.id.nav_logout:
 
-                if(loginSharedPref.isLoggedIn(MainActivity.this)) {
-                    loginSharedPref.logOut(MainActivity.this);
+                if(loginModel != null & loginModel.getUsername() != null) {
+                    sqlDatabaseHelper.logOut(loginModel);
                     finish();
                     startActivity(new Intent(MainActivity.this, LandingActivity.class));
                 }
@@ -361,4 +365,23 @@ public class MainActivity extends LocationTrackingActivity
         mapLocationFragment.onMapClick(matchedResults.get(position).getLocation());
         return false;
     }
+
+//    @Override
+//    public int getResultCode() {
+//        return 0;
+//    }
+
+//    @Override
+//    public void onSuccess(RestCalls callType, String token) {
+//
+//        if(token != null && !token.isEmpty() && loginSharedPref.isLoggedIn(MainActivity.this)) {
+//            loginSharedPref.changeToken(MainActivity.this, token);
+//        }
+//    }
+//
+//    @Override
+//    public void onFailure(RestCalls callType, String string) {
+//        finish();
+//        startActivity(new Intent(MainActivity.this, LandingActivity.class));
+//    }
 }

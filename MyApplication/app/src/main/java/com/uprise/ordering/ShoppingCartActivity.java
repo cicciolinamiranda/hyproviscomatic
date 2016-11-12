@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.ShoppingCartListView;
 
@@ -49,13 +48,14 @@ View.OnClickListener {
         llProceedToCheckout = (LinearLayout) findViewById(R.id.ll_shopping_cart_proceed_checkout);
         llProceedToCheckout.setOnClickListener(this);
 //        cartItemsSharedPref = new CartItemsSharedPref();
-        loginSharedPref = new LoginSharedPref();
+//        loginSharedPref = new LoginSharedPref();
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
 //        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
 //                loginSharedPref.getUsername(ShoppingCartActivity.this));
 
         sqlDatabaseHelper = new SqlDatabaseHelper(ShoppingCartActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
         populateList();
         getSupportActionBar().setTitle("Cart Items");
 
@@ -64,7 +64,7 @@ View.OnClickListener {
 
     @Override
     public void deleteCartItem(CartItemsModel cartItemsModel) {
-        cartItemsModel.setUserName(loginSharedPref.getUsername(ShoppingCartActivity.this));
+        cartItemsModel.setUserName(loginModel.getUsername());
 //        cartItemsSharedPref.removeCardItem(ShoppingCartActivity.this, cartItemsModel);
 
         sqlDatabaseHelper.deleteCartItem(cartItemsModel);
@@ -74,7 +74,7 @@ View.OnClickListener {
 
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
-        cartItemsModel.setUserName(loginSharedPref.getUsername(ShoppingCartActivity.this));
+        cartItemsModel.setUserName(loginModel.getUsername());
         sqlDatabaseHelper.updateCartItems(cartItemsModel);
         populateList();
     }
@@ -83,7 +83,7 @@ View.OnClickListener {
         llNoRecords.setVisibility(View.GONE);
         llShopCartList.setVisibility(View.VISIBLE);
         llLowerLayouts.setVisibility(View.VISIBLE);
-        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginSharedPref.getUsername(ShoppingCartActivity.this));
+        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginModel.getUsername());
         if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
                     productModels, this);

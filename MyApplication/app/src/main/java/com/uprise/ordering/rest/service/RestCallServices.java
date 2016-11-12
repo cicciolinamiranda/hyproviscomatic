@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.util.Base64;
 import android.util.Log;
 
@@ -26,16 +23,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,7 +40,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -244,8 +236,8 @@ public class RestCallServices {
                         if(obj.getString("token") != null )token = obj.getString("token");
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
-                                , ctx.getString(R.string.unable_to_login));
+//                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+//                                , ctx.getString(R.string.unable_to_login));
                     }
 
 
@@ -267,380 +259,110 @@ public class RestCallServices {
         }).execute();
     }
 
-    public void getProducts(final Context ctx, final RestServiceListener listener) {
+    public void getBranch(final Context ctx, final RestServiceListener listener, final String token) {
 
-    }
-
-
-    public void submitImage(final Context ctx, final RestServiceListener listener
-            , final String phoneNumber, final String id, final List<String>images, final int index) {
-
+        final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_branch);
         new RestAsyncTask(new RestAsyncTaskListener() {
-
-            String jsonResults;
-            String imgPath = images.get(index);
-            ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-
+            JSONObject obj;
+            String jsonResult;
             @Override
             public void doInBackground() {
-                params.add(new NameValuePair("device_id", id));
-                params.add(new NameValuePair("description", " "));
-                Bitmap bmpImage = getBitmapFrom(imgPath, listener.getResultCode());
+               obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(branchEndpoint, token);
+                    if(obj   != null) {
+                        jsonResult = obj.toString();
+                    }
 
-                if(bmpImage != null) {
-                    params.add(new NameValuePair("image", bitmapToBase64(bmpImage)));
-                    params.add(new NameValuePair("filename", imgPath));
-
-                    //sqlDatabaseHelper.createImage(new RestData(mainUrl, params));
-                    jsonResults = postImageBase64(ctx, params);
-                }
             }
 
             @Override
             public void result() {
-                if (jsonResults == null) {
-                    RestCallServices.this.failedPost(listener, RestCalls.PICTURE
-                            , "failed sending picture in " + imgPath, params);
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            , ctx.getString(R.string.unable_to_retrieve_branch));
                 } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
 
-                    listener.onSuccess(RestCalls.PICTURE, jsonResults);
-                }
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.LOGIN,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                    , jsnobject.get("detail").toString());
+                        }
 
-                int z= index + 1;
-                if (z < images.size()) {
-                    submitImage(ctx, listener, phoneNumber, id, images, z);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                , ctx.getString(R.string.unable_to_retrieve_branch));
+
+                    }
+
+
+
                 }
             }
         }).execute();
-
-
     }
 
-    private Bitmap rotateBitmap(int degree, Bitmap original) {
-        Matrix matrix = new Matrix();
 
-        matrix.setRotate(degree, original.getWidth() / 2, original.getHeight() / 2);
-        matrix.postTranslate(original.getHeight(), 0);
+    public void getProducts(final Context ctx, final RestServiceListener listener) {
+        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_products);
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamAndAuth(productsEndpoint);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
 
-        Bitmap rotatedBitmap = Bitmap
-                .createBitmap(original.getWidth(), original.getHeight(), original.getConfig());
-        Canvas tmpCanvas = new Canvas(rotatedBitmap);
-        tmpCanvas.drawBitmap(original, matrix, null);
-        tmpCanvas.setBitmap(null);
-
-        return rotatedBitmap;
-    }
-
-    public enum Direction {VERTICAL, HORIZONTAL}
-
-    ;
-
-    /**
-     * Creates a new bitmap by flipping the specified bitmap vertically or horizontally.
-     *
-     * @param src Bitmap to flip
-     * @param type Flip direction (horizontal or vertical)
-     * @return New bitmap created by flipping the given one vertically or horizontally as specified by
-     * the <code>type</code> parameter or the original bitmap if an unknown type is specified.
-     **/
-    public static Bitmap flip(Bitmap src, Direction type) {
-        Matrix matrix = new Matrix();
-
-        if (type == Direction.VERTICAL) {
-            matrix.preScale(1.0f, -1.0f);
-        } else if (type == Direction.HORIZONTAL) {
-            matrix.preScale(-1.0f, 1.0f);
-        } else {
-            return src;
-        }
-
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-    }
-
-    private static int getOrientationFromExif(String imagePath) {
-        int orientation = -1;
-        try {
-            ExifInterface exif = new ExifInterface(imagePath);
-            int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-
-            switch (exifOrientation) {
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    orientation = 270;
-
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    orientation = 180;
-
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    orientation = 90;
-
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-                    orientation = 0;
-
-                    break;
-                default:
-                    break;
             }
-        } catch (IOException e) {
-            Log.e(ApplicationConstants.APP_CODE, "Unable to get image exif orientation", e);
-        }
 
-        return orientation;
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.LOGIN,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                    , jsnobject.get("detail").toString());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                , ctx.getString(R.string.unable_to_retrieve_branch));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
     }
 
-    private String postImageBase64(Context ctx, ArrayList<NameValuePair> params) {
-        String jsonResults = "";
-        InputStream is = null;
-        try {
 
-
-
-      /*if(bmpImage != null) {
-        if (imgNumber == 0) {
-          String base64 = bitmapToBase64(bmpImage);
-          params.add(new NameValuePair("image", base64));
-          Log.d(MainActivity.APP_CODE, base64);
-
-        }
-
-        params.add(new NameValuePair("Image" + (imgNumber+ 1), bitmapToBase64(bmpImage)));
-      }*/
-
-            jsonResults = get(imgUrl, params);
-            Log.d(ApplicationConstants.APP_CODE,"ImG URL:"+imgUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return jsonResults;
-    }
 
 
     String boundary = "-------------" + System.currentTimeMillis();
     private static final String LINE_FEED = "\r\n";
     private static final String TWO_HYPHENS = "--";
-
-
-    private JSONObject postData;
-    private List<String> fileList;
-    private int count = 0;
-    private int imgCount = 0;
-
-
-    private String postImage(Context ctx, String url, String phoneNumber, String deviceId,
-                             String imgPath) {
-
-        Log.d(ApplicationConstants.APP_CODE, "imagePath url:" + url);
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String strResponse = "";
-        InputStream inputStream = null;
-        HttpURLConnection urlConnection = null;
-
-        try {
-            urlConnection = (HttpURLConnection) new URL(url.toString()).openConnection();
-            urlConnection.setRequestProperty("Accept", "application/json");
-            urlConnection.setRequestProperty("Connection", "close");
-            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 ( compatible ) ");
-            //urlConnection.setRequestProperty("Authorization", "Bearer " + Config.getConfigInstance().getAccessToken());
-            urlConnection.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
-
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-            urlConnection.setUseCaches(false);
-            urlConnection.setChunkedStreamingMode(1024);
-            urlConnection.setRequestMethod("POST");
-            dos = new DataOutputStream(urlConnection.getOutputStream());
-
-            //add id to data
-            Iterator<String> keys = postData.keys();
-            while (keys.hasNext()) {
-                try {
-                    String id = String.valueOf(keys.next());
-                    addFormField(id, "" + postData.get(id));
-                    System.out.println(id + " : " + postData.get(id));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            try {
-                dos.writeBytes(LINE_FEED);
-                dos.flush();
-                dos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-     /* if (fileList != null && fileList.size() > 0 && !fileList.isEmpty()) {
-        for (int i = 0; i < fileList.size(); i++) {
-
-          File file = new File(fileList.get(i));
-          if (file != null) ;
-          addFilePart("photos[" + i + "][image]", file);
-        }
-      }*/
-
-            File file = new File("temp/wasabi.jpg");
-            FileInputStream initialStream = ctx.openFileInput(imgPath);
-
-            byte[] buffer = new byte[initialStream.available()];
-            initialStream.read(buffer);
-            OutputStream outStream = new FileOutputStream(file);
-            outStream.write(buffer);
-/*
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 4;
-      Bitmap bmpImage = BitmapFactory.decodeStream(is, null, options);
-*/
-
-            if (file != null) {
-                ;
-            }
-            imgCount++;
-            addFilePart("Image" + imgCount, file);
-
-            // forming th java.net.URL object
-
-            build();
-            urlConnection.connect();
-            int statusCode = 0;
-            try {
-                urlConnection.connect();
-                statusCode = urlConnection.getResponseCode();
-            } catch (EOFException e1) {
-                if (count < 5) {
-                    urlConnection.disconnect();
-                    count++;
-                    String temp = postImage(ctx, url, phoneNumber, deviceId, imgPath);
-                    if (temp != null && !temp.equals("")) {
-                        return temp;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // 200 represents HTTP OK
-            if (statusCode == HttpURLConnection.HTTP_OK) {
-                inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                strResponse = readStream(inputStream);
-            } else {
-                System.out.println(urlConnection.getResponseMessage());
-                inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                strResponse = readStream(inputStream);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != inputStream) {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-            }
-        }
-        return strResponse;
-
-    }
-
-    public void addHeaderField(String name, String value) {
-        try {
-            dos.writeBytes(name + ": " + value + LINE_FEED);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void build() {
-        try {
-            dos.writeBytes(LINE_FEED);
-            dos.flush();
-            dos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String readStream(InputStream in) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String nextLine = "";
-            while ((nextLine = reader.readLine()) != null) {
-                sb.append(nextLine);
-            }
-        /* Close Stream */
-            if (null != in) {
-                in.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }
-
-    /***
-     * @return string of JSON
-     */
-    public String getLogin(final String strUrl, final ArrayList<NameValuePair> params) {
-
-        Log.d(ApplicationConstants.APP_CODE, "url:" + strUrl);
-        HttpURLConnection conn = null;
-        StringBuilder jsonResults = new StringBuilder();
-        try {
-
-            URL url = new URL(strUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Accept", "application/x-www-form-urlencoded");
-            conn.setAllowUserInteraction(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getQuery(params));
-            writer.flush();
-            writer.close();
-            os.close();
-
-            conn.connect();
-
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
-            }
-
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Error processing URL", e);
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error connecting API", e);
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            Log.e(TAG, "Error connecting API", e);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
-
-        return jsonResults.toString();
-
-    }
 
     /***
      * @return string of JSON
@@ -853,11 +575,6 @@ public class RestCallServices {
     }
 
     private void failedPost(final RestServiceListener listener, RestCalls callType, String strResult) {
-//        switch (callType) {
-//            case PICTURE:
-//                sqlDatabaseHelper.createImage(new RestData(imgUrl, params));
-//                break;
-//        }
         listener.onFailure(callType, strResult);
 
 

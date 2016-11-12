@@ -15,7 +15,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.util.Util;
 
 /**
@@ -23,21 +23,32 @@ import com.uprise.ordering.util.Util;
  */
 
 public class BaseAuthenticatedActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+        {
 
 //    protected CartItemsSharedPref cartItemsSharedPref;
-    protected LoginSharedPref loginSharedPref;
+//    protected LoginSharedPref loginSharedPref;
 
     // Google client to interact with Google API
     protected GoogleApiClient mGoogleApiClient;
     protected SqlDatabaseHelper sqlDatabaseHelper;
+//    protected RestCallServices restCallServices;
+    protected LoginModel loginModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 //        cartItemsSharedPref = new CartItemsSharedPref();
-        loginSharedPref = new LoginSharedPref();
+//        loginSharedPref = new LoginSharedPref();
         sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
         checkPermissions();
+
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+////        if(loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)) {
+//        if(loginModel != null && loginModel.getUsername() != null) {
+//            restCallServices.postLogin(BaseAuthenticatedActivity.this, this,
+//                    loginModel.getUsername(), loginModel.getPassword() );
+//        }
 
     }
 
@@ -116,7 +127,8 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent mainIntent;
-            if(loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)){
+//            if(loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)){
+            if(loginModel != null && loginModel.getUsername() != null) {
                 mainIntent = new Intent(this, MainActivity.class);
             } else {
                 mainIntent = new Intent(this, LandingActivity.class);
@@ -128,4 +140,28 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
         }
         return false;
     }
+
+//    @Override
+//    public int getResultCode() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void onSuccess(RestCalls callType, String token) {
+//
+//        if(token != null && !token.isEmpty() && loginModel != null && loginModel.getUsername() != null) {
+//            loginModel.setToken(token);
+//            sqlDatabaseHelper.updateLoginAccount(loginModel);
+//        }
+//    }
+//
+//    @Override
+//    public void onFailure(RestCalls callType, String string) {
+//
+////        if(!loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)) {
+////        loginSharedPref.logOut(BaseAuthenticatedActivity.this);
+////        finish();
+////        startActivity(new Intent(BaseAuthenticatedActivity.this, LandingActivity.class));
+////        }
+//    }
 }

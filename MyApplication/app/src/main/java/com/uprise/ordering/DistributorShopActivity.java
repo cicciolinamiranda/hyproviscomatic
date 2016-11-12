@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.LoginSharedPref;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
@@ -37,9 +36,9 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         //TODO: to be replaced with Rest Call
         productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
-        loginSharedPref = new LoginSharedPref();
+//        loginSharedPref = new LoginSharedPref();
 //        cartItemsSharedPref = new CartItemsSharedPref();
-        username = loginSharedPref.getUsername(this);
+//        username = loginSharedPref.getUsername(this);
 
         populateProductList();
 //        getSupportActionBar().setTitle("Products");

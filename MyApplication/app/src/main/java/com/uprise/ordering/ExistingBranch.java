@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.BranchModel;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.view.BranchList;
 import com.uprise.ordering.view.ExpandableHeightListView;
 
@@ -24,6 +25,7 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
     private List<BranchModel> branchModelList;
     private ArrayAdapter<BranchModel> adapterBranchModelList;
     private ExpandableHeightListView listViewBranch;
+    private RestCallServices restCallServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class ExistingBranch extends BaseAuthenticatedActivity {
         llExistingBranch.setVisibility(View.GONE);
 
         //TODO: add rest call api and determine if list is null. If yes, display no record layout.
+
     }
 
     @Override

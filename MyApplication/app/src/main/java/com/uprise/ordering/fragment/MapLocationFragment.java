@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -35,17 +34,25 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uprise.ordering.LandingActivity;
 import com.uprise.ordering.R;
 import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.LocationDetailsModel;
+import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.service.FetchAddressIntentService;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.util.WifiScanManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by cicciolina on 11/3/16.
@@ -58,7 +65,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         View.OnFocusChangeListener,
         LocationTrackingBase.LocationTrackingBaseListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        RestCallServices.RestServiceListener{
 
     private static final String MARKER_TITLE = "My Current Location";
     private GoogleMap mMap;
@@ -66,7 +74,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 //    private ArrayList<ShopOnMapModel> shopsOnMap;
     private LocationTrackingBase locationTrackingBase;
     private LatLng currPoint;
-    private SharedPreferences sharedPreferences;
+//    private LoginSharedPref loginSharedPref;
+    private SqlDatabaseHelper sqlDatabaseHelper;
+    private LoginModel loginModel;
     private MapLocationListener listener;
     private MapView mapView;
     private View v;
@@ -79,12 +89,21 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     private boolean mAddressRequested;
 
     private AddressResultReceiver mResultReceiver;
+    private RestCallServices restCallServices;
+    private ArrayList<LocationDetailsModel> shopOnMapModels;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.frag_map_location, container, false);
+//        loginSharedPref = new LoginSharedPref();
+        restCallServices = new RestCallServices(getContext());
 
+        sqlDatabaseHelper = new SqlDatabaseHelper(getContext());
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        if(loginModel != null && loginModel.getUsername() != null) {
+            restCallServices.getBranch(getContext(), this, loginModel.getToken());
+        }
         // Gets the MapView from the XML layout and creates it
         mapView = (MapView) v.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -115,6 +134,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             Log.d(ApplicationConstants.APP_CODE, "permission onError:" + s.getMessage());
         }
 
+        shopOnMapModels = new ArrayList<>();
         return v;
     }
 
@@ -134,8 +154,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
         //TODO: replace with API call
-        if(listener.isOnShopNowPage()) {
-            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
                 Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
                         .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
                         .title(shopOnMap.getAddress()));
@@ -214,8 +234,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
 
         //TODO: replace with API call
-        if(listener.isOnShopNowPage()) {
-            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+        if(listener.isOnShopNowPage() && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
                 Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
                         .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
                         .title(shopOnMap.getAddress()));
@@ -348,8 +368,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         currPoint = marker.getPosition();
         locationTrackingBase.setLatLng(currPoint);
         listener.onLatLngChanged(currPoint);
-        if(listener.isOnShopNowPage()) {
-            for (LocationDetailsModel shopOnMap : getShopsLocation()) {
+        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
                 startIntentService(shopOnMap);
             }
 
@@ -365,21 +385,23 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         return (currPoint != null) && (currPoint.latitude != 0 && currPoint.longitude != 0) && (marker != null);
     }
 
-    private List<LocationDetailsModel> getShopsLocation() {
-        ArrayList<LocationDetailsModel> shopOnMapModels = new ArrayList<>();
-
-
-        //TODO replace with REST api call
-        for (int i = 0; i < Util.latLngs.size(); i++) {
-            LocationDetailsModel shopOnMapModel = new LocationDetailsModel();
-            LatLng latLng = Util.latLngs.get(i);
-//            shopOnMapModel.setTitle("Location "+i);
-            shopOnMapModel.setLocation(latLng);
-            shopOnMapModels.add(shopOnMapModel);
-        }
-
-        return shopOnMapModels;
-    }
+//    private List<LocationDetailsModel> getShopsLocation() {
+////        ArrayList<LocationDetailsModel> shopOnMapModels =
+//
+//
+////        //TODO replace with REST api call
+//
+//        if(shopOnMapModels != null && shopOnMapModels.size() > 0) {
+//            for (int i = 0; i < Util.latLngs.size(); i++) {
+//                LocationDetailsModel shopOnMapModel = new LocationDetailsModel();
+//                LatLng latLng = Util.latLngs.get(i);
+////            shopOnMapModel.setTitle("Location "+i);
+//                shopOnMapModel.setLocation(latLng);
+//                shopOnMapModels.add(shopOnMapModel);
+//            }
+//        }
+//        return shopOnMapModels;
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -409,6 +431,73 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             }
         }
     }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        shopOnMapModels.add(generateBranchModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private LocationDetailsModel generateBranchModelFromJson(JSONObject jsonObject) {
+        LocationDetailsModel shopsLocation = new LocationDetailsModel();
+
+        try {
+            if(jsonObject.getString("lat") != null && jsonObject.getString("lng") != null) {
+                double lat = 0;
+                double lng = 0;
+                if(!jsonObject.getString("lat").isEmpty()) lat = Double.parseDouble(jsonObject.getString("lat"));
+                if(!jsonObject.getString("lng").isEmpty()) lng = Double.parseDouble(jsonObject.getString("lng"));
+                shopsLocation.setLocation(new LatLng(lat, lng));
+            }
+
+            if(jsonObject.getString("address") != null) shopsLocation.setAddress(jsonObject.getString("address"));
+            return shopsLocation;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+        if(string.contentEquals("Session is already expired")) {
+            Util.getInstance().showSnackBarToast(getContext(), string);
+            sqlDatabaseHelper.logOut(loginModel);
+            getActivity().finish();
+            getContext().startActivity(new Intent(getActivity(), LandingActivity.class));
+        } else {
+            Util.getInstance().showSnackBarToast(getContext(), getContext().getString(R.string.unable_to_retrieve_branch));
+        }
+
+    }
+
     private class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);

@@ -15,6 +15,9 @@ public class ImageModel implements Parcelable{
     private int numOfImages;
 
 
+    public ImageModel() {
+    }
+
     public ImageModel(ArrayList<Integer> integerBase, ArrayList<String> stringBase, int numOfImages) {
         this.integerBase = integerBase;
         this.stringBase = stringBase;

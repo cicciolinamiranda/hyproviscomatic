@@ -20,9 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.uprise.ordering.R;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
-import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -53,6 +54,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private LinearLayout llBrandQty;
     private LinearLayout llQtyButtons;
     private LinearLayout llTransacBtn;
+    private SqlDatabaseHelper sqlDatabaseHelper;
+    private LoginModel loginModel;
 
     public BrandsPagerAdapter(Context context, List<BrandModel> web, List<CartItemsModel> cartItemsModelList, BrandsPagerAdapter.BrandsAdapterListener listener, String productId) {
         this.mContext = context;
@@ -64,6 +67,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
 //        this.productPosition = productPosition;
         savedCardItem = new CartItemsModel();
         this.cartItemsModelList = cartItemsModelList;
+        sqlDatabaseHelper = new SqlDatabaseHelper(context);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
 
     }
 
@@ -97,12 +102,14 @@ public class BrandsPagerAdapter extends PagerAdapter {
         BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId);
 
 
-        LoginSharedPref loginSharedPref = new LoginSharedPref();
+//        LoginSharedPref loginSharedPref = new LoginSharedPref();
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+
         llBrandPrice = (LinearLayout) itemView.findViewById(R.id.ll_brand_price);
         llBrandQty = (LinearLayout) itemView.findViewById(R.id.ll_brand_qty);
         llQtyButtons = (LinearLayout) itemView.findViewById(R.id.ll_item_qty_buttons);
         llTransacBtn = (LinearLayout) itemView.findViewById(R.id.ll_transac_buttons);
-        if(!loginSharedPref.isLoggedIn(mContext)) {
+        if(loginModel == null || loginModel.getUsername() == null) {
             llBrandPrice.setVisibility(View.INVISIBLE);
             llBrandQty.setVisibility(View.INVISIBLE);
             llQtyButtons.setVisibility(View.INVISIBLE);

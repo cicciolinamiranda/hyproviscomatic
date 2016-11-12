@@ -22,13 +22,14 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.enums.OrderStatus;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.LoginSharedPref;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -267,7 +268,9 @@ public class Util {
 
     public ArrayList<CartItemsModel> generateCartItems(Context ctx) {
 
-        LoginSharedPref loginSharedPref = new LoginSharedPref();
+//        LoginSharedPref loginSharedPref = new LoginSharedPref();
+        SqlDatabaseHelper sqlDatabaseHelper = new SqlDatabaseHelper(ctx);
+        LoginModel loginModel = sqlDatabaseHelper.getLoginCredentials();
 
         ArrayList<CartItemsModel> cartItemsModels = new ArrayList<>();
         for (int i = 1; i < 11; i++) {
@@ -275,7 +278,7 @@ public class Util {
             cartItemsModel.setProductModelId("product_"+i);
             cartItemsModel.setBranchId("brand_"+i);
             cartItemsModel.setQuantity(i*2);
-            cartItemsModel.setUserName(loginSharedPref.getUsername(ctx));
+            cartItemsModel.setUserName(loginModel.getUsername());
             cartItemsModels.add(cartItemsModel);
 
         }

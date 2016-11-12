@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.uprise.ordering.database.SqlDatabaseHelper;
+import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.shared.LoginSharedPref;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +27,8 @@ import java.util.List;
 public class ProductsActivity extends BaseAuthenticatedActivity implements ExpandableListView.OnChildClickListener,
         ExpandableListView.OnGroupExpandListener,
         BrandsPagerAdapter.BrandsAdapterListener,
-        ProductsAdapter.ProductsAdapterListener {
+        ProductsAdapter.ProductsAdapterListener,
+        RestCallServices.RestServiceListener {
 
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
@@ -33,6 +40,8 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     private int lastViewPagerPosition = -1;
     private ViewPager childView;
     private boolean isAddOrSaved;
+    private RestCallServices restCallServices;
+    private View mProgressView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +50,23 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         expandableListView = (ExpandableListView) findViewById(R.id.el_shop_now_products);
 
         //TODO: to be replaced with Rest Call
-        productModels = Util.getInstance().generateProductModels();
+        productModels = new ArrayList<>();
+//        productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
-        loginSharedPref = new LoginSharedPref();
+//        loginSharedPref = new LoginSharedPref();
 //        cartItemsSharedPref = new CartItemsSharedPref();
-        username = loginSharedPref.getUsername(this);
+//        username = loginSharedPref.getUsername(this);
+        sqlDatabaseHelper = new SqlDatabaseHelper(ProductsActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
 //        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
-        sqlDatabaseHelper = new SqlDatabaseHelper(ProductsActivity.this);
-        populateProductList();
-        getSupportActionBar().setTitle("Products");
+        restCallServices = new RestCallServices(this);
+        restCallServices.getProducts(ProductsActivity.this, this);
+//        populateProductList();
+        mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
+        mProgressView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -117,7 +132,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
             productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         }
         expandableListView.setAdapter(productsAdapter);
-
+        mProgressView.setVisibility(View.GONE);
         if(lastExpandedPosition != -1) {
             expandableListView.expandGroup(lastExpandedPosition);
         }
@@ -132,5 +147,73 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
                 break;
         }
         return true;
+    }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        productModels.add(generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+                    populateProductList();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+    }
+
+    private ProductModel generateProductModelFromJson(JSONObject jsonObject) {
+        ProductModel productModel = new ProductModel();
+
+
+
+        try {
+            if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
+
+            if(jsonObject.getString("brands") != null) {
+                JSONArray jsonBrandsArray = jsonObject.getJSONArray("brands");
+                ArrayList<BrandModel> brands = new ArrayList<>();
+
+                for(int i = 0; i < jsonBrandsArray.length(); i++) {
+                    BrandModel brandModel = new BrandModel();
+                    brandModel.setId(jsonBrandsArray.getJSONObject(i).getString("id"));
+                    brandModel.setBrandName(jsonBrandsArray.getJSONObject(i).getString("name"));
+
+                    //TODO INCORRECT!
+                    brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
+                    brandModel.setPrice(Double.parseDouble("100")*i);
+                    brands.add(brandModel);
+                }
+                productModel.setBrands(brands);
+            }
+            return productModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
