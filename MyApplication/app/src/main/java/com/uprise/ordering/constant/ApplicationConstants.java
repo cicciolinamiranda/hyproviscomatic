@@ -55,6 +55,7 @@ public class ApplicationConstants {
 
     public static final int REQUEST_CODE_ADD_BRANCH_LAT_LNG = 0X16;
 
-    public static final int REQUEST_CODE_EDIT_BRANCH_LAT_LNG = 0x17;
+    public static final int RESULT_FROM_ADD_BRANCH_SIGNED_IN = 0x17;
+
 
 }

@@ -119,4 +119,6 @@
     <string name="label_existing_products_no_label">No Products Available</string>
     <string name="endpoint_get_purchase">/api/purchase</string>
     <string name="unable_to_checkout_order">Unable to process checkout your items. Please Try Again.</string>
+    <string name="unable_to_retrieve_products">Unable to retrieve list of products.</string>
+    <string name="unable_to_add_branch">Unable to save branch. Please Try Again</string>
 </resources>

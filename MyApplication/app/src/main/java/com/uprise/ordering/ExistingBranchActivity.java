@@ -1,5 +1,6 @@
 package com.uprise.ordering;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -95,10 +96,12 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
         switch(requestCode) {
 
-            case ApplicationConstants.RESULT_FROM_ADD_BRANCH:
+            case ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN:
                 if (resultCode != RESULT_CANCELED && data != null) {
                     BranchModel branchModel = data.getParcelableExtra("branchModel");
                     branchModelList.add(branchModel);
+
+                    restCallServices.saveBranchToExistingUser(ExistingBranchActivity.this, this, branchModel, loginModel);
                     populateBranchListView();
                 }
                 break;
@@ -159,7 +162,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
     private void showAddBranchDialog() {
             Intent intent = new Intent(ExistingBranchActivity.this, AddBranchActivity.class);
-            startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
+            startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN);
     }
 
     @Override
@@ -180,7 +183,14 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        branchModelList.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
+
+                        if (jsonArray.getJSONObject(i).getString("user") != null &&
+                                !jsonArray.getJSONObject(i).getString("user").isEmpty()
+                                && jsonArray.getJSONObject(i).getString("user").contentEquals(loginModel.getUsername())) {
+
+                            branchModelList.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
+
+                        }
                     }
 
                 }
@@ -194,6 +204,13 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
     @Override
     public void onFailure(RestCalls callType, String string) {
+        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
     }
 }

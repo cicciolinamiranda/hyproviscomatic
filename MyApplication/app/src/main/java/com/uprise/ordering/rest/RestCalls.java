@@ -15,7 +15,10 @@ public enum RestCalls {
 //    UNINSTALL(0x09),
     PICTURE(0x69),
     REGISTRATION(0x70),
-    LOGIN(0x71);
+    LOGIN(0x71),
+    PURCHASE(0x72),
+    PRODUCTS(0x73),
+    BRANCH(0x74), ADD_BRANCH(0x75);
 //    SPEEDTEST_SERVER_LIST(0x11),
 //    DEVICE_DETAILS(0x12);
 

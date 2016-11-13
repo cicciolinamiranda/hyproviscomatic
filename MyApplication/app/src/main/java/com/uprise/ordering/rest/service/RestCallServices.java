@@ -178,6 +178,8 @@ public class RestCallServices {
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String jsonResults;
+
+
             @Override
             public void doInBackground() {
                 JSONObject obj = HttpClient.SendHttpPost(registrationEndpoint, body);
@@ -240,6 +242,75 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void saveBranchToExistingUser(final Context ctx, final RestServiceListener listener,
+                                         final BranchModel branchModel, final LoginModel loginModel) {
+        final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_branch);
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject branchJsonObj = new JSONObject();
+            String resultStr;
+
+            @Override
+            public void doInBackground() {
+                JSONArray photosJsonArray = new JSONArray();
+                try {
+                    branchJsonObj.put("name", branchModel.getName());
+
+                    branchJsonObj.put("lat", branchModel.getLat());
+//                Log.i(TAG, "LAT:-->" + branchModel.getLat());
+                    branchJsonObj.put("lng", branchModel.getLng());
+//                Log.i(TAG, "LNG:-->" + branchModel.getLng());
+                    branchJsonObj.put("phone", branchModel.getContactNum());
+                    branchJsonObj.put("address", branchModel.getAddress());
+
+
+//                      Photos of store
+                    int numStorePics = 0;
+                    for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
+                        JSONObject storePhotoJson = new JSONObject();
+                        Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
+                        storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
+                        storePhotoJson.put("description", "Photo of Permit No. "+ numStorePics);
+                        photosJsonArray.put(storePhotoJson);
+                        numStorePics++;
+                    }
+
+//                       Photos of permit
+                    int numPermitPics = 0;
+                    for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
+                        JSONObject permitPhotoJsonObj = new JSONObject();
+                        Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
+                        permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
+                        Log.i(TAG, "PERMIT IMAGE:--->" + "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
+                        permitPhotoJsonObj.put("description", "Photo of Permit No. "+ numPermitPics);
+                        photosJsonArray.put(permitPhotoJsonObj);
+                        numPermitPics++;
+                    }
+
+                    branchJsonObj.put("photos", photosJsonArray);
+
+                    JSONObject resultObj = HttpClient.SenHttpPostWithAuthentication(branchEndpoint, branchJsonObj, loginModel.getToken());
+                    if(resultObj.getString("results") != null )resultStr = resultObj.getString("results");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.ADD_BRANCH
+                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                } else {
+                            listener.onSuccess(RestCalls.ADD_BRANCH,  resultStr);
+                        }
+            }
+        }).execute();
+    }
+
     public void getBranch(final Context ctx, final RestServiceListener listener, final String token) {
 
         final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
@@ -261,7 +332,7 @@ public class RestCallServices {
 
                 if (jsonResult == null || jsonResult.isEmpty()) {
 
-                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                    RestCallServices.this.failedPost(listener, RestCalls.BRANCH
                             , ctx.getString(R.string.unable_to_retrieve_branch));
                 } else {
                     try {
@@ -271,13 +342,13 @@ public class RestCallServices {
                             listener.onSuccess(RestCalls.LOGIN,  jsonResult);
                         }
                         else if(null != jsnobject.get("detail")) {
-                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            RestCallServices.this.failedPost(listener, RestCalls.BRANCH
                                     , jsnobject.get("detail").toString());
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                        RestCallServices.this.failedPost(listener, RestCalls.BRANCH
                                 , ctx.getString(R.string.unable_to_retrieve_branch));
 
                     }
@@ -339,11 +410,11 @@ public class RestCallServices {
             public void result() {
                 if (resultStr == null || resultStr.isEmpty()) {
 
-                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                    RestCallServices.this.failedPost(listener, RestCalls.PURCHASE
                             , ctx.getString(R.string.unable_to_checkout_order));
                 } else {
 
-                    listener.onSuccess(RestCalls.LOGIN, resultStr);
+                    listener.onSuccess(RestCalls.PURCHASE, resultStr);
                 }
 
 
@@ -378,7 +449,7 @@ public class RestCallServices {
                         JSONObject jsnobject = new JSONObject(jsonResult);
 
                         if(null != jsnobject.get("results")) {
-                            listener.onSuccess(RestCalls.LOGIN,  jsonResult);
+                            listener.onSuccess(RestCalls.PRODUCTS,  jsonResult);
                         }
                         else if(null != jsnobject.get("detail")) {
                             RestCallServices.this.failedPost(listener, RestCalls.LOGIN
@@ -387,8 +458,8 @@ public class RestCallServices {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        RestCallServices.this.failedPost(listener, RestCalls.LOGIN
-                                , ctx.getString(R.string.unable_to_retrieve_branch));
+                        RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
+                                , ctx.getString(R.string.unable_to_retrieve_products));
 
                     }
 
