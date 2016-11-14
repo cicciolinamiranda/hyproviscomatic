@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_shopping_cart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    tools:context="com.uprise.ordering.ExistingBranchActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
@@ -67,4 +67,4 @@
 
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</FrameLayout>

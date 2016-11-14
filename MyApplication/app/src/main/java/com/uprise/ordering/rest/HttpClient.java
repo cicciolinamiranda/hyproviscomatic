@@ -139,7 +139,7 @@ public class HttpClient {
             se = new StringEntity(jsonObjSend.toString());
 
             httpPostRequest.setEntity(se);
-            httpPostRequest.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            httpPostRequest.setHeader(HTTP.CONTENT_TYPE, "application/json");
             httpPostRequest.addHeader("Authorization","JWT "+token);
 //            httpPostRequest.setHeader("Accept-Encoding", "gzip"); // only set this parameter if you would like to use gzip compression
 

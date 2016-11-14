@@ -255,6 +255,7 @@ public class RestCallServices {
             public void doInBackground() {
                 JSONArray photosJsonArray = new JSONArray();
                 try {
+                    branchJsonObj.put("user", loginModel.getToken());
                     branchJsonObj.put("name", branchModel.getName());
 
                     branchJsonObj.put("lat", branchModel.getLat());
@@ -303,7 +304,7 @@ public class RestCallServices {
                 if (resultStr == null || resultStr.isEmpty()) {
 
                     RestCallServices.this.failedPost(listener, RestCalls.ADD_BRANCH
-                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                            , ctx.getString(R.string.unable_to_save_branch));
                 } else {
                             listener.onSuccess(RestCalls.ADD_BRANCH,  resultStr);
                         }

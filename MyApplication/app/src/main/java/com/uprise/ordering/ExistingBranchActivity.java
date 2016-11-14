@@ -101,7 +101,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                     BranchModel branchModel = data.getParcelableExtra("branchModel");
                     branchModelList.add(branchModel);
 
-                    restCallServices.saveBranchToExistingUser(ExistingBranchActivity.this, this, branchModel, loginModel);
+//                    restCallServices.saveBranchToExistingUser(ExistingBranchActivity.this, this, branchModel, loginModel);
                     populateBranchListView();
                 }
                 break;
@@ -127,41 +127,11 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                 registerForContextMenu(listViewBranch);
             }
         });
-//        listViewBranch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, final View view, final int i, final long l) {
-//
-//                AlertDialog.Builder listViewDialog = new AlertDialog.Builder(
-//                        ExistingBranch.this);
-//                listViewDialog.setPositiveButton("Edit",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface arg0, int arg1) {
-//                                Intent editBranch = new Intent(ExistingBranch.this, AddBranchActivity.class);
-//                                editBranch.putExtra("branchModel", branchModelList.get(i));
-//                                editBranch.putExtra("id",i);
-//                                editBranch.putExtra(("resultCode"), ApplicationConstants.RESULT_EDIT_BRANCH);
-//                                startActivityForResult(editBranch, ApplicationConstants.RESULT_EDIT_BRANCH );
-//
-////                                            finish();
-//                            }
-//                        });
-//
-//                listViewDialog.setNegativeButton("Delete",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface arg0, int arg1) {
-//                                branchModelList.remove(branchModelList.get(i));
-//                                adapterBranchModelList = new BranchList(ExistingBranch.this, branchModelList);
-//                                adapterBranchModelList.notifyDataSetChanged();
-//                                listViewBranch.setAdapter(adapterBranchModelList);
-//                            }
-//                        });
-//                listViewDialog.show();
-//            }
-//        });
     }
 
     private void showAddBranchDialog() {
             Intent intent = new Intent(ExistingBranchActivity.this, AddBranchActivity.class);
+            intent.putExtra("resultCode" , ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN);
             startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN);
     }
 
@@ -184,13 +154,13 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
 
-                        if (jsonArray.getJSONObject(i).getString("user") != null &&
-                                !jsonArray.getJSONObject(i).getString("user").isEmpty()
-                                && jsonArray.getJSONObject(i).getString("user").contentEquals(loginModel.getUsername())) {
-
+//                        if (jsonArray.getJSONObject(i).getString("user") != null &&
+//                                !jsonArray.getJSONObject(i).getString("user").isEmpty()
+//                                && jsonArray.getJSONObject(i).getString("user").contentEquals(loginModel.getUsername())) {
+//TODO: revert condition for user
                             branchModelList.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
 
-                        }
+//                        }
                     }
 
                 }

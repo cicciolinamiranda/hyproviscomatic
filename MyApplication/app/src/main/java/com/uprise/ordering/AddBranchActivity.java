@@ -1,5 +1,6 @@
 package com.uprise.ordering;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,9 +25,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.camera.CameraImageActivity;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.ImageModel;
 import com.uprise.ordering.model.LocationDetailsModel;
+import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 
@@ -39,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AddBranchActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddBranchActivity extends AppCompatActivity implements View.OnClickListener, RestCallServices.RestServiceListener {
 
     private ImageModel imageStoreModel;
     private ImageModel imagePermitModel;
@@ -56,6 +60,9 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     private  ImageButton btnPicsOfPermit;
     private int selectedBranchId;
     private int resultCode;
+    private LoginModel loginModel;
+    private SqlDatabaseHelper sqlDatabaseHelper;
+    private RestCallServices restCallServices;
 
     //Maps with address
     private ImageButton addLatLngBtn;
@@ -64,12 +71,14 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //    private TextView tvLngValue;
     private LocationDetailsModel selectedAddressLocation;
     private LinearLayout llEditTextAddress;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_add_branch);
         imageStoreModel  = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
         imagePermitModel = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
+
         etBranchName = (EditText) findViewById(R.id.et_dialog_add_branch_name);
         etBranchAdd = (EditText) findViewById(R.id.et_dialog_add_branch_address);
         llEditTextAddress = (LinearLayout) findViewById(R.id.ll_edittext_address);
@@ -123,6 +132,15 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             refreshImageList("iv_cam_store_", R.id.tv_max_of_three_pic_store, R.id.btn_shop_picture_camera, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
             refreshImageList("iv_cam_permit_", R.id.tv_max_of_three_pic_permit, R.id.btn_shop_picture_permit_camera, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
 
+        }
+
+        sqlDatabaseHelper = new SqlDatabaseHelper(AddBranchActivity.this);
+        loginModel = new LoginModel();
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        restCallServices = new RestCallServices(AddBranchActivity.this);
+
+        if(ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN == getIntent().getIntExtra("resultCode",0)) {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN;
         }
 
 
@@ -464,11 +482,16 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                     if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
                         branchIntent.putExtra("id",selectedBranchId);
                         branchIntent.putExtra("resultCode", ApplicationConstants.RESULT_EDIT_BRANCH);
-//                        startActivity(branchIntent);
-//                        finish();
+                        setResult(RESULT_OK, branchIntent);
+                        finish();
                     }
-                    setResult(RESULT_OK, branchIntent);
-                    finish();
+
+                    if(resultCode == ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN) {
+                        restCallServices.saveBranchToExistingUser(AddBranchActivity.this, this, toBeSaved(), loginModel);
+                        progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), toBeSaved().getName()));
+
+
+                    }
 
 
                 }
@@ -576,5 +599,37 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //            tvLngValue.setVisibility(View.VISIBLE);
 //            tvLngValue.setText("Lng: "+lng);
 //        }
+    }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
+        Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
+        branchIntent.putExtra( "branchModel",toBeSaved());
+        setResult(RESULT_OK, branchIntent);
+        finish();
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
+        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
     }
 }
