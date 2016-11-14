@@ -133,8 +133,6 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
             s.printStackTrace();
             Log.d(ApplicationConstants.APP_CODE, "permission onError:" + s.getMessage());
         }
-
-        shopOnMapModels = new ArrayList<>();
         return v;
     }
 
@@ -149,21 +147,24 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     public void onMapClick(LatLng latLng) {
         marker.remove();
 
-        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
-
-        //TODO: replace with API call
-        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
-            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
-                Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                        .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                        .title(shopOnMap.getAddress()));
-                shopMaker.setVisible(true);
-                startIntentService(shopOnMap);
-
-            }
-        }
+//        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
+//        Bitmap b = bitmapdraw.getBitmap();
+//        Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
+//
+//        if(loginModel != null && loginModel.getUsername() != null) {
+//            restCallServices.getBranch(getContext(), this, loginModel.getToken());
+//        }
+//
+//        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+//            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
+//                Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+//                        .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+//                        .title(shopOnMap.getAddress()));
+//                shopMaker.setVisible(true);
+//                startIntentService(shopOnMap);
+//
+//            }
+//        }
 
         marker = mMap.addMarker(new MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
@@ -228,20 +229,6 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currPoint, 10.0f));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         MapsInitializer.initialize(this.getActivity());
-
-        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
-
-        //TODO: replace with API call
-        if(listener.isOnShopNowPage() && shopOnMapModels != null && shopOnMapModels.size() > 0) {
-            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
-                Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
-                        .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                        .title(shopOnMap.getAddress()));
-                shopMaker.setVisible(true);
-            }
-        }
 
         marker = mMap.addMarker(new MarkerOptions().position(currPoint)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
@@ -437,30 +424,50 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         return 0;
     }
 
+
     @Override
     public void onSuccess(RestCalls callType, String string) {
 
-        try {
-            JSONObject jsnobject = new JSONObject(string);
-            JSONArray jsonArray = new JSONArray();
-            if(jsnobject != null) {
-                jsonArray = jsnobject.getJSONArray("results");
-            }
+        if(listener.isOnShopNowPage() && isVisible()) {
+            shopOnMapModels = new ArrayList<>();
+            try {
+                JSONObject jsnobject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+                if (jsnobject != null) {
+                    jsonArray = jsnobject.getJSONArray("results");
+                }
 
-            if(jsonArray != null) {
+                if (jsonArray != null) {
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    if(jsonArray.getJSONObject(i) != null) {
-                        shopOnMapModels.add(Util.getInstance().generateLocationDetailsModelFromJson(jsonArray.getJSONObject(i)));
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if (jsonArray.getJSONObject(i) != null) {
+                            shopOnMapModels.add(Util.getInstance().generateLocationDetailsModelFromJson(jsonArray.getJSONObject(i)));
+                        }
+
                     }
 
+                    BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_store_black_48dp);
+                    Bitmap b = bitmapdraw.getBitmap();
+                    Bitmap storeMarker = Bitmap.createScaledBitmap(b, markerSize, markerSize, false);
+
+
+                    if (listener.isOnShopNowPage() && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+                        for (LocationDetailsModel shopOnMap : shopOnMapModels) {
+                            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                                    .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
+                                    .title(shopOnMap.getAddress()));
+                            shopMaker.setVisible(true);
+                            startIntentService(shopOnMap);
+                        }
+                    }
+
+
                 }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
     }
 
 //    private LocationDetailsModel generateBranchModelFromJson(JSONObject jsonObject) {

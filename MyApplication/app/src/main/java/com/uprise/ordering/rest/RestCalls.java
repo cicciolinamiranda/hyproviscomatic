@@ -18,7 +18,9 @@ public enum RestCalls {
     LOGIN(0x71),
     PURCHASE(0x72),
     PRODUCTS(0x73),
-    BRANCH(0x74), ADD_BRANCH(0x75);
+    BRANCH(0x74),
+    ADD_BRANCH(0x75),
+    GET_LIST_BRANCH(0X76);
 //    SPEEDTEST_SERVER_LIST(0x11),
 //    DEVICE_DETAILS(0x12);
 

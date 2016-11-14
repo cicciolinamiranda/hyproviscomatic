@@ -255,7 +255,7 @@ public class RestCallServices {
             public void doInBackground() {
                 JSONArray photosJsonArray = new JSONArray();
                 try {
-                    branchJsonObj.put("user", loginModel.getToken());
+                    branchJsonObj.put("user", loginModel.getUsername());
                     branchJsonObj.put("name", branchModel.getName());
 
                     branchJsonObj.put("lat", branchModel.getLat());
@@ -292,7 +292,7 @@ public class RestCallServices {
                     branchJsonObj.put("photos", photosJsonArray);
 
                     JSONObject resultObj = HttpClient.SenHttpPostWithAuthentication(branchEndpoint, branchJsonObj, loginModel.getToken());
-                    if(resultObj.getString("results") != null )resultStr = resultObj.getString("results");
+                    resultStr = resultObj.toString();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

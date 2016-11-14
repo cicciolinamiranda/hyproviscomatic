@@ -384,24 +384,22 @@ public class Util {
             if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
             if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
 
-            if(jsonObject.getString("brands") != null) {
-                JSONArray jsonBrandsArray = jsonObject.getJSONArray("brands");
+            if(jsonObject.getString("attributes") != null) {
+                JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");
                 ArrayList<BrandModel> brands = new ArrayList<>();
 
-                for(int i = 0; i < jsonBrandsArray.length(); i++) {
+                for(int i = 0; i < jsonAttributesArray.length(); i++) {
                     BrandModel brandModel = new BrandModel();
-                    brandModel.setId(jsonBrandsArray.getJSONObject(i).getString("id"));
-                    brandModel.setBrandName(jsonBrandsArray.getJSONObject(i).getString("name"));
+                    JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
 
-                    //TODO INCORRECT! MOCK DATA ONLY
-                    brandModel.setBrandPhotoUrl("http://gazettereview.com/wp-content/uploads/2015/12/PEN-STYLE-2.jpg");
-
-                    //TODO Incorrect!! THIS IS A MOCK DATA
-                    brandModel.setPrice(Double.parseDouble("100.00"));
-                    if(jsonObject.getString("price") != null ) {
-                        brandModel.setPrice(Double.parseDouble(jsonObject.getString("price")));
+                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("brand")) {
+                        JSONObject jsonValue = attributeItem.getJSONObject("value");
+                        brandModel.setId(jsonValue.getString("brand_id"));
+                        brandModel.setBrandName(jsonValue.getString("brand_name"));
+                        brandModel.setBrandPhotoUrl(jsonValue.getString("photo_path"));
+                        brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
+                        brands.add(brandModel);
                     }
-                    brands.add(brandModel);
                 }
                 productModel.setBrands(brands);
             }

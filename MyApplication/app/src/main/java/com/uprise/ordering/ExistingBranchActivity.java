@@ -99,7 +99,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
             case ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN:
                 if (resultCode != RESULT_CANCELED && data != null) {
                     BranchModel branchModel = data.getParcelableExtra("branchModel");
-                    branchModelList.add(branchModel);
+//                    branchModelList.add(branchModel);
 
 //                    restCallServices.saveBranchToExistingUser(ExistingBranchActivity.this, this, branchModel, loginModel);
                     populateBranchListView();
@@ -154,13 +154,12 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
 
-//                        if (jsonArray.getJSONObject(i).getString("user") != null &&
-//                                !jsonArray.getJSONObject(i).getString("user").isEmpty()
-//                                && jsonArray.getJSONObject(i).getString("user").contentEquals(loginModel.getUsername())) {
-//TODO: revert condition for user
+                        if (jsonArray.getJSONObject(i).getString("user") != null &&
+                                !jsonArray.getJSONObject(i).getString("user").isEmpty()
+                                && jsonArray.getJSONObject(i).getString("user").contentEquals(loginModel.getUsername())) {
                             branchModelList.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
 
-//                        }
+                        }
                     }
 
                 }
