@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +15,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 
 /**
@@ -32,27 +32,22 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
     // Google client to interact with Google API
     protected GoogleApiClient mGoogleApiClient;
     protected SqlDatabaseHelper sqlDatabaseHelper;
-//    protected RestCallServices restCallServices;
+    protected RestCallServices restCallServices;
     protected LoginModel loginModel;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+
+            @Override
+            protected void onCreate(@Nullable Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                checkPermissions();
 //        cartItemsSharedPref = new CartItemsSharedPref();
 //        loginSharedPref = new LoginSharedPref();
-        sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
-        checkPermissions();
+                loginModel = new LoginModel();
+                sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
+                loginModel = sqlDatabaseHelper.getLoginCredentials();
+            }
 
-        loginModel = sqlDatabaseHelper.getLoginCredentials();
-////        if(loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)) {
-//        if(loginModel != null && loginModel.getUsername() != null) {
-//            restCallServices.postLogin(BaseAuthenticatedActivity.this, this,
-//                    loginModel.getUsername(), loginModel.getPassword() );
-//        }
-
-    }
-
-    public void checkPermissions() {
+            public void checkPermissions() {
         //TODO: check permissions
 
         if (/**  ContextCompat.checkSelfPermission(this,

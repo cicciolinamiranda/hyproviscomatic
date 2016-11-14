@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
@@ -33,7 +31,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
     private Button btnSignIn;
     private TextView tvCreateNewAccount;
     private TextView tvDistributorShop;
-    private RestCallServices restCallServices;
+//    private RestCallServices restCallServices;
     boolean cancel;
 
 
@@ -85,8 +83,13 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
 
 //        loginSharedPref = new LoginSharedPref();
         restCallServices = new RestCallServices(this);
-        loginModel = new LoginModel();
-        sqlDatabaseHelper = new SqlDatabaseHelper(LandingActivity.this);
+//        loginModel = new LoginModel();
+//        sqlDatabaseHelper = new SqlDatabaseHelper(LandingActivity.this);
+//        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        if(loginModel != null && loginModel.getUsername() != null) {
+            startActivity(new Intent(LandingActivity.this, MainActivity.class));
+            finish();
+        }
     }
 
     @Override

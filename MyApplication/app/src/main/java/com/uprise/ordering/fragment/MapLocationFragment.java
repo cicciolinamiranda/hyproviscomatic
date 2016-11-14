@@ -91,6 +91,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     private AddressResultReceiver mResultReceiver;
     private RestCallServices restCallServices;
     private ArrayList<LocationDetailsModel> shopOnMapModels;
+    private RelativeLayout rlLoadingLayout;
 
     @Nullable
     @Override
@@ -101,9 +102,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
         sqlDatabaseHelper = new SqlDatabaseHelper(getContext());
         loginModel = sqlDatabaseHelper.getLoginCredentials();
-        if(loginModel != null && loginModel.getUsername() != null) {
-            restCallServices.getBranch(getContext(), this, loginModel.getToken());
-        }
+        rlLoadingLayout = (RelativeLayout) v.findViewById(R.id.rl_frag_map_loading_layout);
+
+
         // Gets the MapView from the XML layout and creates it
         mapView = (MapView) v.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -112,6 +113,11 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         currPoint = null;
 
         mAddressOutput = "";
+
+        if(loginModel != null && loginModel.getUsername() != null) {
+            restCallServices.getBranch(getContext(), this, loginModel.getToken());
+        }
+
         updateValuesFromBundle(savedInstanceState);
 
         LocationManager lm = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -200,6 +206,11 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        if(listener.isOnShopNowPage()) {
+            mapView.setVisibility(View.GONE);
+            rlLoadingLayout.setVisibility(View.VISIBLE);
+        }
+
         mMap = googleMap;
         // Gets to GoogleMap from the MapView and does initialization stuff
         mMap = mapView.getMap();
@@ -342,6 +353,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        restCallServices = null;
+        rlLoadingLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -429,6 +442,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     public void onSuccess(RestCalls callType, String string) {
 
         if(listener.isOnShopNowPage() && isVisible()) {
+            mapView.setVisibility(View.VISIBLE);
+            rlLoadingLayout.setVisibility(View.GONE);
             shopOnMapModels = new ArrayList<>();
             try {
                 JSONObject jsnobject = new JSONObject(string);
@@ -494,6 +509,8 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onFailure(RestCalls callType, String string) {
 
+        mapView.setVisibility(View.VISIBLE);
+        rlLoadingLayout.setVisibility(View.GONE);
         if(string.contentEquals("Session is already expired")) {
             Util.getInstance().showSnackBarToast(getContext(), string);
             sqlDatabaseHelper.logOut(loginModel);
