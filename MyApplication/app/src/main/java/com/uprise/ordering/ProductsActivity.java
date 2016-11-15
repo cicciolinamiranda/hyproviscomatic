@@ -52,21 +52,15 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
 
         //TODO: to be replaced with Rest Call
         productModels = new ArrayList<>();
-//        productModels = Util.getInstance().generateProductModels();
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
-//        loginSharedPref = new LoginSharedPref();
-//        cartItemsSharedPref = new CartItemsSharedPref();
-//        username = loginSharedPref.getUsername(this);
         sqlDatabaseHelper = new SqlDatabaseHelper(ProductsActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
-//        List<CartItemsModel> items = cartItemsSharedPref.loadCartItems(this, username);
         restCallServices = new RestCallServices(this);
         restCallServices.getProducts(ProductsActivity.this, this);
-//        populateProductList();
         mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
     }

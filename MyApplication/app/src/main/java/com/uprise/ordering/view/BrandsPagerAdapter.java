@@ -24,6 +24,7 @@ import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.util.ImageDownloaderTask;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -92,7 +93,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
 
         tvBrandPrice.setText(String.format("%.2f", web.get(position).getPrice())+" Php");
         itemImage = (ImageView) itemView.findViewById(R.id.iv_brand_image);
-        new LoadImageAsyncTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
+        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) new ImageDownloaderTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
         etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);

@@ -22,7 +22,7 @@
                 android:id="@+id/iv_brand_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/blank_image"
+                android:src="@drawable/placeholder"
                 android:scaleType="centerInside"
                 android:layout_weight="0.05"
                 android:layout_marginRight="50dp" />

@@ -30,6 +30,7 @@ import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.fragment.MapLocationFragment;
 import com.uprise.ordering.model.LocationDetailsModel;
+import com.uprise.ordering.model.LoginModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,7 @@ public class MainActivity extends LocationTrackingActivity
         TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
 
 //        loginSharedPref = new LoginSharedPref();
+        loginModel = new LoginModel();
         sqlDatabaseHelper = new SqlDatabaseHelper(MainActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         if(loginModel == null || loginModel.getUsername() == null) {
@@ -362,7 +364,8 @@ public class MainActivity extends LocationTrackingActivity
 //        intent.putExtra("shopOnMapModel", matchedResults.get(position));
 //        finish();
 //        startActivity(intent);
-        mapLocationFragment.onMapClick(matchedResults.get(position).getLocation());
+//        mapLocationFragment.onMapClick(matchedResults.get(position).getLocation());
+        mapLocationFragment.setLocation(matchedResults.get(position).getLocation());
         return false;
     }
 

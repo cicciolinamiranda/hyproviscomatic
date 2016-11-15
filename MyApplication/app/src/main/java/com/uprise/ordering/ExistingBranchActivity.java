@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
@@ -54,7 +55,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
         llExistingBranch.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.VISIBLE);
 
-        //TODO: add rest call api and determine if list is null. If yes, display no record layout.
+        loginModel = new LoginModel();
         sqlDatabaseHelper = new SqlDatabaseHelper(ExistingBranchActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         restCallServices = new RestCallServices(ExistingBranchActivity.this);

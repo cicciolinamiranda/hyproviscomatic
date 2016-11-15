@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
@@ -49,7 +50,6 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
-//        decimalFormat = new DecimalFormat("#.##");
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
         llShopCartList = (RelativeLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
@@ -57,19 +57,13 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_total_value);
         llProceedToCheckout = (LinearLayout) findViewById(R.id.ll_shopping_cart_proceed_checkout);
         llProceedToCheckout.setOnClickListener(this);
-//        cartItemsSharedPref = new CartItemsSharedPref();
-//        loginSharedPref = new LoginSharedPref();
-        //TODO: to be replaced with Rest Call
-//        productModels = Util.getInstance().generateProductModels();
-//        cartItemsModelArrayList = cartItemsSharedPref.loadCartItems(ShoppingCartActivity.this,
-//                loginSharedPref.getUsername(ShoppingCartActivity.this));
 
+        loginModel = new LoginModel();
         sqlDatabaseHelper = new SqlDatabaseHelper(ShoppingCartActivity.this);
         productModels = new ArrayList<>();
         restCallServices = new RestCallServices(this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         restCallServices.getProducts(this, this);
-//        populateList();
         mProgressView = findViewById(R.id.rl_shopping_cart_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
 

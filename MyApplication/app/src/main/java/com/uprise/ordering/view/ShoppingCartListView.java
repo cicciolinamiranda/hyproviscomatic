@@ -19,6 +19,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.util.ImageDownloaderTask;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -87,7 +88,9 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                         tvProductName.setText(matchedProductModel.getName());
                         tvBrandName.setText(matchedBrandModel.getBrandName());
                         tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
-                        if(matchedBrandModel.getBrandPhotoUrl() != null && matchedBrandModel.getBrandPhotoUrl().isEmpty()) new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+                        if(matchedBrandModel.getBrandPhotoUrl() != null && !matchedBrandModel.getBrandPhotoUrl().isEmpty()) {
+                            new ImageDownloaderTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+                        } /** new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl()); **/
                         etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
                         minusBtn.setVisibility(View.GONE);
                         if(cartItemsModels.get(position).getQuantity()>1) {

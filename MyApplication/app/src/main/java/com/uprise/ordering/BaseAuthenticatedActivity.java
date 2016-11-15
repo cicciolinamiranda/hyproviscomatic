@@ -42,9 +42,9 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
                 checkPermissions();
 //        cartItemsSharedPref = new CartItemsSharedPref();
 //        loginSharedPref = new LoginSharedPref();
-                loginModel = new LoginModel();
-                sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
-                loginModel = sqlDatabaseHelper.getLoginCredentials();
+//                loginModel = new LoginModel();
+//                sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
+//                loginModel = sqlDatabaseHelper.getLoginCredentials();
             }
 
             public void checkPermissions() {

@@ -22,16 +22,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.uprise.ordering.base.LocationTrackingBase;
@@ -54,10 +61,11 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         AdapterView.OnClickListener,
         AdapterView.OnItemClickListener{
 
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+
     private MapLocationFragment mapLocationFragment;
-//    private FloatingSearchView floatingSearchView;
-//    private LinearLayout llSearchAddress;
-//    private TextView tvSearchAddress;
+    private LinearLayout llSearchAddress;
+    private TextView tvSearchAddress;
     private ImageView ivSearch;
     protected LocationTrackingBase locationTrackingBase;
     private LocationDetailsModel locationDetailsModel;
@@ -86,15 +94,17 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         mapLocationFragment.setOnFocusChangedListener(this);
         locationDetailsModel = new LocationDetailsModel();
 
-//        tvSearchAddress = (TextView) findViewById(R.id.tv_search_address_value);
-//        ivSearch = (ImageView) findViewById(R.id.img_search_address);
-//        ivSearch.setColorFilter(getResources().getColor(R.color.grey_500));
+        llSearchAddress = (LinearLayout) findViewById(R.id.ll_search_address);
+        llSearchAddress.setOnClickListener(this);
+        tvSearchAddress = (TextView) findViewById(R.id.tv_search_address_value);
+        ivSearch = (ImageView) findViewById(R.id.img_search_address);
+        ivSearch.setColorFilter(getResources().getColor(R.color.grey_500));
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
-        mAutocompleteView = (AutoCompleteTextView)
-                findViewById(R.id.autocomplete_places);
+//        mAutocompleteView = (AutoCompleteTextView)
+//                findViewById(R.id.autocomplete_places);
 
         // Register a listener that receives callbacks when a suggestion has been selected
-        mAutocompleteView.setOnItemClickListener(this);
+//        mAutocompleteView.setOnItemClickListener(this);
 
         // Retrieve the TextViews that will display details and attributions of the selected place.
 //        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
@@ -130,7 +140,8 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
 
                 if(!isFromSuggestion) {
                     locationDetailsModel.setAddress(address);
-                    mAutocompleteView.setText(locationDetailsModel.getAddress());
+//                    mAutocompleteView.setText(locationDetailsModel.getAddress());
+                    tvSearchAddress.setText(locationDetailsModel.getAddress());
 
                 }
             }
@@ -152,7 +163,8 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         locationDetailsModel = new LocationDetailsModel();
         locationDetailsModel.setAddress(shopOnMapModel.getAddress());
         locationDetailsModel.setLocation(shopOnMapModel.getLocation());
-        mAutocompleteView.setText(locationDetailsModel.getAddress());
+//        mAutocompleteView.setText(locationDetailsModel.getAddress());
+        tvSearchAddress.setText(locationDetailsModel.getAddress());
     }
 
     @Override
@@ -190,7 +202,8 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         locationDetailsModel = getIntent().getParcelableExtra("locationDetailsModel");
         if(locationDetailsModel != null) {
             mapLocationFragment.setLocation(locationDetailsModel.getLocation());
-            mAutocompleteView.setText(locationDetailsModel.getAddress());
+//            mAutocompleteView.setText(locationDetailsModel.getAddress());
+            tvSearchAddress.setText(locationDetailsModel.getAddress());
         }
         else {
             mapLocationFragment.setLocation(latlng);
@@ -204,7 +217,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         // the entire world.
         mAdapter = new PlaceAutocompleteAdapter(this, locationTrackingBase.getGoogleApiClient(), PHILIPPINES,
                 null);
-        mAutocompleteView.setAdapter(mAdapter);
+//        mAutocompleteView.setAdapter(mAdapter);
     }
 
     @Override
@@ -364,9 +377,69 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.autocomplete_places:
-                mAutocompleteView.setText("");
+            case R.id.ll_search_address:
+                openAutocompleteActivity();
                 break;
         }
     }
+
+    private void openAutocompleteActivity() {
+        try {
+            // The autocomplete activity requires Google Play Services to be available. The intent
+            // builder checks this and throws an exception if it is not the case.
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .build(this);
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt
+            // the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+                    0 /* requestCode */).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily
+            // resolvable.
+            String message = "Google Play Services is not available: " +
+                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+
+            Log.e(ApplicationConstants.APP_CODE, message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Called after the autocomplete activity has finished to return its result.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check that the result was from the autocomplete widget.
+        if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            if (resultCode == RESULT_OK) {
+                // Get the user's selected place from the Intent.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(ApplicationConstants.APP_CODE, "Place Selected: " + place.getName());
+
+                // Format the place's details and display them in the TextView.
+                tvSearchAddress.setText(formatPlaceDetails(getResources(), place.getName(),
+                        place.getId(), place.getAddress(), place.getPhoneNumber(),
+                        place.getWebsiteUri()));
+
+                // Display attributions if required.
+//                CharSequence attributions = place.getAttributions();
+//                if (!TextUtils.isEmpty(attributions)) {
+//                    mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
+//                } else {
+//                    mPlaceAttribution.setText("");
+//                }
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                Log.e(ApplicationConstants.APP_CODE, "Error: Status = " + status.toString());
+            } else if (resultCode == RESULT_CANCELED) {
+                // Indicates that the activity closed before a selection was made. For example if
+                // the user pressed the back button.
+            }
+        }
+    }
+
 }

@@ -58,7 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/list_shopping_cart"
-            android:descendantFocusability="blocksDescendants"
             android:layout_alignParentTop="true"/>
     </RelativeLayout>
 
