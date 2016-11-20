@@ -69,7 +69,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == R.id.email_sign_in_button || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
@@ -81,11 +81,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         mLoginLogoView = findViewById(R.id.rl_login_logo);
         mProgressView = findViewById(R.id.login_loading_layout);
 
-//        loginSharedPref = new LoginSharedPref();
         restCallServices = new RestCallServices(this);
-//        loginModel = new LoginModel();
-//        sqlDatabaseHelper = new SqlDatabaseHelper(LandingActivity.this);
-//        loginModel = sqlDatabaseHelper.getLoginCredentials();
         if(loginModel != null && loginModel.getUsername() != null) {
             startActivity(new Intent(LandingActivity.this, MainActivity.class));
             finish();
