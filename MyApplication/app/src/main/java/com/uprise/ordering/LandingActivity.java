@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.uprise.ordering.database.SqlDatabaseHelper;
+import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
@@ -81,6 +83,15 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         mLoginLogoView = findViewById(R.id.rl_login_logo);
         mProgressView = findViewById(R.id.login_loading_layout);
 
+
+        sqlDatabaseHelper = new SqlDatabaseHelper(this);
+        loginModel = new LoginModel();
+        //Mock Data to bypass
+        loginModel.setUsername("cicci.miranda@gmail.com");
+        loginModel.setPassword("ciccicicci");
+        loginModel.setToken("asdadadsadsadadsadasdsa");
+
+        sqlDatabaseHelper.login(loginModel);
         restCallServices = new RestCallServices(this);
         if(loginModel != null && loginModel.getUsername() != null) {
             startActivity(new Intent(LandingActivity.this, MainActivity.class));
@@ -160,19 +171,11 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             // perform the user login attempt.
             showProgress(true);
 
-            //TODO: WHEN API IS AVAILABLE
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
-
-            restCallServices.postLogin(LandingActivity.this, this, email, password);
+            //TODO: MUST BE UNCOMMENTED OUT
+//            restCallServices.postLogin(LandingActivity.this, this, email, password);
         }
 
 
-//        if(!cancel && !loginSharedPref.isLoggedIn(LandingActivity.this)) {
-//            loginSharedPref.login(LandingActivity.this, email);
-//            finish();
-//            startActivity(new Intent(LandingActivity.this, MainActivity.class));
-//        }
     }
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -243,6 +246,12 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             loginModel.setUsername(mEmailView.getText().toString());
             loginModel.setPassword(mPasswordView.getText().toString());
             loginModel.setToken(token);
+
+            //Mock Data to bypass
+            loginModel.setUsername("cicci.miranda@gmail.com");
+            loginModel.setPassword("ciccicicci");
+            loginModel.setToken("asdadadsadsadadsadasdsa");
+
             sqlDatabaseHelper.login(loginModel);
             finish();
             startActivity(new Intent(LandingActivity.this, MainActivity.class));

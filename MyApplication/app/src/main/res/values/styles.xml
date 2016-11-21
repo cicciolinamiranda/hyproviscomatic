@@ -45,7 +45,8 @@
     </style>
 
     <style name="LandingEditText">
-        <item name="android:textColorHint">@color/light</item>
+        <item name="android:textColor">@color/material_orange</item>
+        <item name="android:colorControlActivated">@color/light</item>
         <item name="android:colorControlNormal">@color/light</item>
     </style>
 

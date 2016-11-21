@@ -145,6 +145,7 @@ public class HttpClient {
 
             long t = System.currentTimeMillis();
             HttpResponse response = (HttpResponse) httpclient.execute(httpPostRequest);
+
             Log.i(TAG, "HTTPResponse received in [" + (System.currentTimeMillis() - t) + "ms]");
 
             // Get hold of the response entity (-> the data):

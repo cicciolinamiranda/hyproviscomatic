@@ -156,6 +156,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
+        mProgressView.setVisibility(View.GONE);
         try {
             JSONObject jsnobject = new JSONObject(string);
             JSONArray jsonArray = new JSONArray();
