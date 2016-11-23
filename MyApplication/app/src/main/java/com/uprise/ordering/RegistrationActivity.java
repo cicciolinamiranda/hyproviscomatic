@@ -144,6 +144,7 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
 
     private void showAddBranchDialog() {
             Intent intent = new Intent(RegistrationActivity.this, AddBranchActivity.class);
+            intent.putExtra("resultCode", ApplicationConstants.RESULT_FROM_ADD_BRANCH);
             startActivityForResult(intent, ApplicationConstants.RESULT_FROM_ADD_BRANCH);
 //            finish();
     }

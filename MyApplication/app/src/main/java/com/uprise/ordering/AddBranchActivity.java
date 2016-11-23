@@ -143,6 +143,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN;
         }
 
+        if(ApplicationConstants.RESULT_FROM_ADD_BRANCH == getIntent().getIntExtra("resultCode",0)) {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH;
+        }
+
 
     }
 
@@ -478,6 +482,11 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                 if(isFormCanBeSaved()) {
                     Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
                     branchIntent.putExtra("branchModel",toBeSaved());
+
+                    if(resultCode == ApplicationConstants.RESULT_FROM_ADD_BRANCH) {
+                        setResult(RESULT_OK, branchIntent);
+                        finish();
+                    }
 
                     if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
                         branchIntent.putExtra("id",selectedBranchId);
