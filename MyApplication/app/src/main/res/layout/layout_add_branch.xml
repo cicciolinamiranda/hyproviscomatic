@@ -36,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_address_lat_lng"
+        android:visibility="gone"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -136,7 +137,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_dialog_add_branch_address"
-        android:hint="@string/label_branch_address"
         android:lines="1"
         android:layout_gravity="center_horizontal"
         />

@@ -83,7 +83,7 @@
     <string name="title_activity_cart">Cart Items</string>
     <string name="title_activity_notif">Notifications</string>
     <string name="title_activity_add_branch">Branch Details</string>
-    <string name="unable_to_register">Unable to Register. Please Try Again.</string>
+    <string name="unable_to_register">Unable to Register. Please Try Again. Maybe your email is already existing</string>
     <string name="registration_inp">Please wait...</string>
     <string name="currently_registering">Submitting request : %s</string>
     <string name="try_again">Please try again.</string>
@@ -110,7 +110,7 @@
 
 <!--Endpoints-->
     <string name="endpoint_post_registration">/api/registration</string>
-    <string name="endpoint_server">http://130.211.249.66</string>
+    <string name="endpoint_server">http://139.162.57.95</string>
     <string name="endpoint_post_login">/api-token-auth</string>
     <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>
     <string name="endpoint_get_branch">/api/branch</string>

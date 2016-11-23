@@ -382,7 +382,6 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
                 break;
         }
     }
-
     private void openAutocompleteActivity() {
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
@@ -405,6 +404,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
+
 
     /**
      * Called after the autocomplete activity has finished to return its result.

@@ -87,9 +87,9 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         sqlDatabaseHelper = new SqlDatabaseHelper(this);
         loginModel = new LoginModel();
         //Mock Data to bypass
-        loginModel.setUsername("cicci.miranda@gmail.com");
-        loginModel.setPassword("ciccicicci");
-        loginModel.setToken("asdadadsadsadadsadasdsa");
+//        loginModel.setUsername("cicci.miranda@gmail.com");
+//        loginModel.setPassword("ciccicicci");
+//        loginModel.setToken("asdadadsadsadadsadasdsa");
 
         sqlDatabaseHelper.login(loginModel);
         restCallServices = new RestCallServices(this);
@@ -247,10 +247,6 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             loginModel.setPassword(mPasswordView.getText().toString());
             loginModel.setToken(token);
 
-            //Mock Data to bypass
-            loginModel.setUsername("cicci.miranda@gmail.com");
-            loginModel.setPassword("ciccicicci");
-            loginModel.setToken("asdadadsadsadadsadasdsa");
 
             sqlDatabaseHelper.login(loginModel);
             finish();

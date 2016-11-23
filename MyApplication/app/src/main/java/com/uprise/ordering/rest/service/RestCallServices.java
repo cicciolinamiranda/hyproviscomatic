@@ -157,7 +157,6 @@ public class RestCallServices {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
-                    Log.i(TAG, "PERMIT IMAGE:--->" + "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
                     permitPhotoJsonObj.put("description", "Photo of Permit No. "+ numPermitPics);
                     photosJsonArray.put(permitPhotoJsonObj);
                     numPermitPics++;

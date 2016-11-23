@@ -82,7 +82,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         etBranchName = (EditText) findViewById(R.id.et_dialog_add_branch_name);
         etBranchAdd = (EditText) findViewById(R.id.et_dialog_add_branch_address);
         llEditTextAddress = (LinearLayout) findViewById(R.id.ll_edittext_address);
-        llEditTextAddress.setVisibility(View.GONE);
+//        llEditTextAddress.setVisibility(View.GONE);
         etBranchPhone = (EditText) findViewById(R.id.et_dialog_add_branch_phone);
         btnPicsOfStore = (ImageButton) findViewById(R.id.btn_shop_picture_camera);
         btnPicsOfPermit=(ImageButton) findViewById(R.id.btn_shop_picture_permit_camera);
@@ -141,6 +141,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
         if(ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN == getIntent().getIntExtra("resultCode",0)) {
             resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN;
+        } else {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH;
         }
 
 
@@ -479,6 +481,11 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                     Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
                     branchIntent.putExtra("branchModel",toBeSaved());
 
+                    if(resultCode == ApplicationConstants.RESULT_FROM_ADD_BRANCH) {
+                        setResult(RESULT_OK, branchIntent);
+                        finish();
+                    }
+
                     if(resultCode == ApplicationConstants.RESULT_EDIT_BRANCH) {
                         branchIntent.putExtra("id",selectedBranchId);
                         branchIntent.putExtra("resultCode", ApplicationConstants.RESULT_EDIT_BRANCH);
@@ -489,9 +496,12 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                     if(resultCode == ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN) {
                         restCallServices.saveBranchToExistingUser(AddBranchActivity.this, this, toBeSaved(), loginModel);
                         progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), toBeSaved().getName()));
-
+                        setResult(RESULT_OK, branchIntent);
+                        finish();
 
                     }
+
+
 
 
                 }
@@ -555,9 +565,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         BranchModel branchModel = new BranchModel();
         branchModel.setName(etBranchName.getText().toString());
         branchModel.setContactNum(etBranchPhone.getText().toString());
-        branchModel.setLat(Double.toString(selectedAddressLocation.getLocation().latitude));
-        branchModel.setLng(Double.toString(selectedAddressLocation.getLocation().longitude));
-        branchModel.setAddress(selectedAddressLocation.getAddress());
+//        branchModel.setLat(Double.toString(selectedAddressLocation.getLocation().latitude));
+//        branchModel.setLng(Double.toString(selectedAddressLocation.getLocation().longitude));
+//        branchModel.setAddress(selectedAddressLocation.getAddress());
+        branchModel.setAddress(etBranchAdd.getText().toString());
         branchModel.setPermitsPic(imagePermitModel);
         branchModel.setBranchsPic(imageStoreModel);
         return branchModel;
