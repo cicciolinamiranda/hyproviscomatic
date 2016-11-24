@@ -59,7 +59,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
         restCallServices = new RestCallServices(this);
-        restCallServices.getProducts(ProductsActivity.this, this);
+        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(ProductsActivity.this, this, loginModel.getToken());
         mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
     }

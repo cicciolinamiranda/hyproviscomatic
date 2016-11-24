@@ -63,7 +63,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         productModels = new ArrayList<>();
         restCallServices = new RestCallServices(this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
-        restCallServices.getProducts(this, this);
+        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(this, this, loginModel.getToken());
         mProgressView = findViewById(R.id.rl_shopping_cart_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
 

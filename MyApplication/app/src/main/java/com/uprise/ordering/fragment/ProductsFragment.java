@@ -21,6 +21,10 @@ import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +71,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
         restCallServices = new RestCallServices(getContext());
-        restCallServices.getProducts(getContext(), this);
+        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(getContext(), this, loginModel.getToken());
         mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
         return rowView;
@@ -91,7 +95,27 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
+        mProgressView.setVisibility(View.GONE);
+        try {
+            JSONObject jsnobject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsnobject != null) {
+                jsonArray = jsnobject.getJSONArray("results");
+            }
 
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if(jsonArray.getJSONObject(i) != null) {
+                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                    }
+                    populateProductList();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

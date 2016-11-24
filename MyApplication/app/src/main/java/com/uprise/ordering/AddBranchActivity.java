@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.camera.CameraImageActivity;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
@@ -122,9 +121,9 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //            tvLngValue.setText(branchModel.getLng());
 
 
-            selectedAddressLocation = new LocationDetailsModel();
-            selectedAddressLocation.setAddress(branchModel.getAddress());
-            selectedAddressLocation.setLocation(new LatLng(Double.parseDouble(branchModel.getLat()), Double.parseDouble(branchModel.getLng())));
+//            selectedAddressLocation = new LocationDetailsModel();
+//            selectedAddressLocation.setAddress(branchModel.getAddress());
+//            selectedAddressLocation.setLocation(new LatLng(Double.parseDouble(branchModel.getLat()), Double.parseDouble(branchModel.getLng())));
             etBranchPhone.setText(branchModel.getContactNum());
             imageStoreModel = branchModel.getBranchsPic();
             imagePermitModel = branchModel.getPermitsPic();
@@ -132,6 +131,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             refreshImageList("iv_cam_store_", R.id.tv_max_of_three_pic_store, R.id.btn_shop_picture_camera, imageStoreModel, ApplicationConstants.RESULT_GALLERY_STORE);
             refreshImageList("iv_cam_permit_", R.id.tv_max_of_three_pic_permit, R.id.btn_shop_picture_permit_camera, imagePermitModel, ApplicationConstants.RESULT_GALLERY_PERMIT);
 
+        } else if(ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN == getIntent().getIntExtra("resultCode",0)) {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN;
+        } else {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH;
         }
 
         sqlDatabaseHelper = new SqlDatabaseHelper(AddBranchActivity.this);
@@ -139,11 +142,6 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         restCallServices = new RestCallServices(AddBranchActivity.this);
 
-        if(ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN == getIntent().getIntExtra("resultCode",0)) {
-            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN;
-        } else {
-            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH;
-        }
 
 
     }
@@ -496,8 +494,11 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
                     if(resultCode == ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN) {
                         restCallServices.saveBranchToExistingUser(AddBranchActivity.this, this, toBeSaved(), loginModel);
                         progressDialog = ProgressDialog.show(this, getString(R.string.registration_inp), String.format(getString(R.string.currently_registering), toBeSaved().getName()));
-                        setResult(RESULT_OK, branchIntent);
-                        finish();
+
+                        if(progressDialog == null && !progressDialog.isShowing()) {
+                            setResult(RESULT_OK, branchIntent);
+                            finish();
+                        }
 
                     }
 

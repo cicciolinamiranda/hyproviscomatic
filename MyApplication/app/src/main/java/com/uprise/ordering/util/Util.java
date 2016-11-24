@@ -391,12 +391,12 @@ public class Util {
                 for(int i = 0; i < jsonAttributesArray.length(); i++) {
                     BrandModel brandModel = new BrandModel();
                     JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
-
+                    if(attributeItem.getString("id") != null) brandModel.setAttributeId(attributeItem.getString("id"));
                     if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("brand")) {
                         JSONObject jsonValue = attributeItem.getJSONObject("value");
-                        brandModel.setId(jsonValue.getString("brand_id"));
+                        brandModel.setId(jsonValue.getString("brand"));
                         brandModel.setBrandName(jsonValue.getString("brand_name"));
-                        brandModel.setBrandPhotoUrl(jsonValue.getString("photo_path"));
+                        brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
                         brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
                         brands.add(brandModel);
                     }

@@ -86,12 +86,12 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
 
         sqlDatabaseHelper = new SqlDatabaseHelper(this);
         loginModel = new LoginModel();
+
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
         //Mock Data to bypass
 //        loginModel.setUsername("cicci.miranda@gmail.com");
 //        loginModel.setPassword("ciccicicci");
 //        loginModel.setToken("asdadadsadsadadsadasdsa");
-
-        sqlDatabaseHelper.login(loginModel);
         restCallServices = new RestCallServices(this);
         if(loginModel != null && loginModel.getUsername() != null) {
             startActivity(new Intent(LandingActivity.this, MainActivity.class));
@@ -171,8 +171,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             // perform the user login attempt.
             showProgress(true);
 
-            //TODO: MUST BE UNCOMMENTED OUT
-//            restCallServices.postLogin(LandingActivity.this, this, email, password);
+            restCallServices.postLogin(LandingActivity.this, this, email, password);
         }
 
 

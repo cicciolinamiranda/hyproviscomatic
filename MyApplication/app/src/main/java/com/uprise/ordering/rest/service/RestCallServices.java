@@ -132,9 +132,9 @@ public class RestCallServices {
             try {
                 branchJsonObj.put("name", branchModel.getName());
 
-                branchJsonObj.put("lat", branchModel.getLat());
+                branchJsonObj.put("lat", "0");
 //                Log.i(TAG, "LAT:-->" + branchModel.getLat());
-                branchJsonObj.put("lng", branchModel.getLng());
+                branchJsonObj.put("lng", "0");
 //                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                 branchJsonObj.put("phone", branchModel.getContactNum());
                 branchJsonObj.put("address", branchModel.getAddress());
@@ -257,9 +257,11 @@ public class RestCallServices {
                     branchJsonObj.put("user", loginModel.getUsername());
                     branchJsonObj.put("name", branchModel.getName());
 
-                    branchJsonObj.put("lat", branchModel.getLat());
+//                    branchJsonObj.put("lat", branchModel.getLat());
+                    branchJsonObj.put("lat", "0");
 //                Log.i(TAG, "LAT:-->" + branchModel.getLat());
-                    branchJsonObj.put("lng", branchModel.getLng());
+                    branchJsonObj.put("lng", "0");
+//                    branchJsonObj.put("lng", branchModel.getLng());
 //                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                     branchJsonObj.put("phone", branchModel.getContactNum());
                     branchJsonObj.put("address", branchModel.getAddress());
@@ -291,7 +293,7 @@ public class RestCallServices {
                     branchJsonObj.put("photos", photosJsonArray);
 
                     JSONObject resultObj = HttpClient.SenHttpPostWithAuthentication(branchEndpoint, branchJsonObj, loginModel.getToken());
-                    resultStr = resultObj.toString();
+                    if(resultObj != null) resultStr = resultObj.toString();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -374,15 +376,16 @@ public class RestCallServices {
                 for(CartItemsModel cartItemsModel: cartItemsModels) {
                    JSONObject itemObjJson = new JSONObject();
                     itemObjJson.put("quantity", cartItemsModel.getQuantity());
-                    itemObjJson.put("price", cartItemsModel.getPrice());
+//                    itemObjJson.put("price", cartItemsModel.getPrice());
                     itemObjJson.put("product", cartItemsModel.getProductModelId());
                     itemObjJson.put("brand", cartItemsModel.getBrandId());
+                    itemObjJson.put("attribute_id", cartItemsModel.getBrandId());
                     itemsJsonArray.put(itemObjJson);
                 }
             }
 
             purchaseObject.put("items", itemsJsonArray);
-            purchaseObject.put("total", total);
+//            purchaseObject.put("total", total);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -398,7 +401,7 @@ public class RestCallServices {
                 JSONObject obj = HttpClient.SenHttpPostWithAuthentication(purchaseEndpoint, purchaseObject, loginModel.getToken());
                 try {
 
-                    if(obj.getString("results") != null )resultStr = obj.getString("results");
+                    if(obj != null && obj.getString("results") != null )resultStr = obj.getString("results");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -422,7 +425,55 @@ public class RestCallServices {
         }).execute();
     }
 
-    public void getProducts(final Context ctx, final RestServiceListener listener) {
+    public void getProducts(final Context ctx, final RestServiceListener listener, final String token) {
+        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_products);
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(productsEndpoint, token);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
+
+            }
+
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.PRODUCTS,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                                    , jsnobject.get("detail").toString());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
+                                , ctx.getString(R.string.unable_to_retrieve_products));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
+    }
+
+    public void getDistributorShop(final Context ctx, final RestServiceListener listener) {
         final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
                 + ctx.getResources().getString(R.string.endpoint_get_products);
         new RestAsyncTask(new RestAsyncTaskListener() {

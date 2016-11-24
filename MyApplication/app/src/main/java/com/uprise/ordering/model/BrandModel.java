@@ -10,6 +10,7 @@ import android.os.Parcelable;
 public class BrandModel implements Parcelable {
 
     private String id;
+    private String attributeId;
     private String brandPhotoUrl;
     private String brandName;
     private double price;
@@ -22,6 +23,7 @@ public class BrandModel implements Parcelable {
         parcel.writeString(brandName);
         parcel.writeDouble(price);
         parcel.writeString(brandPhotoUrl);
+        parcel.writeString(attributeId);
     }
 
     public BrandModel(Parcel in) {
@@ -30,6 +32,7 @@ public class BrandModel implements Parcelable {
         brandName = in.readString();
         price = in.readDouble();
         brandPhotoUrl = in.readString();
+        attributeId = in.readString();
     }
 
     public static final Creator<BrandModel> CREATOR = new Creator<BrandModel>() {
@@ -74,6 +77,14 @@ public class BrandModel implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
     }
 
     @Override

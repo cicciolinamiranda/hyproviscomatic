@@ -43,11 +43,10 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         productModels = new ArrayList<>();
         expandableListView = (ExpandableListView) findViewById(R.id.el_shop_now_products);
 
-        //TODO: to be replaced with Rest Call
         expandableListView.setOnChildClickListener(this);
         llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         restCallServices = new RestCallServices(this);
-        restCallServices.getProducts(this, this);
+        restCallServices.getDistributorShop(this, this);
         mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
     }
