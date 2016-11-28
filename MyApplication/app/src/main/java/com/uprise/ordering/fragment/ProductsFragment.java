@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -38,6 +41,10 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         ProductsAdapter.ProductsAdapterListener,
         RestCallServices.RestServiceListener {
 
+    private MenuItem previousMenu;
+    private MenuItem nextMenu;
+    private String nextUrl;
+    private String prevUrl;
     private View rowView;
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
@@ -71,9 +78,12 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
         restCallServices = new RestCallServices(getContext());
-        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(getContext(), this, loginModel.getToken());
+        final String productsEndpoint = getResources().getString(R.string.endpoint_server)
+        + getResources().getString(R.string.endpoint_get_products);
+        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
         mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
+        setHasOptionsMenu(true);
         return rowView;
     }
 
@@ -96,12 +106,26 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     @Override
     public void onSuccess(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
+        previousMenu.setVisible(false);
+        nextMenu.setVisible(false);
         try {
             JSONObject jsnobject = new JSONObject(string);
             JSONArray jsonArray = new JSONArray();
             if(jsnobject != null) {
                 jsonArray = jsnobject.getJSONArray("results");
             }
+
+            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+
+                nextUrl = jsnobject.getString("next");
+                nextMenu.setVisible(true);
+            }
+            if(jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+                    && !jsnobject.getString("previous").contentEquals("null")) {
+                prevUrl = jsnobject.getString("previous");
+                previousMenu.setVisible(true);
+            }
+
 
             if(jsonArray != null) {
 
@@ -162,12 +186,12 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
         if(items !=null && !items.isEmpty()) {
             productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
-            productsAdapter.notifyDataSetChanged();
         }
         else {
 //            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
             productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
         }
+        productsAdapter.notifyDataSetChanged();
         expandableListView.setAdapter(productsAdapter);
         mProgressView.setVisibility(View.GONE);
 
@@ -175,5 +199,35 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         if(lastExpandedPosition != -1) {
             expandableListView.expandGroup(lastExpandedPosition);
         }
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.order_list_menu, menu);
+        previousMenu = menu.findItem(R.id.menu_orderlist_prev);
+        previousMenu.setVisible(false);
+        nextMenu = menu.findItem(R.id.menu_orderlist_next);
+        nextMenu.setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_orderlist_prev:
+                lastExpandedPosition = -1;
+                mProgressView.setVisibility(View.VISIBLE);
+              productModels = new ArrayList<>();
+                restCallServices.getProducts(getActivity(), this, loginModel.getToken(), prevUrl);
+                break;
+            case R.id.menu_orderlist_next:
+                lastExpandedPosition = -1;
+                mProgressView.setVisibility(View.VISIBLE);
+                productModels = new ArrayList<>();
+                restCallServices.getProducts(getActivity(), this, loginModel.getToken(), nextUrl);
+                break;
+        }
+        return true;
     }
 }

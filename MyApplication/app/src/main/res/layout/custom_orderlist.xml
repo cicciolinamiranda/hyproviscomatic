@@ -10,8 +10,8 @@
         android:orientation="horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
     <!--Order Details-->
         <LinearLayout
             android:id="@+id/ll_order_details"
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:gravity="center_vertical"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:text="@string/order_number_label"/>
                 <TextView
                     android:id="@+id/tv_order_number"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:gravity="center_vertical"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:text="1322132144"/>
             </LinearLayout>
 
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:text="date" />
             </LinearLayout>
         </LinearLayout>
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:gravity="right"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:text="Closed"/>
             </LinearLayout>
     </LinearLayout>

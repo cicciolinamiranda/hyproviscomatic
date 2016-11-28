@@ -49,6 +49,7 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         tvOrderDate.setVisibility(View.GONE);
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
 //        tvOrderDate.setText(dateFormat.format(new Date(Long.parseLong(web.get(position).getDate()))));
+//        tvOrderDate.setText(dateFormat.format(new Date()));
         return rowView;
     }
 }

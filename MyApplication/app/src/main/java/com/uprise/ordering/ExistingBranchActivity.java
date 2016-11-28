@@ -169,6 +169,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
         } catch (JSONException e) {
             e.printStackTrace();
+            checkIfTheresData();
         }
     }
 
@@ -181,6 +182,18 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                         dialog.dismiss();
                     }
                 });
+        checkIfTheresData();
 
+    }
+
+    private void checkIfTheresData() {
+        if(branchModelList != null && !branchModelList.isEmpty()) {
+            llNoBranchAvail.setVisibility(View.GONE);
+            llExistingBranch.setVisibility(View.VISIBLE);
+        } else {
+            llNoBranchAvail.setVisibility(View.VISIBLE);
+            llExistingBranch.setVisibility(View.GONE);
+        }
+        loadingLayout.setVisibility(View.GONE);
     }
 }

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -34,6 +36,10 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     private View mProgressView;
     private RestCallServices restCallServices;
     private LinearLayout llNoRecords;
+    private MenuItem previousMenu;
+    private MenuItem nextMenu;
+    private String nextUrl;
+    private String prevUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,9 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         expandableListView.setOnChildClickListener(this);
         llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         restCallServices = new RestCallServices(this);
-        restCallServices.getDistributorShop(this, this);
+        final String productsEndpoint = getResources().getString(R.string.endpoint_server)
+        + getResources().getString(R.string.endpoint_get_products);
+        restCallServices.getDistributorShop(this, this, productsEndpoint);
         mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
     }
@@ -119,6 +127,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
     private void populateProductList() {
         productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
+        productsAdapter.notifyDataSetChanged();
         expandableListView.setAdapter(productsAdapter);
         mProgressView.setVisibility(View.GONE);
         if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
@@ -133,7 +142,26 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
                 startActivity(mainIntent);
                 finish();
                 break;
+            case R.id.menu_orderlist_prev:
+                productModels.clear();
+                restCallServices.getDistributorShop(DistributorShopActivity.this, this, prevUrl);
+                break;
+            case R.id.menu_orderlist_next:
+                productModels.clear();
+                restCallServices.getDistributorShop(DistributorShopActivity.this, this, nextUrl);
+                break;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.order_list_menu, menu);
+        previousMenu = menu.findItem(R.id.menu_orderlist_prev);
+        previousMenu.setVisible(false);
+        nextMenu = menu.findItem(R.id.menu_orderlist_next);
+        nextMenu.setVisible(false);
         return true;
     }
 
@@ -163,6 +191,18 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
                 jsonArray = jsnobject.getJSONArray("results");
             }
 
+            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+
+                nextUrl = jsnobject.getString("next");
+                nextMenu.setVisible(true);
+            }
+            if(jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+                    && !jsnobject.getString("previous").contentEquals("null")) {
+                prevUrl = jsnobject.getString("previous");
+                previousMenu.setVisible(true);
+            }
+
+
             if(jsonArray != null) {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -175,6 +215,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
         } catch (JSONException e) {
             e.printStackTrace();
+            if(productModels.size() <=0) {llNoRecords.setVisibility(View.VISIBLE);}
         }
 
     }
@@ -183,7 +224,6 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     public void onFailure(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
 
-        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
         if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 

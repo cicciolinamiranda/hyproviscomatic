@@ -40,6 +40,7 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     private boolean isAddOrSaved;
     private View mProgressView;
     private LinearLayout llNoRecords;
+    private String productsEndpoint;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,10 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
-
+        productsEndpoint = getResources().getString(R.string.endpoint_server);
+                getResources().getString(R.string.endpoint_get_products);
         restCallServices = new RestCallServices(this);
-        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(ProductsActivity.this, this, loginModel.getToken());
+        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(ProductsActivity.this, this, loginModel.getToken(), productsEndpoint);
         mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
     }

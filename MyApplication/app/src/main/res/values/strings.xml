@@ -125,4 +125,6 @@
     <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
     <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
     <string name="estimated_discount_label">Discount</string>
+    <string name="endpoint_get_notifications">/api/announcement</string>
+    <string name="unable_to_get_notif">Unable to get notifications</string>
 </resources>

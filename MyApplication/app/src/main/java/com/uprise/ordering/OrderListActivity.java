@@ -2,6 +2,8 @@ package com.uprise.ordering;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +33,10 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
     private LinearLayout llNoRecords;
     private RelativeLayout rlShopCartLoader;
     private ArrayList<OrderModel> orderModels;
+    private MenuItem previousMenu;
+    private MenuItem nextMenu;
+    private String nextUrl;
+    private String prevUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,10 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
 
         restCallServices = new RestCallServices(this);
         orderModels = new ArrayList<>();
+        final String purchaseEndpoint = getResources().getString(R.string.endpoint_server)
+        + getResources().getString(R.string.endpoint_get_purchase);
         if(loginModel != null) restCallServices.getPurchaseList(OrderListActivity.this,
-                this, loginModel);
+                this, loginModel, purchaseEndpoint);
 
         showLoader();
 
@@ -95,6 +103,14 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
                 finish();
                 startActivity(new Intent(OrderListActivity.this, MainActivity.class));
                 break;
+            case R.id.menu_orderlist_prev:
+                orderModels.clear();
+                restCallServices.getPurchaseList(OrderListActivity.this, this, loginModel, prevUrl);
+                break;
+            case R.id.menu_orderlist_next:
+                orderModels.clear();
+                restCallServices.getPurchaseList(OrderListActivity.this, this, loginModel, nextUrl);
+                break;
         }
         return true;
     }
@@ -107,13 +123,26 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
     @Override
     public void onSuccess(RestCalls callType, String string) {
         hideLoader();
+        previousMenu.setVisible(false);
+        nextMenu.setVisible(false);
         try {
-//            JSONObject jsnobject = new JSONObject(string);
-            JSONArray jsonArray = new JSONArray(string);
 
-//            if(jsnobject != null) {
-//                jsnobject = jsnobject.getJSONObject("results");
-//            }
+            JSONObject jsonObject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsonObject.getString("results") != null) {
+                jsonArray = new JSONArray(jsonObject.getString("results"));
+            }
+
+            if(jsonObject.getString("next") != null && !jsonObject.getString("next").isEmpty() && !jsonObject.getString("next").contentEquals("null"))  {
+
+                nextUrl = jsonObject.getString("next");
+                nextMenu.setVisible(true);
+            }
+            if(jsonObject.getString("previous") != null && !jsonObject.getString("previous").isEmpty()
+                    && !jsonObject.getString("previous").contentEquals("null")) {
+                prevUrl = jsonObject.getString("previous");
+                previousMenu.setVisible(true);
+            }
 
             if(jsonArray != null) {
 
@@ -134,6 +163,17 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
 
     @Override
     public void onFailure(RestCalls callType, String string) {
-        showNoRecords();
+        if(orderModels.size() <=0) showNoRecords();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.order_list_menu, menu);
+        previousMenu = menu.findItem(R.id.menu_orderlist_prev);
+        previousMenu.setVisible(false);
+        nextMenu = menu.findItem(R.id.menu_orderlist_next);
+        nextMenu.setVisible(false);
+        return true;
     }
 }

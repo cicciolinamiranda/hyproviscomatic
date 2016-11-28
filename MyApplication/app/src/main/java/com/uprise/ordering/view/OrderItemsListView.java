@@ -72,12 +72,15 @@ public class OrderItemsListView extends ArrayAdapter<OrderItemsModel> {
         minusBtn.setVisibility(View.GONE);
         plusBtn.setVisibility(View.GONE);
         deleteBtn.setVisibility(View.GONE);
-                    tvProductName.setText(orderItemsModels.get(position).getProductName());
-                    tvBrandName.setText(orderItemsModels.get(position).getBrandName());
-                    tvBrandPrice.setText(String.format("%.2f",orderItemsModels.get(position).getPrice()) + " Php");
-//                    new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(orderItemsModels.get(position).getPhotoUrl());
-                    etQuantity.setText(orderItemsModels.get(position).getQuantity()+"");
-                    etQuantity.setTextColor(resources.getColor(R.color.black));
+        tvProductName.setText(orderItemsModels.get(position).getProductName());
+        tvBrandName.setText(orderItemsModels.get(position).getBrandName());
+        tvBrandPrice.setText(String.format("%.2f",orderItemsModels.get(position).getPrice()) + " Php");
+
+        //TODO: NO ITEMS FOR NOW
+        itemImage.setVisibility(View.GONE);
+//        new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(orderItemsModels.get(position).getPhotoUrl());
+        etQuantity.setText(orderItemsModels.get(position).getQuantity()+"");
+        etQuantity.setTextColor(resources.getColor(R.color.black));
 //        if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, OrderItemsModel)) {
 //
 //            ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);

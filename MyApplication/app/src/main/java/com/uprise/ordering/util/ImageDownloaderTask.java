@@ -70,7 +70,9 @@ private Bitmap downloadBitmap(String url) {
         return bitmap;
         }
         } catch (Exception e) {
-        urlConnection.disconnect();
+        if (urlConnection != null) {
+                urlConnection.disconnect();
+        }
         Log.w("ImageDownloader", "Error downloading image from " + url);
         } finally {
         if (urlConnection != null) {

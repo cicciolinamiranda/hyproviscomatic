@@ -415,9 +415,10 @@ public class RestCallServices {
         }).execute();
     }
 
-    public void getProducts(final Context ctx, final RestServiceListener listener, final String token) {
-        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_get_products);
+    public void getProducts(final Context ctx, final RestServiceListener listener, final String token
+            , final String productsEndpoint) {
+//        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_products);
         new RestAsyncTask(new RestAsyncTaskListener() {
             JSONObject obj;
             String jsonResult;
@@ -462,9 +463,50 @@ public class RestCallServices {
             }
         }).execute();
     }
-    public void getPurchaseList(final Context ctx, final RestServiceListener listener, final LoginModel loginModel) {
-        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_get_purchase);
+
+
+    public void getNotifications(final Context ctx, final RestServiceListener listener,
+                                 final LoginModel loginModel, final String notifEndpoint) {
+//        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_notifications);
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            String resultStr;
+
+
+            @Override
+            public void doInBackground() {
+                JSONObject obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(notifEndpoint, loginModel.getToken());
+
+                if(obj != null) {
+//                         resultStr = obj.getString("results");
+                    resultStr = obj.toString();
+                }
+
+
+
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.NOTIFICATIONS
+                            , ctx.getString(R.string.unable_to_get_notif));
+                } else {
+
+                    listener.onSuccess(RestCalls.PURCHASE, resultStr);
+                }
+
+
+            }
+        }).execute();
+    }
+
+    public void getPurchaseList(final Context ctx, final RestServiceListener listener, final LoginModel loginModel,
+                                final String purchaseEndpoint) {
+//        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_purchase);
 
         new RestAsyncTask(new RestAsyncTaskListener() {
             String resultStr;
@@ -473,14 +515,12 @@ public class RestCallServices {
             @Override
             public void doInBackground() {
                 JSONObject obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(purchaseEndpoint, loginModel.getToken());
-                try {
 
                     if(obj != null) {
-                         resultStr = obj.getString("results");
+//                         resultStr = obj.getString("results");
+                        resultStr = obj.toString();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
 
 
             }
@@ -502,9 +542,9 @@ public class RestCallServices {
     }
 
 
-    public void getDistributorShop(final Context ctx, final RestServiceListener listener) {
-        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_get_products);
+    public void getDistributorShop(final Context ctx, final RestServiceListener listener, final String productsEndpoint) {
+//        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_products);
         new RestAsyncTask(new RestAsyncTaskListener() {
             JSONObject obj;
             String jsonResult;
