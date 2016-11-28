@@ -123,4 +123,6 @@
     <string name="unable_to_add_branch">Unable to save branch. Please Try Again</string>
     <string name="unable_to_save_branch">Unable to save branch. Please Try Again.</string>
     <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
+    <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
+    <string name="estimated_discount_label">Discount</string>
 </resources>

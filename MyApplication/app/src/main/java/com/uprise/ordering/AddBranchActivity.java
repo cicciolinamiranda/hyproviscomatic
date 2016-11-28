@@ -623,19 +623,23 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-//        Util.getInstance().showDialog(this, getString(R.string.branch_approval_msg), this.getString(R.string.action_ok),
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
+        Util.getInstance().showDialog(this, getString(R.string.branch_approval_msg), this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
+                        branchIntent.putExtra( "branchModel",toBeSaved());
+                        setResult(RESULT_OK, branchIntent);
+                        finish();
+                    }
+                });
 
-        Util.getInstance().showSnackBarToast(AddBranchActivity.this, getString(R.string.branch_approval_msg));
-        Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
-        branchIntent.putExtra( "branchModel",toBeSaved());
-        setResult(RESULT_OK, branchIntent);
-        finish();
+//        Util.getInstance().showSnackBarToast(AddBranchActivity.this, getString(R.string.branch_approval_msg));
+//        Intent branchIntent = new Intent(AddBranchActivity.this, RegistrationActivity.class);
+//        branchIntent.putExtra( "branchModel",toBeSaved());
+//        setResult(RESULT_OK, branchIntent);
+//        finish();
 
     }
 

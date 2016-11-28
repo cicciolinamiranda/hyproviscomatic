@@ -63,6 +63,36 @@
                 android:layout_marginRight="20dp"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_order_item_estimated_discount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:background="@color/grey_500"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/estimated_discount_label"
+                android:id="@+id/tv_order_item_estimated_discount"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="20dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="100.00 Php"
+                android:id="@+id/tv_order_item__estimated_discount_value"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
 

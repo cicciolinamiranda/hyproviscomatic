@@ -25,22 +25,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -379,7 +369,7 @@ public class RestCallServices {
 //                    itemObjJson.put("price", cartItemsModel.getPrice());
                     itemObjJson.put("product", cartItemsModel.getProductModelId());
                     itemObjJson.put("brand", cartItemsModel.getBrandId());
-                    itemObjJson.put("attribute_id", cartItemsModel.getBrandId());
+                    itemObjJson.put("attribute_id", cartItemsModel.getAttributeId());
                     itemsJsonArray.put(itemObjJson);
                 }
             }
@@ -401,7 +391,7 @@ public class RestCallServices {
                 JSONObject obj = HttpClient.SenHttpPostWithAuthentication(purchaseEndpoint, purchaseObject, loginModel.getToken());
                 try {
 
-                    if(obj != null && obj.getString("results") != null )resultStr = obj.getString("results");
+                    if(obj != null && obj.getString("items") != null )resultStr = obj.getString("items");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -472,6 +462,45 @@ public class RestCallServices {
             }
         }).execute();
     }
+    public void getPurchaseList(final Context ctx, final RestServiceListener listener, final LoginModel loginModel) {
+        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_get_purchase);
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            String resultStr;
+
+
+            @Override
+            public void doInBackground() {
+                JSONObject obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(purchaseEndpoint, loginModel.getToken());
+                try {
+
+                    if(obj != null) {
+                         resultStr = obj.getString("results");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.PURCHASE
+                            , ctx.getString(R.string.unable_to_checkout_order));
+                } else {
+
+                    listener.onSuccess(RestCalls.PURCHASE, resultStr);
+                }
+
+
+            }
+        }).execute();
+    }
+
 
     public void getDistributorShop(final Context ctx, final RestServiceListener listener) {
         final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
@@ -524,89 +553,7 @@ public class RestCallServices {
 
 
 
-    String boundary = "-------------" + System.currentTimeMillis();
-    private static final String LINE_FEED = "\r\n";
-    private static final String TWO_HYPHENS = "--";
 
-    /***
-     * @return string of JSON
-     */
-    public String get(final String strUrl, final ArrayList<NameValuePair> params) {
-
-        Log.d(ApplicationConstants.APP_CODE, "url:" + strUrl);
-        HttpURLConnection conn = null;
-        StringBuilder jsonResults = new StringBuilder();
-        try {
-
-            URL url = new URL(strUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setAllowUserInteraction(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getQuery(params));
-            writer.flush();
-            writer.close();
-            os.close();
-
-            conn.connect();
-
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
-            }
-
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Error processing URL", e);
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error connecting API", e);
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            Log.e(TAG, "Error connecting API", e);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
-
-        return jsonResults.toString();
-
-    }
-
-
-
-    private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        for (NameValuePair pair : params) {
-            if (first) {
-                first = false;
-            } else {
-                result.append("&");
-            }
-
-            result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
 
     public interface RestServiceListener {
 
@@ -614,44 +561,6 @@ public class RestCallServices {
         public void onSuccess(RestCalls callType, String string);
 
         public void onFailure(RestCalls callType, String string);
-    }
-
-    public void addFormField(String fieldName, String value) {
-        try {
-            dos.writeBytes(TWO_HYPHENS + boundary + LINE_FEED);
-            dos.writeBytes(
-                    "Content-Disposition: form-data; name=\"" + fieldName + "\"" + LINE_FEED + LINE_FEED/*+ value + LINE_FEED*/);
-            /*dos.writeBytes("Content-Type: text/plain; charset=UTF-8" + LINE_FEED);*/
-            dos.writeBytes(value + LINE_FEED);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void addFilePart(String fieldName, File uploadFile) {
-        try {
-            dos.writeBytes(TWO_HYPHENS + boundary + LINE_FEED);
-            dos.writeBytes(
-                    "Content-Disposition: form-data; name=\"" + fieldName + "\";filename=\"" + uploadFile
-                            .getName() + "\"" + LINE_FEED);
-            dos.writeBytes(LINE_FEED);
-
-            FileInputStream fStream = new FileInputStream(uploadFile);
-            int bufferSize = 1024;
-            byte[] buffer = new byte[bufferSize];
-            int length = -1;
-
-            while ((length = fStream.read(buffer)) != -1) {
-                dos.write(buffer, 0, length);
-            }
-            dos.writeBytes(LINE_FEED);
-            dos.writeBytes(TWO_HYPHENS + boundary + TWO_HYPHENS + LINE_FEED);
-        /* close streams */
-            fStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

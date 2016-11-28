@@ -135,14 +135,21 @@ View.OnClickListener, RestCallServices.RestServiceListener {
 
                     @Override
                     public void onSuccess(RestCalls callType, String string) {
-                        finish();
-                        startActivity(getIntent());
                         for(CartItemsModel cartItemsModel: cartItemsModelArrayList) {
+                            cartItemsModel.setUserName(loginModel.getUsername());
                             sqlDatabaseHelper.deleteCartItem(cartItemsModel);
                         }
-                        Util.getInstance().showSnackBarToast(ShoppingCartActivity.this, getString(R.string.action_checkout));
-                        finish();
-                        startActivity(getIntent());
+
+                        Util.getInstance().showDialog(ShoppingCartActivity.this, getString(R.string.purchase_approval_msg), getString(R.string.action_ok),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                          finish();
+                                        startActivity(new Intent(ShoppingCartActivity.this, OrderListActivity.class));
+                                    }
+                                });
+
                     }
 
                     @Override

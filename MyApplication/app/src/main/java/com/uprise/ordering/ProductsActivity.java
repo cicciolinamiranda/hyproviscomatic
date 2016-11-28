@@ -33,14 +33,11 @@ public class ProductsActivity extends BaseAuthenticatedActivity implements Expan
     private ProductsAdapter productsAdapter;
     private ExpandableListView expandableListView;
     private ArrayList<ProductModel> productModels;
-//    private CartItemsSharedPref sharedPreferences;
-//    private LoginSharedPref loginSharedPref;
     private String username;
     private int lastExpandedPosition = -1;
     private int lastViewPagerPosition = -1;
     private ViewPager childView;
     private boolean isAddOrSaved;
-    private RestCallServices restCallServices;
     private View mProgressView;
     private LinearLayout llNoRecords;
     

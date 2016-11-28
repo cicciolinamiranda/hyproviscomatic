@@ -23,13 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.enums.OrderStatus;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.NotificationsModel;
+import com.uprise.ordering.model.OrderItemsModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
 
@@ -266,8 +266,8 @@ public class Util {
             long daysAgo = cal.getTimeInMillis();
             orderModel.setOrderId(UUID.randomUUID().toString());
             orderModel.setDate(daysAgo+"");
-            orderModel.setOrderStatus(OrderStatus.APPROVED);
-            orderModel.setCartItemsModels(generateCartItems(ctx));
+//            orderModel.setOrderStatus(OrderStatus.APPROVED);
+//            orderModel.setCartItemsModels(generateCartItems(ctx));
             orderModels.add(orderModel);
         }
         return orderModels;
@@ -284,6 +284,7 @@ public class Util {
         CartItemsModel cartItemsModel = new CartItemsModel();
             cartItemsModel.setProductModelId("product_"+i);
             cartItemsModel.setBrandId("brand_"+i);
+            cartItemsModel.setAttributeId(1+i*i+"");
             cartItemsModel.setQuantity(i*2);
             cartItemsModel.setUserName(loginModel.getUsername());
             cartItemsModels.add(cartItemsModel);
@@ -468,6 +469,66 @@ public class Util {
 
         return null;
     }
+
+    public OrderModel generateOrderModelFromJson(JSONObject jsonObject) {
+        OrderModel orderModel = new OrderModel();
+        ArrayList<OrderItemsModel> orderItemsModels = new ArrayList<>();
+        try {
+            if(jsonObject.getString("items") != null) {
+
+                JSONArray jsonItemsArray = jsonObject.getJSONArray("items");
+
+
+                for(int i = 0; i < jsonItemsArray.length(); i++) {
+                    double price = 0;
+                    int quantity = 0;
+                    OrderItemsModel orderItemsModel = new OrderItemsModel();
+                    JSONObject jsonItem = jsonItemsArray.getJSONObject(i);
+                    if (jsonItem.getString("product") != null &&
+                            !jsonItem.getString("product").isEmpty())
+                        orderItemsModel.setProductName(jsonItem.getString("product"));
+                    if (jsonItem.getString("brand") != null &&
+                            !jsonItem.getString("brand").isEmpty())
+                        orderItemsModel.setBrandName(jsonItem.getString("brand"));
+                    if (jsonItem.getString("price") != null &&
+                            !jsonItem.getString("price").isEmpty())
+                        price = Double.parseDouble(jsonItem.getString("price"));
+
+                    orderItemsModel.setPrice(price);
+                    if (jsonItem.getString("quantity") != null &&
+                            !jsonItem.getString("quantity").isEmpty())
+                        quantity = Integer.parseInt(jsonItem.getString("quantity"));
+                    orderItemsModel.setQuantity(quantity);
+                    orderItemsModels.add(orderItemsModel);
+                }
+                orderModel.setOrderItemsModels(orderItemsModels);
+            }
+
+            if(jsonObject.getString("id") != null && !jsonObject.getString("id").isEmpty()) {
+                orderModel.setOrderId(jsonObject.getString("id"));
+            }
+            if(jsonObject.getString("status") != null && !jsonObject.getString("status").isEmpty()) {
+                orderModel.setOrderStatus(jsonObject.getString("status"));
+            }
+
+            if(jsonObject.getString("discount") != null && !jsonObject.getString("discount").isEmpty()) {
+                double discount = Double.parseDouble(jsonObject.getString("discount"));
+                orderModel.setDiscount(discount);
+            }
+
+
+            if(jsonObject.getString("total") != null && !jsonObject.getString("total").isEmpty()) {
+                double total = Double.parseDouble(jsonObject.getString("total"));
+                orderModel.setTotalAmount(total);
+            }
+
+            return orderModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return orderModel;
+    }
+
 
     public BranchModel generateBranchModelFromJson(JSONObject jsonObject) {
         BranchModel branchModel = new BranchModel();

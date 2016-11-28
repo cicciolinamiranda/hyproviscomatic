@@ -26,8 +26,6 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
         {
 
-//    protected CartItemsSharedPref cartItemsSharedPref;
-//    protected LoginSharedPref loginSharedPref;
 
     // Google client to interact with Google API
     protected GoogleApiClient mGoogleApiClient;
@@ -40,11 +38,6 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
             protected void onCreate(@Nullable Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 checkPermissions();
-//        cartItemsSharedPref = new CartItemsSharedPref();
-//        loginSharedPref = new LoginSharedPref();
-//                loginModel = new LoginModel();
-//                sqlDatabaseHelper = new SqlDatabaseHelper(BaseAuthenticatedActivity.this);
-//                loginModel = sqlDatabaseHelper.getLoginCredentials();
             }
 
             public void checkPermissions() {

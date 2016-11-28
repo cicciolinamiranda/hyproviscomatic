@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.uprise.ordering.enums.OrderStatus;
-
 import java.util.ArrayList;
 
 /**
@@ -16,10 +14,13 @@ public class OrderModel implements Parcelable {
 
     private String orderId;
     private String date;
-    private ArrayList<CartItemsModel> cartItemsModels;
-    private int quantity;
+//    private ArrayList<CartItemsModel> cartItemsModels;
+    private ArrayList<OrderItemsModel> orderItemsModels;
+//    private int quantity;
     private double totalAmount;
-    private OrderStatus orderStatus;
+    private double discount;
+//    private OrderStatus orderStatus;
+private String orderStatus;
 
     public OrderModel() {}
 
@@ -27,10 +28,13 @@ public class OrderModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(orderId);
         dest.writeString(date);
-        dest.writeInt(quantity);
+//        dest.writeInt(quantity);
         dest.writeDouble(totalAmount);
-        dest.writeTypedList(cartItemsModels);
-        dest.writeInt(orderStatus.getOrderStatus());
+//        dest.writeTypedList(cartItemsModels);
+        dest.writeTypedList(orderItemsModels);
+//        dest.writeInt(orderStatus);
+        dest.writeString(orderStatus);
+        dest.writeDouble(discount);
     }
 
 
@@ -38,10 +42,13 @@ public class OrderModel implements Parcelable {
     protected OrderModel(Parcel in) {
         orderId = in.readString();
         date = in.readString();
-        quantity = in.readInt();
+//        quantity = in.readInt();
         totalAmount = in.readDouble();
-        cartItemsModels = in.createTypedArrayList(CartItemsModel.CREATOR);
-        orderStatus = in.readTypedObject(OrderStatus.CREATOR);
+//        cartItemsModels = in.createTypedArrayList(CartItemsModel.CREATOR);
+        orderItemsModels = in.createTypedArrayList(OrderItemsModel.CREATOR);
+//        orderStatus = in.readTypedObject(OrderStatus.CREATOR);
+        orderStatus = in.readString();
+        discount = in.readDouble();
     }
 
     public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
@@ -72,21 +79,21 @@ public class OrderModel implements Parcelable {
         this.date = date;
     }
 
-    public ArrayList<CartItemsModel> getCartItemsModels() {
-        return cartItemsModels;
-    }
+//    public ArrayList<CartItemsModel> getCartItemsModels() {
+//        return cartItemsModels;
+//    }
+//
+//    public void setCartItemsModels(ArrayList<CartItemsModel> cartItemsModels) {
+//        this.cartItemsModels = cartItemsModels;
+//    }
 
-    public void setCartItemsModels(ArrayList<CartItemsModel> cartItemsModels) {
-        this.cartItemsModels = cartItemsModels;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+//    public int getQuantity() {
+//        return quantity;
+//    }
+//
+//    public void setQuantity(int quantity) {
+//        this.quantity = quantity;
+//    }
 
     public double getTotalAmount() {
         return totalAmount;
@@ -96,16 +103,41 @@ public class OrderModel implements Parcelable {
         this.totalAmount = totalAmount;
     }
 
-    public OrderStatus getOrderStatus() {
+//    public OrderStatus getOrderStatus() {
+//        return orderStatus;
+//    }
+//
+//    public void setOrderStatus(OrderStatus orderStatus) {
+//        this.orderStatus = orderStatus;
+//    }
+
+
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public ArrayList<OrderItemsModel> getOrderItemsModels() {
+        return orderItemsModels;
+    }
+
+    public void setOrderItemsModels(ArrayList<OrderItemsModel> orderItemsModels) {
+        this.orderItemsModels = orderItemsModels;
     }
 }

@@ -16,8 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.uprise.ordering.R;
-import com.uprise.ordering.model.BrandModel;
-import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.OrderItemsModel;
 import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.util.Util;
 
@@ -28,9 +27,10 @@ import java.util.List;
  * Created by cicciolina on 11/3/16.
  */
 
-public class OrderItemsListView extends ArrayAdapter<CartItemsModel> {
+public class OrderItemsListView extends ArrayAdapter<OrderItemsModel> {
 
-    private List<CartItemsModel> cartItemsModels;
+//    private List<CartItemsModel> cartItemsModels;
+    private List<OrderItemsModel> orderItemsModels;
     private Activity context;
     private Resources resources;
     private List<ProductModel> productModels;
@@ -45,11 +45,12 @@ public class OrderItemsListView extends ArrayAdapter<CartItemsModel> {
     private TextView tvProductName;
 
     public OrderItemsListView (Activity context,
-                               List<CartItemsModel> cartItemsModels,
+                               List<OrderItemsModel> orderItemsModels,
                                List<ProductModel> productModels) {
-        super(context, R.layout.custom_shopping_cart_list, cartItemsModels);
+        super(context, R.layout.custom_shopping_cart_list, orderItemsModels);
         this.context = context;
-        this.cartItemsModels = cartItemsModels;
+//        this.cartItemsModels = cartItemsModels;
+        this.orderItemsModels = orderItemsModels;
         this.resources = context.getResources();
         this.productModels = productModels;
     }
@@ -71,25 +72,30 @@ public class OrderItemsListView extends ArrayAdapter<CartItemsModel> {
         minusBtn.setVisibility(View.GONE);
         plusBtn.setVisibility(View.GONE);
         deleteBtn.setVisibility(View.GONE);
-
-        if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, cartItemsModels)) {
-
-            ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);
-
-            if(matchedProductModel != null &&
-                    !matchedProductModel.getBrands().isEmpty()) {
-                BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
-                if(matchedBrandModel != null) {
-                    tvProductName.setText(matchedProductModel.getName());
-                    tvBrandName.setText(matchedBrandModel.getBrandName().toString());
-                    tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
-                    new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
-                    etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
+                    tvProductName.setText(orderItemsModels.get(position).getProductName());
+                    tvBrandName.setText(orderItemsModels.get(position).getBrandName());
+                    tvBrandPrice.setText(String.format("%.2f",orderItemsModels.get(position).getPrice()) + " Php");
+//                    new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(orderItemsModels.get(position).getPhotoUrl());
+                    etQuantity.setText(orderItemsModels.get(position).getQuantity()+"");
                     etQuantity.setTextColor(resources.getColor(R.color.black));
-                }
-            }
-
-        }
+//        if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, OrderItemsModel)) {
+//
+//            ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);
+//
+//            if(matchedProductModel != null &&
+//                    !matchedProductModel.getBrands().isEmpty()) {
+//                BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
+//                if(matchedBrandModel != null) {
+//                    tvProductName.setText(matchedProductModel.getName());
+//                    tvBrandName.setText(matchedBrandModel.getBrandName().toString());
+//                    tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
+//                    new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+//                    etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
+//                    etQuantity.setTextColor(resources.getColor(R.color.black));
+//                }
+//            }
+//
+//        }
 
         return rowView;
     }
