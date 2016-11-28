@@ -26,6 +26,9 @@ public class CartItemsModel implements Parcelable
     @Expose
     private double price;
 
+    @Expose
+    private String attributeId;
+
     public CartItemsModel() {
         super();
     }
@@ -37,6 +40,7 @@ public class CartItemsModel implements Parcelable
         dest.writeString(brandId);
         dest.writeString(userName);
         dest.writeDouble(price);
+        dest.writeString(attributeId);
     }
 
     protected CartItemsModel(Parcel in) {
@@ -45,6 +49,7 @@ public class CartItemsModel implements Parcelable
         brandId = in.readString();
         userName = in.readString();
         price = in.readDouble();
+        attributeId = in.readString();
     }
 
     public static final Creator<CartItemsModel> CREATOR = new Creator<CartItemsModel>() {
@@ -102,5 +107,13 @@ public class CartItemsModel implements Parcelable
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
     }
 }

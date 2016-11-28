@@ -167,7 +167,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                        productModels.add(Util.getInstance().generateDistributorShopFromJson(jsonArray.getJSONObject(i)));
                     }
                     populateProductList();
                 }

@@ -44,6 +44,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CART_ITEMS_QTY = "quantity";
     private static final String COLUMN_CART_ITEMS_BRANCH_ID = "branchId";
     private static final String COLUMN_CART_ITEMS_PRODUCT_ID = "productModelId";
+    private static final String COLUMN_CART_ITEMS_ATTRIBUTE_ID = "attributeId";
     private static final String COLUMN_CART_ITEMS_PRICE = "price";
     private static final String COLUMN_CART_ITEMS_USERNAME = "username";
 
@@ -60,6 +61,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
             + " integer primary key autoincrement , "
             + COLUMN_CART_ITEMS_QTY + " text not null , "
             + COLUMN_CART_ITEMS_BRANCH_ID + " text not null, "
+            + COLUMN_CART_ITEMS_ATTRIBUTE_ID + " text not null, "
             + COLUMN_CART_ITEMS_PRICE + " text not null, "
             + COLUMN_CART_ITEMS_PRODUCT_ID + " text not null, "
             + COLUMN_CART_ITEMS_USERNAME + " text not null); ";
@@ -149,6 +151,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_CART_ITEMS_QTY, data.getQuantity());
         values.put(COLUMN_CART_ITEMS_BRANCH_ID, data.getBrandId());
+        values.put(COLUMN_CART_ITEMS_ATTRIBUTE_ID, data.getAttributeId());
         values.put(COLUMN_CART_ITEMS_PRICE, data.getPrice());
         values.put(COLUMN_CART_ITEMS_PRODUCT_ID, data.getProductModelId());
         values.put(COLUMN_CART_ITEMS_USERNAME, data.getUserName());
@@ -163,6 +166,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         String whereClause = COLUMN_CART_ITEMS_BRANCH_ID + "= '" + data.getBrandId()
                 + "' AND " + COLUMN_CART_ITEMS_PRODUCT_ID + "= '" + data.getProductModelId()
+                + "' AND " + COLUMN_CART_ITEMS_ATTRIBUTE_ID + "= '" + data.getAttributeId()
                 + "' AND " + COLUMN_CART_ITEMS_USERNAME + "= '" + data.getUserName()+"'";
         return dbWrite.update(TABLE_CART_ITEMS, values, whereClause, null);
     }
@@ -170,6 +174,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     public long deleteCartItem(CartItemsModel data) {
         String whereClause = COLUMN_CART_ITEMS_BRANCH_ID + "= '" + data.getBrandId()
                 + "' AND " + COLUMN_CART_ITEMS_PRODUCT_ID + "= '" + data.getProductModelId()
+                + "' AND " + COLUMN_CART_ITEMS_ATTRIBUTE_ID + "= '" + data.getAttributeId()
                 + "' AND " + COLUMN_CART_ITEMS_USERNAME + "= '" + data.getUserName()+"'";
         String selectQuery = "DELETE FROM " + TABLE_CART_ITEMS
                 + " WHERE " + whereClause;
@@ -191,6 +196,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
                 cartItemsModel.setBrandId(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_BRANCH_ID )));
                 cartItemsModel.setProductModelId(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_PRODUCT_ID )));
+                cartItemsModel.setAttributeId(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_ATTRIBUTE_ID )));
                 cartItemsModel.setQuantity(Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_QTY ))));
                 cartItemsModel.setUserName(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_QTY )));
                 cartItemsModel.setPrice(Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_CART_ITEMS_PRICE))));

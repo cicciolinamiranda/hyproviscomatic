@@ -224,7 +224,8 @@ public class Util {
         BrandModel result = new BrandModel();
         for(int i=0; i<brandModels.size(); i++) {
             if(cartItemsModel.getProductModelId().equalsIgnoreCase(productId) &&
-                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBrandId())) {
+                    brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBrandId()) &&
+                    brandModels.get(i).getAttributeId().equalsIgnoreCase(cartItemsModel.getAttributeId())) {
                 result = brandModels.get(i);
             }
         }
@@ -392,12 +393,12 @@ public class Util {
                     BrandModel brandModel = new BrandModel();
                     JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
                     if(attributeItem.getString("id") != null) brandModel.setAttributeId(attributeItem.getString("id"));
-                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("brand")) {
+                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("brand") && attributeItem.getJSONObject("value") != null) {
                         JSONObject jsonValue = attributeItem.getJSONObject("value");
-                        brandModel.setId(jsonValue.getString("brand"));
-                        brandModel.setBrandName(jsonValue.getString("brand_name"));
-                        brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
-                        brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
+                        if(jsonValue.getString("brand") != null) brandModel.setId(jsonValue.getString("brand"));
+                        if(jsonValue.getString("brand_name") != null) brandModel.setBrandName(jsonValue.getString("brand_name"));
+                        if(jsonValue.getString("image") != null) brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
+                        if(jsonValue.getString("price") != null) brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
                         brands.add(brandModel);
                     }
                 }
@@ -410,6 +411,42 @@ public class Util {
 
         return null;
     }
+
+    public ProductModel generateDistributorShopFromJson(JSONObject jsonObject) {
+        ProductModel productModel = new ProductModel();
+
+
+
+        try {
+            if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
+
+            if(jsonObject.getString("attributes") != null) {
+                JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");
+                ArrayList<BrandModel> brands = new ArrayList<>();
+
+                for(int i = 0; i < jsonAttributesArray.length(); i++) {
+                    BrandModel brandModel = new BrandModel();
+                    JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
+                    if(attributeItem.getString("id") != null) brandModel.setAttributeId(attributeItem.getString("id"));
+                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("brand") && attributeItem.getJSONObject("value") != null) {
+                        JSONObject jsonValue = attributeItem.getJSONObject("value");
+                        if(jsonValue.getString("brand") != null) brandModel.setId(jsonValue.getString("brand"));
+                        if(jsonValue.getString("brand_name") != null) brandModel.setBrandName(jsonValue.getString("brand_name"));
+                        if(jsonValue.getString("image") != null) brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
+                        brands.add(brandModel);
+                    }
+                }
+                productModel.setBrands(brands);
+            }
+            return productModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public LocationDetailsModel generateLocationDetailsModelFromJson(JSONObject jsonObject) {
         LocationDetailsModel shopsLocation = new LocationDetailsModel();

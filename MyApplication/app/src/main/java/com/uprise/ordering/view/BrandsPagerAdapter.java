@@ -100,7 +100,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
-        BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId, web.get(position).getPrice());
+        BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId, web.get(position).getPrice(), web.get(position).getAttributeId());
 
 
 //        LoginSharedPref loginSharedPref = new LoginSharedPref();
@@ -163,11 +163,12 @@ public class BrandsPagerAdapter extends PagerAdapter {
 //        int productPosition;
         String brandId;
         String productId;
+        String attributeId;
         String beforeTextChanged;
         View itemView;
         double price;
 
-        public CountListener(View itemView, String brandId, String productId, double price) {
+        public CountListener(View itemView, String brandId, String productId, double price, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
@@ -178,6 +179,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
             this.brandId = brandId;
             this.productId = productId;
             this.price = price;
+            this.attributeId = attributeId;
         }
         @Override
         public void onClick(View view) {
@@ -251,6 +253,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         private void saveItem() {
             savedCardItem.setQuantity(count);
             savedCardItem.setBrandId(brandId);
+            savedCardItem.setAttributeId(attributeId);
             savedCardItem.setProductModelId(productId);
             savedCardItem.setPrice(price);
             oldQtyValue = count;

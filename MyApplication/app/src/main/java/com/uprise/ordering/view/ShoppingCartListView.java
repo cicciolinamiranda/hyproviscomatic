@@ -100,7 +100,8 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                 }
 
         }
-        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBrandId(), cartItemsModels.get(position).getProductModelId());
+        ShoppingCartListView.CountListener count = new ShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBrandId(), cartItemsModels.get(position).getProductModelId(),
+                 cartItemsModels.get(position).getAttributeId());
         minusBtn.setOnClickListener(count);
         plusBtn.setOnClickListener(count);
         deleteBtn.setOnClickListener(count);
@@ -157,15 +158,11 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
         ImageButton minusBtn;
         ImageButton plusBtn;
         ImageButton deleteBtn;
-//        Button addToCartBtn;
-//        Button saveEditBtn;
-        //        int brandPosition;
-//        int productPosition;
         String brandId;
         String productId;
-        String beforeTextChanged;
+        String attributeId;
         View itemView;
-        public CountListener(View itemView, String brandId, String productId) {
+        public CountListener(View itemView, String brandId, String productId, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
@@ -174,6 +171,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_delete_cart_item) ;
             this.brandId = brandId;
             this.productId = productId;
+            this.attributeId = attributeId;
 
         }
         @Override
@@ -239,6 +237,7 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
             savedCardItem.setQuantity(count);
             savedCardItem.setBrandId(brandId);
             savedCardItem.setProductModelId(productId);
+            savedCardItem.setAttributeId(attributeId);
         }
     }
 
