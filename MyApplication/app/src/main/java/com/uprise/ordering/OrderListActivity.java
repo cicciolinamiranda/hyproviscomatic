@@ -93,6 +93,8 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
 
                 }
             });
+        } else {
+            showNoRecords();
         }
     }
 

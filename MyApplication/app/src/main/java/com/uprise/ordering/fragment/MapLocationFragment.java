@@ -113,9 +113,10 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         currPoint = null;
 
         mAddressOutput = "";
-
+        final String branchEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_branch);
         if(loginModel != null && loginModel.getUsername() != null) {
-            restCallServices.getBranch(getContext(), this, loginModel.getToken());
+            restCallServices.getBranch(getContext(), this, loginModel.getToken(), branchEndpoint);
         }
 
         updateValuesFromBundle(savedInstanceState);

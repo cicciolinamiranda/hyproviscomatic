@@ -185,20 +185,21 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private void populateProductList() {
         List<CartItemsModel> items = sqlDatabaseHelper.getAllUserCartItems(username);
 
-        if(items !=null && !items.isEmpty()) {
-            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
-        }
-        else {
+        if(getContext() != null) {
+            if (items != null && !items.isEmpty()) {
+                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
+            } else {
 //            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
-            productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
-        }
-        productsAdapter.notifyDataSetChanged();
-        expandableListView.setAdapter(productsAdapter);
-        mProgressView.setVisibility(View.GONE);
+                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, new ArrayList<CartItemsModel>());
+            }
+            productsAdapter.notifyDataSetChanged();
+            expandableListView.setAdapter(productsAdapter);
+            mProgressView.setVisibility(View.GONE);
 
-        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
-        if(lastExpandedPosition != -1) {
-            expandableListView.expandGroup(lastExpandedPosition);
+            if (productModels.size() <= 0) llNoRecords.setVisibility(View.VISIBLE);
+            if (lastExpandedPosition != -1) {
+                expandableListView.expandGroup(lastExpandedPosition);
+            }
         }
     }
 
@@ -230,5 +231,17 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        restCallServices = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        restCallServices = null;
     }
 }

@@ -303,10 +303,10 @@ public class RestCallServices {
         }).execute();
     }
 
-    public void getBranch(final Context ctx, final RestServiceListener listener, final String token) {
+    public void getBranch(final Context ctx, final RestServiceListener listener, final String token, final String branchEndpoint) {
 
-        final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_get_branch);
+//        final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_branch);
         new RestAsyncTask(new RestAsyncTaskListener() {
             JSONObject obj;
             String jsonResult;

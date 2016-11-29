@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="@string/label_shopping_cart_no_label"
+            android:text="@string/label_order_no_label"
             android:id="@+id/label_shopping_cart_no_label"
             android:layout_gravity="center_vertical"
             android:paddingLeft="20dp"/>

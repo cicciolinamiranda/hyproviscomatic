@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_shopping_cart"
     android:layout_width="match_parent"
+    android:fillViewport="true"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -16,7 +17,6 @@
             android:id="@+id/rl_branch_list_loading_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:background="@null"
             android:visibility="visible">
             <ProgressBar
@@ -63,8 +63,8 @@
                 android:cacheColorHint="#00000000"
                 android:fadingEdge="none"
                 android:focusable="false"
-                android:scrollbars="none"/>
+                android:scrollbars="vertical"/>
 
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

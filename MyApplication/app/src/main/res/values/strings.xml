@@ -128,4 +128,5 @@
     <string name="endpoint_get_notifications">/api/announcement</string>
     <string name="unable_to_get_notif">Unable to get notifications</string>
     <string name="total_label">Total</string>
+    <string name="label_order_no_label">No Order Records</string>
 </resources>

@@ -42,6 +42,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
     private MenuItem nextMenu;
     private String nextUrl;
     private String prevUrl;
+    private boolean isNotFromFirstPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +64,11 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
         sqlDatabaseHelper = new SqlDatabaseHelper(ExistingBranchActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         restCallServices = new RestCallServices(ExistingBranchActivity.this);
+        final String branchEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_branch);
 
         if(loginModel != null && loginModel.getUsername() != null) {
-            restCallServices.getBranch(ExistingBranchActivity.this, this, loginModel.getToken());
+            restCallServices.getBranch(ExistingBranchActivity.this, this, loginModel.getToken(), branchEndpoint);
         }
 
 
@@ -97,14 +100,16 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                 break;
 
             case R.id.menu_orderlist_prev:
+                llExistingBranch.setVisibility(View.GONE);
                 loadingLayout.setVisibility(View.VISIBLE);
                 branchModelList = new ArrayList<>();
-                restCallServices.getBranch(ExistingBranchActivity.this, this, prevUrl);
+                restCallServices.getBranch(ExistingBranchActivity.this, this, loginModel.getToken(), prevUrl);
                 break;
             case R.id.menu_orderlist_next:
+                llExistingBranch.setVisibility(View.GONE);
                 loadingLayout.setVisibility(View.VISIBLE);
                 branchModelList = new ArrayList<>();
-                restCallServices.getBranch(ExistingBranchActivity.this, this, nextUrl);
+                restCallServices.getBranch(ExistingBranchActivity.this, this,loginModel.getToken(), nextUrl);
                 break;
         }
         return true;
@@ -177,7 +182,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                 nextUrl = jsnobject.getString("next");
                 nextMenu.setVisible(true);
             }
-            if(jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+            if(!isNotFromFirstPage && jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
                     && !jsnobject.getString("previous").contentEquals("null")) {
                 prevUrl = jsnobject.getString("previous");
                 previousMenu.setVisible(true);
@@ -198,7 +203,14 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                     }
 
                 }
-                populateBranchListView();
+
+                if(branchModelList.isEmpty() && nextUrl != null) {
+                    restCallServices.getBranch(ExistingBranchActivity.this, this,loginModel.getToken(), nextUrl);
+                    isNotFromFirstPage = true;
+                } else {
+                    populateBranchListView();
+                    isNotFromFirstPage = false;
+                }
             }
 
         } catch (JSONException e) {

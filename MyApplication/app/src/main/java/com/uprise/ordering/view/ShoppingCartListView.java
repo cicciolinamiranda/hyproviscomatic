@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
-import com.uprise.ordering.util.ImageDownloaderTask;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -89,7 +89,17 @@ public class ShoppingCartListView extends ArrayAdapter<CartItemsModel> {
                         tvBrandName.setText(matchedBrandModel.getBrandName());
                         tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
                         if(matchedBrandModel.getBrandPhotoUrl() != null && !matchedBrandModel.getBrandPhotoUrl().isEmpty()) {
-                            new ImageDownloaderTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+
+                            //TODO: Since no storage, response is Base64
+//                            new ImageDownloaderTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
+
+                            String replacedBase64 = matchedBrandModel.getBrandPhotoUrl().replace("data:image/jpeg;base64,","");
+                            if(replacedBase64.contains("data:image/png;base64,")) {
+                                replacedBase64 = replacedBase64.replace("data:image/png;base64,","");
+                            }
+                            byte[] decodedString = Base64.decode(replacedBase64, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            itemImage.setImageBitmap(decodedByte);
                         } /** new ShoppingCartListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl()); **/
                         etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
                         minusBtn.setVisibility(View.GONE);

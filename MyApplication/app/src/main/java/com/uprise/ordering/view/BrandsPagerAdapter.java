@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
-import com.uprise.ordering.util.ImageDownloaderTask;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -93,7 +93,19 @@ public class BrandsPagerAdapter extends PagerAdapter {
 
         tvBrandPrice.setText(String.format("%.2f", web.get(position).getPrice())+" Php");
         itemImage = (ImageView) itemView.findViewById(R.id.iv_brand_image);
-        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) new ImageDownloaderTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
+
+        //TODO: Since no storage, response is Base64
+//        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) new ImageDownloaderTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
+
+        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) {
+            String replacedBase64 = web.get(position).getBrandPhotoUrl().replace("data:image/jpeg;base64,","");
+            if(replacedBase64.contains("data:image/png;base64,")) {
+                replacedBase64 = replacedBase64.replace("data:image/png;base64,","");
+            }
+            byte[] decodedString = Base64.decode(replacedBase64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            itemImage.setImageBitmap(decodedByte);
+        }
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
         etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
