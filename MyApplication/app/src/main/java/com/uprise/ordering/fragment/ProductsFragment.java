@@ -206,7 +206,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.order_list_menu, menu);
+        inflater.inflate(R.menu.pagination_menu, menu);
         previousMenu = menu.findItem(R.id.menu_orderlist_prev);
         previousMenu.setVisible(false);
         nextMenu = menu.findItem(R.id.menu_orderlist_next);

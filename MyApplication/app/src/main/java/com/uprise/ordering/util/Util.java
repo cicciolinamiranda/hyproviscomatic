@@ -536,7 +536,7 @@ public class Util {
         try {
             if(jsonObject.getString("name") != null && !jsonObject.getString("name").isEmpty()) branchModel.setName(jsonObject.getString("name"));
             if(jsonObject.getString("address") != null && !jsonObject.getString("address").isEmpty()) branchModel.setAddress(jsonObject.getString("address"));
-            if(jsonObject.getString("phone") != null && !jsonObject.getString("phone").isEmpty()) branchModel.setAddress(jsonObject.getString("phone"));
+            if(jsonObject.getString("phone") != null && !jsonObject.getString("phone").isEmpty()) branchModel.setContactNum(jsonObject.getString("phone"));
             return branchModel;
         } catch (JSONException e) {
             e.printStackTrace();

@@ -160,7 +160,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.order_list_menu, menu);
+        mi.inflate(R.menu.pagination_menu, menu);
         previousMenu = menu.findItem(R.id.menu_orderlist_prev);
         previousMenu.setVisible(false);
         nextMenu = menu.findItem(R.id.menu_orderlist_next);

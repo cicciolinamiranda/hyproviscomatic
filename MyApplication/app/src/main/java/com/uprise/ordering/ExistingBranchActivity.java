@@ -38,6 +38,10 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
     private ExpandableHeightListView listViewBranch;
     private RestCallServices restCallServices;
     private RelativeLayout loadingLayout;
+    private MenuItem previousMenu;
+    private MenuItem nextMenu;
+    private String nextUrl;
+    private String prevUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,10 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
         super.onCreateOptionsMenu(menu);
         MenuInflater mi = getMenuInflater();
         mi.inflate(R.menu.existing_branch_add_new, menu);
+        previousMenu = menu.findItem(R.id.menu_orderlist_prev);
+        previousMenu.setVisible(false);
+        nextMenu = menu.findItem(R.id.menu_orderlist_next);
+        nextMenu.setVisible(false);
 
         return true;
     }
@@ -86,6 +94,17 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
             case R.id.existing_branch_add_new:
                 showAddBranchDialog();
+                break;
+
+            case R.id.menu_orderlist_prev:
+                loadingLayout.setVisibility(View.VISIBLE);
+                branchModelList = new ArrayList<>();
+                restCallServices.getBranch(ExistingBranchActivity.this, this, prevUrl);
+                break;
+            case R.id.menu_orderlist_next:
+                loadingLayout.setVisibility(View.VISIBLE);
+                branchModelList = new ArrayList<>();
+                restCallServices.getBranch(ExistingBranchActivity.this, this, nextUrl);
                 break;
         }
         return true;
@@ -143,12 +162,27 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
+        nextMenu.setVisible(false);
+        previousMenu.setVisible(false);
+
         try {
             JSONObject jsnobject = new JSONObject(string);
             JSONArray jsonArray = new JSONArray();
             if(jsnobject != null) {
                 jsonArray = jsnobject.getJSONArray("results");
             }
+
+            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+
+                nextUrl = jsnobject.getString("next");
+                nextMenu.setVisible(true);
+            }
+            if(jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+                    && !jsnobject.getString("previous").contentEquals("null")) {
+                prevUrl = jsnobject.getString("previous");
+                previousMenu.setVisible(true);
+            }
+
 
             if(jsonArray != null) {
 

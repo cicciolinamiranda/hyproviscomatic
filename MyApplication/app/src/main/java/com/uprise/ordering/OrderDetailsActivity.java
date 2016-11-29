@@ -39,6 +39,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvEstimatedTotal.setText(String.format("%.2f", orderModel.getTotalAmount())+" Php");
         tvDiscount.setText(String.format("%.2f", orderModel.getDiscount())+" Php");
 
+        getSupportActionBar().setTitle("Order# "+orderModel.getOrderId());
+
     }
 
     @Override
