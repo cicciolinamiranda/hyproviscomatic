@@ -495,7 +495,7 @@ public class RestCallServices {
                             , ctx.getString(R.string.unable_to_get_notif));
                 } else {
 
-                    listener.onSuccess(RestCalls.PURCHASE, resultStr);
+                    listener.onSuccess(RestCalls.NOTIFICATIONS, resultStr);
                 }
 
 

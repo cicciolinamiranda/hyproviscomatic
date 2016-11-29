@@ -3,34 +3,67 @@ package com.uprise.ordering;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.NotificationsModel;
+import com.uprise.ordering.rest.RestCalls;
+import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.NotificationsList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class NotificationActivity extends BaseAuthenticatedActivity {
+public class NotificationActivity extends BaseAuthenticatedActivity implements RestCallServices.RestServiceListener {
 
     private ArrayAdapter<NotificationsModel> notificationsModelArrayAdapter;
     private ListView lvNotificationsList;
     private ArrayList<NotificationsModel> notificationsModelArrayList;
+    private LinearLayout llNoRecords;
+    private RelativeLayout rlShopCartLoader;
+    private String nextUrl;
+    private String prevUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
         lvNotificationsList = (ListView) findViewById(R.id.list_notifications);
-        //TODO: to be replaced by REST CALL API
-        notificationsModelArrayList = Util.getInstance().generateNotifications();
+        llNoRecords = (LinearLayout) findViewById(R.id.ll_order_list_no_records);
+        rlShopCartLoader = (RelativeLayout) findViewById(R.id.rl_order_list_loading_layout);
+
+        sqlDatabaseHelper = new SqlDatabaseHelper(NotificationActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        restCallServices = new RestCallServices(this);
+        final String notifEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_notifications);
+        if(loginModel != null) restCallServices.getNotifications(NotificationActivity.this,
+                this, loginModel, notifEndpoint);
+        notificationsModelArrayList = new ArrayList<>();
+        showLoader();
+//        notificationsModelArrayList = Util.getInstance().generateNotifications();
+//        notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
+//        notificationsModelArrayAdapter.notifyDataSetChanged();
+//        lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
+//        registerForContextMenu(lvNotificationsList);
+
+    }
+
+    private void populatelist() {
         notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
         notificationsModelArrayAdapter.notifyDataSetChanged();
         lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
         registerForContextMenu(lvNotificationsList);
-
     }
 
     @Override
@@ -58,5 +91,85 @@ public class NotificationActivity extends BaseAuthenticatedActivity {
                 break;
         }
     }
-//    }
+
+    private void showLoader() {
+        lvNotificationsList.setVisibility(View.GONE);
+        llNoRecords.setVisibility(View.GONE);
+        rlShopCartLoader.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        lvNotificationsList.setVisibility(View.VISIBLE);
+        llNoRecords.setVisibility(View.GONE);
+        rlShopCartLoader.setVisibility(View.GONE);
+    }
+
+    private void showNoRecords() {
+        lvNotificationsList.setVisibility(View.GONE);
+        llNoRecords.setVisibility(View.VISIBLE);
+        rlShopCartLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+        hideLoader();
+//        previousMenu.setVisible(false);
+//        nextMenu.setVisible(false);
+        try {
+
+            JSONObject jsonObject = new JSONObject(string);
+            JSONArray jsonArray = new JSONArray();
+            if(jsonObject.getString("results") != null) {
+                jsonArray = new JSONArray(jsonObject.getString("results"));
+            }
+
+            if(jsonObject.getString("next") != null && !jsonObject.getString("next").isEmpty() && !jsonObject.getString("next").contentEquals("null"))  {
+
+                nextUrl = jsonObject.getString("next");
+//                nextMenu.setVisible(true);
+            }
+            if(jsonObject.getString("previous") != null && !jsonObject.getString("previous").isEmpty()
+                    && !jsonObject.getString("previous").contentEquals("null")) {
+                prevUrl = jsonObject.getString("previous");
+//                previousMenu.setVisible(true);
+            }
+
+            if(jsonArray != null) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject items = jsonArray.getJSONObject(i);
+                    if(items != null) {
+                        notificationsModelArrayList.add(Util.getInstance().generateNotificationsFromJson(items));
+                    }
+                }
+                populateList();
+            }
+
+        } catch (JSONException e) {
+            showNoRecords();
+            e.printStackTrace();
+        }
+    }
+
+    private void populateList() {
+
+        if(notificationsModelArrayList != null && !notificationsModelArrayList.isEmpty()) {
+            notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
+            notificationsModelArrayAdapter.notifyDataSetChanged();
+            lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
+            registerForContextMenu(lvNotificationsList);
+        } else {
+            showNoRecords();
+        }
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+    }
 }

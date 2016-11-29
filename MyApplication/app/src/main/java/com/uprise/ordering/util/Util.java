@@ -546,5 +546,19 @@ public class Util {
     }
 
 
-
+    public NotificationsModel generateNotificationsFromJson(JSONObject jsonObject) {
+        NotificationsModel notificationsModel = new NotificationsModel();
+        try {
+            if(jsonObject.getString("title") != null && !jsonObject.getString("title").isEmpty()) notificationsModel.setTitle(jsonObject.getString("title"));
+            if(jsonObject.getString("id") != null && !jsonObject.getString("id").isEmpty()) notificationsModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("content") != null && !jsonObject.getString("content").isEmpty()) notificationsModel.setMessage(jsonObject.getString("content"));
+            if(jsonObject.getString("status") != null && !jsonObject.getString("status").isEmpty()) notificationsModel.setStatus(jsonObject.getString("status"));
+            if(jsonObject.getString("date_added") != null && !jsonObject.getString("date_added").isEmpty()) notificationsModel.setDate(jsonObject.getString("date_added"));
+            if(jsonObject.getString("url") != null && !jsonObject.getString("url").isEmpty()) notificationsModel.setUrl(jsonObject.getString("url"));
+            return notificationsModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

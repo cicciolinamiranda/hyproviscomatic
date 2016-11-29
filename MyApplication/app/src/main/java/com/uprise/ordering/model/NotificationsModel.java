@@ -13,7 +13,8 @@ public class NotificationsModel implements Parcelable {
     private String title;
     private String message;
     private String date;
-    private boolean isRead;
+    private String url;
+    private String status;
 
     public NotificationsModel() {}
 
@@ -23,14 +24,18 @@ public class NotificationsModel implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(message);
         parcel.writeString(date);
-        parcel.writeByte((byte) (isRead ? 1 : 0));
+        parcel.writeString(url);
+        parcel.writeString(status);
+//        parcel.writeByte((byte) (isRead ? 1 : 0));
     }
     protected NotificationsModel(Parcel in) {
         id = in.readString();
         title = in.readString();
         message = in.readString();
         date = in.readString();
-        isRead = in.readByte() != 0;
+//        isRead = in.readByte() != 0;
+        url = in.readString();
+        status = in.readString();
     }
 
     public static final Creator<NotificationsModel> CREATOR = new Creator<NotificationsModel>() {
@@ -77,12 +82,23 @@ public class NotificationsModel implements Parcelable {
         this.date = date;
     }
 
-    public boolean isRead() {
-        return isRead;
+//    public boolean isRead() {
+
+
+    public String getUrl() {
+        return url;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
