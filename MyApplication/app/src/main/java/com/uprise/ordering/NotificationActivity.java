@@ -2,6 +2,8 @@ package com.uprise.ordering;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,6 +32,8 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
     private ArrayList<NotificationsModel> notificationsModelArrayList;
     private LinearLayout llNoRecords;
     private RelativeLayout rlShopCartLoader;
+    private MenuItem previousMenu;
+    private MenuItem nextMenu;
     private String nextUrl;
     private String prevUrl;
 
@@ -50,6 +54,7 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
         if(loginModel != null) restCallServices.getNotifications(NotificationActivity.this,
                 this, loginModel, notifEndpoint);
         notificationsModelArrayList = new ArrayList<>();
+        rlShopCartLoader.setVisibility(View.VISIBLE);
         showLoader();
 //        notificationsModelArrayList = Util.getInstance().generateNotifications();
 //        notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
@@ -72,6 +77,16 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
             case android.R.id.home:
                 finish();
                 startActivity(new Intent(NotificationActivity.this, MainActivity.class));
+                break;
+            case R.id.menu_orderlist_prev:
+                rlShopCartLoader.setVisibility(View.VISIBLE);
+                notificationsModelArrayList = new ArrayList<>();
+                restCallServices.getNotifications(NotificationActivity.this, this, loginModel, prevUrl);
+                break;
+            case R.id.menu_orderlist_next:
+                rlShopCartLoader.setVisibility(View.VISIBLE);
+                notificationsModelArrayList = new ArrayList<>();
+                restCallServices.getNotifications(NotificationActivity.this, this, loginModel, nextUrl);
                 break;
         }
         return true;
@@ -118,8 +133,8 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
     @Override
     public void onSuccess(RestCalls callType, String string) {
         hideLoader();
-//        previousMenu.setVisible(false);
-//        nextMenu.setVisible(false);
+        previousMenu.setVisible(false);
+        nextMenu.setVisible(false);
         try {
 
             JSONObject jsonObject = new JSONObject(string);
@@ -131,12 +146,12 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
             if(jsonObject.getString("next") != null && !jsonObject.getString("next").isEmpty() && !jsonObject.getString("next").contentEquals("null"))  {
 
                 nextUrl = jsonObject.getString("next");
-//                nextMenu.setVisible(true);
+                nextMenu.setVisible(true);
             }
             if(jsonObject.getString("previous") != null && !jsonObject.getString("previous").isEmpty()
                     && !jsonObject.getString("previous").contentEquals("null")) {
                 prevUrl = jsonObject.getString("previous");
-//                previousMenu.setVisible(true);
+                previousMenu.setVisible(true);
             }
 
             if(jsonArray != null) {
@@ -170,6 +185,17 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
 
     @Override
     public void onFailure(RestCalls callType, String string) {
+        showNoRecords();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.order_list_menu, menu);
+        previousMenu = menu.findItem(R.id.menu_orderlist_prev);
+        previousMenu.setVisible(false);
+        nextMenu = menu.findItem(R.id.menu_orderlist_next);
+        nextMenu.setVisible(false);
+        return true;
     }
 }

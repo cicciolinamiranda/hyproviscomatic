@@ -43,6 +43,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     private RestCallServices restCallServices;
     private View mProgressView;
     private double total;
+    private String nextUrl;
 //    private DecimalFormat decimalFormat;
 
     @Override

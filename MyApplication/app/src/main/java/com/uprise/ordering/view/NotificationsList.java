@@ -48,7 +48,7 @@ public class NotificationsList extends ArrayAdapter<NotificationsModel> {
         TextView tvMsg = (TextView) rowView.findViewById(R.id.tv_notification_title);
         TextView tvDate = (TextView) rowView.findViewById(R.id.tv_notification_date);
         LinearLayout llItemNotif = (LinearLayout) rowView.findViewById(R.id.ll_item_notifications);
-        tvMsg.setText(web.get(position).getMessage());
+        tvMsg.setText(web.get(position).getTitle());
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
         tvDate.setText(dateFormat.format(new Date(Long.parseLong(web.get(position).getDate()))));
 

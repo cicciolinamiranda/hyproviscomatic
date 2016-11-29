@@ -41,6 +41,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     private String nextUrl;
     private String prevUrl;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -143,11 +144,13 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
                 finish();
                 break;
             case R.id.menu_orderlist_prev:
-                productModels.clear();
+                mProgressView.setVisibility(View.VISIBLE);
+                productModels = new ArrayList<>();
                 restCallServices.getDistributorShop(DistributorShopActivity.this, this, prevUrl);
                 break;
             case R.id.menu_orderlist_next:
-                productModels.clear();
+                mProgressView.setVisibility(View.VISIBLE);
+                productModels = new ArrayList<>();
                 restCallServices.getDistributorShop(DistributorShopActivity.this, this, nextUrl);
                 break;
         }
@@ -184,6 +187,9 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     @Override
     public void onSuccess(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
+        nextMenu.setVisible(false);
+        previousMenu.setVisible(false);
+
         try {
             JSONObject jsnobject = new JSONObject(string);
             JSONArray jsonArray = new JSONArray();
@@ -204,7 +210,6 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
 
             if(jsonArray != null) {
-
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
                         productModels.add(Util.getInstance().generateDistributorShopFromJson(jsonArray.getJSONObject(i)));
@@ -223,7 +228,8 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     @Override
     public void onFailure(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
-
+        nextMenu.setVisible(false);
+        previousMenu.setVisible(false);
         if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 

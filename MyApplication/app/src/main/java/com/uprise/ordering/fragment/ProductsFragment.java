@@ -68,7 +68,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         super.onCreateView(inflater, container, savedInstanceState);
         rowView = inflater.inflate(R.layout.layout_shop_now, container, false);
         expandableListView = (ExpandableListView) rowView.findViewById(R.id.el_shop_now_products);
-        productModels = new ArrayList<>();
+//        productModels = new ArrayList<>();
         expandableListView.setOnChildClickListener(this);
         expandableListView.setOnGroupExpandListener(this);
         sqlDatabaseHelper = new SqlDatabaseHelper(getContext());
@@ -128,6 +128,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
 
             if(jsonArray != null) {
+                productModels = new ArrayList<>();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
