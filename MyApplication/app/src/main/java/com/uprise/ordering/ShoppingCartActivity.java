@@ -44,6 +44,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     private View mProgressView;
     private double total;
     private String nextUrl;
+    private boolean isNextUrl;
 //    private DecimalFormat decimalFormat;
 
     @Override
@@ -77,7 +78,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     public void deleteCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(loginModel.getUsername());
 //        cartItemsSharedPref.removeCardItem(ShoppingCartActivity.this, cartItemsModel);
-
+        isNextUrl = false;
         sqlDatabaseHelper.deleteCartItem(cartItemsModel);
 //        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginSharedPref.getUsername(ShoppingCartActivity.this));
         populateList();
@@ -86,6 +87,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     @Override
     public void editCartItem(CartItemsModel cartItemsModel) {
         cartItemsModel.setUserName(loginModel.getUsername());
+        isNextUrl = false;
         sqlDatabaseHelper.updateCartItems(cartItemsModel);
         populateList();
     }
@@ -94,7 +96,9 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         llNoRecords.setVisibility(View.GONE);
         llShopCartList.setVisibility(View.VISIBLE);
         llLowerLayouts.setVisibility(View.VISIBLE);
-        cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginModel.getUsername());
+
+
+        if(!isNextUrl) cartItemsModelArrayList = sqlDatabaseHelper.getAllUserCartItems(loginModel.getUsername());
         if (cartItemsModelArrayList != null && !cartItemsModelArrayList.isEmpty() &&
                 productModels != null && !productModels.isEmpty()) {
             cartItemsModelArrayAdapter = new ShoppingCartListView(ShoppingCartActivity.this, cartItemsModelArrayList,
@@ -200,6 +204,12 @@ View.OnClickListener, RestCallServices.RestServiceListener {
                 }
             }
 
+            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+                nextUrl = jsnobject.getString("next");
+                isNextUrl = true;
+                restCallServices.getProducts(this, this, loginModel.getToken(), nextUrl);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -208,9 +218,11 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     @Override
     public void onFailure(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
-        llNoRecords.setVisibility(View.VISIBLE);
-        llShopCartList.setVisibility(View.GONE);
-        llLowerLayouts.setVisibility(View.GONE);
+        if(productModels != null && !productModels.isEmpty()) {
+            llNoRecords.setVisibility(View.VISIBLE);
+            llShopCartList.setVisibility(View.GONE);
+            llLowerLayouts.setVisibility(View.GONE);
+        }
     }
 }
 
