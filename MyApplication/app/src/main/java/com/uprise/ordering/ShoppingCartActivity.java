@@ -225,7 +225,7 @@ View.OnClickListener, RestCallServices.RestServiceListener {
     @Override
     public void onFailure(RestCalls callType, String string) {
         mProgressView.setVisibility(View.GONE);
-        if(productModels != null && !productModels.isEmpty()) {
+        if(productModels == null || productModels.isEmpty()) {
             llNoRecords.setVisibility(View.VISIBLE);
             llShopCartList.setVisibility(View.GONE);
             llLowerLayouts.setVisibility(View.GONE);

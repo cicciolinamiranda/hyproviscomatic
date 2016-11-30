@@ -150,7 +150,8 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
     @Override
     public void onFailure(RestCalls callType, String string) {
-
+        mProgressView.setVisibility(View.GONE);
+        llNoRecords.setVisibility(View.VISIBLE);
     }
 
     @Override
