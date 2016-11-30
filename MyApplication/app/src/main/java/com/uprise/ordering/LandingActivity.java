@@ -144,6 +144,9 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         String password = mPasswordView.getText().toString();
         View focusView = null;
 
+        if(!Util.getInstance().isNetworkAvailable(this)) {
+            cancel = true;
+        }
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));

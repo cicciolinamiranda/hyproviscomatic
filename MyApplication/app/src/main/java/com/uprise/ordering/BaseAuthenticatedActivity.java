@@ -129,27 +129,4 @@ public class BaseAuthenticatedActivity extends AppCompatActivity implements
         return false;
     }
 
-//    @Override
-//    public int getResultCode() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void onSuccess(RestCalls callType, String token) {
-//
-//        if(token != null && !token.isEmpty() && loginModel != null && loginModel.getUsername() != null) {
-//            loginModel.setToken(token);
-//            sqlDatabaseHelper.updateLoginAccount(loginModel);
-//        }
-//    }
-//
-//    @Override
-//    public void onFailure(RestCalls callType, String string) {
-//
-////        if(!loginSharedPref.isLoggedIn(BaseAuthenticatedActivity.this)) {
-////        loginSharedPref.logOut(BaseAuthenticatedActivity.this);
-////        finish();
-////        startActivity(new Intent(BaseAuthenticatedActivity.this, LandingActivity.class));
-////        }
-//    }
 }

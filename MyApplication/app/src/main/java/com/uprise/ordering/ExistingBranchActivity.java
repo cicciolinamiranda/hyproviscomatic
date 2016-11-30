@@ -56,10 +56,6 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
         listViewBranch.setExpanded(true);
         branchModelList = new ArrayList<>();
 
-        llNoBranchAvail.setVisibility(View.GONE);
-        llExistingBranch.setVisibility(View.GONE);
-        loadingLayout.setVisibility(View.VISIBLE);
-
         loginModel = new LoginModel();
         sqlDatabaseHelper = new SqlDatabaseHelper(ExistingBranchActivity.this);
         loginModel = sqlDatabaseHelper.getLoginCredentials();
@@ -67,8 +63,14 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
         final String branchEndpoint = getResources().getString(R.string.endpoint_server)
                 + getResources().getString(R.string.endpoint_get_branch);
 
-        if(loginModel != null && loginModel.getUsername() != null) {
+        if(loginModel != null && loginModel.getUsername() != null &&
+                Util.getInstance().isNetworkAvailable(this)) {
             restCallServices.getBranch(ExistingBranchActivity.this, this, loginModel.getToken(), branchEndpoint);
+            llNoBranchAvail.setVisibility(View.GONE);
+            llExistingBranch.setVisibility(View.GONE);
+            loadingLayout.setVisibility(View.VISIBLE);
+        } else {
+            llNoBranchAvail.setVisibility(View.VISIBLE);
         }
 
 

@@ -67,9 +67,16 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         loginModel = sqlDatabaseHelper.getLoginCredentials();
             final String productsEndpoint = getResources().getString(R.string.endpoint_server)
             + getResources().getString(R.string.endpoint_get_products);
-    if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(this, this, loginModel.getToken(), productsEndpoint);
+    if(loginModel != null && loginModel.getToken() != null &&
+            Util.getInstance().isNetworkAvailable(this)) {
+        restCallServices.getProducts(this, this, loginModel.getToken(), productsEndpoint);
         mProgressView = findViewById(R.id.rl_shopping_cart_loading_layout);
         mProgressView.setVisibility(View.VISIBLE);
+    } else {
+        llNoRecords.setVisibility(View.VISIBLE);
+        llShopCartList.setVisibility(View.GONE);
+        llLowerLayouts.setVisibility(View.GONE);
+    }
 
 
     }

@@ -55,9 +55,14 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         restCallServices = new RestCallServices(this);
         final String productsEndpoint = getResources().getString(R.string.endpoint_server)
         + getResources().getString(R.string.endpoint_get_products);
-        restCallServices.getDistributorShop(this, this, productsEndpoint);
-        mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
-        mProgressView.setVisibility(View.VISIBLE);
+
+        if(Util.getInstance().isNetworkAvailable(this)) {
+            restCallServices.getDistributorShop(this, this, productsEndpoint);
+            mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
+            mProgressView.setVisibility(View.VISIBLE);
+        } else {
+            llNoRecords.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

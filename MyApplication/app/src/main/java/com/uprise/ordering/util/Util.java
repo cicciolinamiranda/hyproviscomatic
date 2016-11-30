@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PointF;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -560,5 +562,16 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isNetworkAvailable(Context ctx) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if(activeNetworkInfo == null || !activeNetworkInfo.isConnected()) {
+            Util.getInstance().showSnackBarToast(ctx, "You need to be connected to a network");
+        }
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -80,10 +80,15 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         restCallServices = new RestCallServices(getContext());
         final String productsEndpoint = getResources().getString(R.string.endpoint_server)
         + getResources().getString(R.string.endpoint_get_products);
-        if(loginModel != null && loginModel.getToken() != null) restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
-        mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
-        mProgressView.setVisibility(View.VISIBLE);
-        setHasOptionsMenu(true);
+        if(loginModel != null && loginModel.getToken() != null &&
+                Util.getInstance().isNetworkAvailable(getContext())) {
+            restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
+            mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
+            mProgressView.setVisibility(View.VISIBLE);
+            setHasOptionsMenu(true);
+        } else {
+            llNoRecords.setVisibility(View.VISIBLE);
+        }
         return rowView;
     }
 

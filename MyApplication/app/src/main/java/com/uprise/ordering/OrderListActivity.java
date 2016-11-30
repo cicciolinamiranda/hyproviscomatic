@@ -52,10 +52,15 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
         orderModels = new ArrayList<>();
         final String purchaseEndpoint = getResources().getString(R.string.endpoint_server)
         + getResources().getString(R.string.endpoint_get_purchase);
-        if(loginModel != null) restCallServices.getPurchaseList(OrderListActivity.this,
-                this, loginModel, purchaseEndpoint);
+        if(loginModel != null &&
+                Util.getInstance().isNetworkAvailable(this)) {
+            restCallServices.getPurchaseList(OrderListActivity.this,
+                    this, loginModel, purchaseEndpoint);
 
-        showLoader();
+            showLoader();
+        } else {
+            showNoRecords();
+        }
 
     }
 

@@ -51,24 +51,17 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
         restCallServices = new RestCallServices(this);
         final String notifEndpoint = getResources().getString(R.string.endpoint_server)
                 + getResources().getString(R.string.endpoint_get_notifications);
-        if(loginModel != null) restCallServices.getNotifications(NotificationActivity.this,
-                this, loginModel, notifEndpoint);
-        notificationsModelArrayList = new ArrayList<>();
-        rlShopCartLoader.setVisibility(View.VISIBLE);
-        showLoader();
-//        notificationsModelArrayList = Util.getInstance().generateNotifications();
-//        notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
-//        notificationsModelArrayAdapter.notifyDataSetChanged();
-//        lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
-//        registerForContextMenu(lvNotificationsList);
+        if(loginModel != null &&
+        Util.getInstance().isNetworkAvailable(this)) {
+            restCallServices.getNotifications(NotificationActivity.this,
+                    this, loginModel, notifEndpoint);
+            notificationsModelArrayList = new ArrayList<>();
+            rlShopCartLoader.setVisibility(View.VISIBLE);
+            showLoader();
+        } else {
+            showNoRecords();
+        }
 
-    }
-
-    private void populatelist() {
-        notificationsModelArrayAdapter = new NotificationsList(NotificationActivity.this, notificationsModelArrayList);
-        notificationsModelArrayAdapter.notifyDataSetChanged();
-        lvNotificationsList.setAdapter(notificationsModelArrayAdapter);
-        registerForContextMenu(lvNotificationsList);
     }
 
     @Override
