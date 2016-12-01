@@ -112,7 +112,7 @@
     <string name="endpoint_server">http://139.162.57.95</string>
     <string name="endpoint_post_registration">/api/registration</string>
     <string name="endpoint_get_purchase">/api/purchase</string>
-    <string name="endpoint_get_notifications">/api/announcement</string>
+    <string name="endpoint_get_notifications">/api/announcement?ordering=-date_added</string>
     <string name="endpoint_post_login">/api-token-auth</string>
     <string name="endpoint_get_products">/api/product</string>
     <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>

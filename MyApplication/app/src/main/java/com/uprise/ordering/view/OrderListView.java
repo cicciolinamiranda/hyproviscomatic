@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.OrderModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,10 +47,10 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         tvOrderNumber.setText(web.get(position).getOrderId());
         tvOrderStatus.setText(web.get(position).getOrderStatus());
 
-        //TODO: MUST NOT BE HIDDEN. PROVIDE CORRECT DATE MAPPING
-        tvOrderDate.setVisibility(View.GONE);
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
-//        tvOrderDate.setText(dateFormat.format(new Date(Long.parseLong(web.get(position).getDate()))));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
+        long dv = Long.valueOf(web.get(position).getDate())*1000;
+        tvOrderDate.setText(dateFormat.format(new Date(dv)));
 //        tvOrderDate.setText(dateFormat.format(new Date()));
         return rowView;
     }

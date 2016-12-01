@@ -524,6 +524,10 @@ public class Util {
                 orderModel.setTotalAmount(total);
             }
 
+            if(jsonObject.getString("date_added") != null && !jsonObject.getString("date_added").isEmpty()) {
+                orderModel.setDate(jsonObject.getString("date_added"));
+            }
+
             return orderModel;
         } catch (JSONException e) {
             e.printStackTrace();

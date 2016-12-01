@@ -50,7 +50,8 @@ public class NotificationsList extends ArrayAdapter<NotificationsModel> {
         LinearLayout llItemNotif = (LinearLayout) rowView.findViewById(R.id.ll_item_notifications);
         tvMsg.setText(web.get(position).getTitle());
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
-        tvDate.setText(dateFormat.format(new Date(Long.parseLong(web.get(position).getDate()))));
+        long dv = Long.valueOf(web.get(position).getDate())*1000;
+        tvDate.setText(dateFormat.format(new Date(dv)));
 
         llItemNotif.setOnClickListener(new View.OnClickListener() {
             @Override
