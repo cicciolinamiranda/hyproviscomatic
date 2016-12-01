@@ -109,15 +109,16 @@
 
 
 <!--Endpoints-->
-    <string name="endpoint_post_registration">/api/registration</string>
     <string name="endpoint_server">http://139.162.57.95</string>
+    <string name="endpoint_post_registration">/api/registration</string>
+    <string name="endpoint_get_purchase">/api/purchase</string>
+    <string name="endpoint_get_notifications">/api/announcement</string>
     <string name="endpoint_post_login">/api-token-auth</string>
+    <string name="endpoint_get_products">/api/product</string>
     <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>
     <string name="endpoint_get_branch">/api/branch</string>
     <string name="unable_to_retrieve_branch">Unable to retrieve Branch(es)</string>
-    <string name="endpoint_get_products">/api/product</string>
     <string name="label_existing_products_no_label">No Products Available</string>
-    <string name="endpoint_get_purchase">/api/purchase</string>
     <string name="unable_to_checkout_order">Unable to process checkout your items. Please Try Again.</string>
     <string name="unable_to_retrieve_products">Unable to retrieve list of products.</string>
     <string name="unable_to_add_branch">Unable to save branch. Please Try Again</string>
@@ -125,7 +126,6 @@
     <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
     <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
     <string name="estimated_discount_label">Discount</string>
-    <string name="endpoint_get_notifications">/api/announcement</string>
     <string name="unable_to_get_notif">Unable to get notifications</string>
     <string name="total_label">Total</string>
     <string name="label_order_no_label">No Order Records</string>

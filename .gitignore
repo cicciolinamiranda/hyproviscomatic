@@ -6,3 +6,5 @@
 /MyApplication/build/*
 /MyApplication/captures
 /MyApplication/*.apk
+.idea
+*.DS_Store

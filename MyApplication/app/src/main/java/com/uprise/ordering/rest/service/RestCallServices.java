@@ -205,12 +205,12 @@ public class RestCallServices {
                 params.add(new BasicNameValuePair("username", username));
                 params.add(new BasicNameValuePair("password", password));
                 JSONObject obj = HttpClient.SendHttpPost(loginEndpoint, params);
-                    try {
+                try {
 
-                        if(obj.getString("token") != null )token = obj.getString("token");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    if(obj.getString("token") != null )token = obj.getString("token");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -297,25 +297,24 @@ public class RestCallServices {
                     RestCallServices.this.failedPost(listener, RestCalls.ADD_BRANCH
                             , ctx.getString(R.string.unable_to_save_branch));
                 } else {
-                            listener.onSuccess(RestCalls.ADD_BRANCH,  resultStr);
-                        }
+                    listener.onSuccess(RestCalls.ADD_BRANCH,  resultStr);
+                }
             }
         }).execute();
     }
 
-    public void getBranch(final Context ctx, final RestServiceListener listener, final String token, final String branchEndpoint) {
+    public void getBranch(final Context ctx, final RestServiceListener listener, final String token,
+                          final String branchEndpoint) {
 
-//        final String branchEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-//                + ctx.getResources().getString(R.string.endpoint_get_branch);
         new RestAsyncTask(new RestAsyncTaskListener() {
             JSONObject obj;
             String jsonResult;
             @Override
             public void doInBackground() {
-               obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(branchEndpoint, token);
-                    if(obj   != null) {
-                        jsonResult = obj.toString();
-                    }
+                obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(branchEndpoint, token);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
 
             }
 
@@ -364,7 +363,7 @@ public class RestCallServices {
             if(cartItemsModels != null && cartItemsModels.size() >0) {
 
                 for(CartItemsModel cartItemsModel: cartItemsModels) {
-                   JSONObject itemObjJson = new JSONObject();
+                    JSONObject itemObjJson = new JSONObject();
                     itemObjJson.put("quantity", cartItemsModel.getQuantity());
 //                    itemObjJson.put("price", cartItemsModel.getPrice());
                     itemObjJson.put("product", cartItemsModel.getProductModelId());
@@ -516,10 +515,10 @@ public class RestCallServices {
             public void doInBackground() {
                 JSONObject obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(purchaseEndpoint, loginModel.getToken());
 
-                    if(obj != null) {
+                if(obj != null) {
 //                         resultStr = obj.getString("results");
-                        resultStr = obj.toString();
-                    }
+                    resultStr = obj.toString();
+                }
 
 
 
@@ -632,7 +631,7 @@ public class RestCallServices {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmaps object
-       // bitmap.recycle();
+        // bitmap.recycle();
         byte[] b = baos.toByteArray();
 //
 //        try {
