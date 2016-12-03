@@ -24,7 +24,6 @@
 
                 android:layout_alignParentTop="true"/>
         </RelativeLayout>
-    </LinearLayout>
 
     <!--Estimated Total-->
     <LinearLayout
@@ -93,6 +92,7 @@
                 android:layout_marginRight="20dp"
                 />
         </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </FrameLayout>
 
