@@ -26,12 +26,16 @@ public class NotifMsgActivity extends AppCompatActivity {
         tvNotifMsg = (TextView) findViewById(R.id.tv_notification_msg);
         tvNotifDate = (TextView) findViewById(R.id.tv_notification_date);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
+
         NotificationsModel notificationsModel = getIntent().getParcelableExtra("notificationsModel");
 
         if(null != notificationsModel) {
             if(notificationsModel.getTitle() != null) tvNotifTitle.setText(notificationsModel.getTitle());
             if(notificationsModel.getMessage() != null) tvNotifMsg.setText(notificationsModel.getMessage());
-            if(notificationsModel.getDate() != null) tvNotifDate.setText(dateFormat.format(new Date(Long.parseLong(notificationsModel.getDate()))));
+            if(notificationsModel.getDate() != null) {
+                long dv = Long.valueOf(notificationsModel.getDate())*1000;
+                tvNotifDate.setText(dateFormat.format(new Date(dv)));
+            }
         }
     }
 
