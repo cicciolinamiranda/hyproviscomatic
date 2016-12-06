@@ -143,6 +143,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         restCallServices = new RestCallServices(AddBranchActivity.this);
 
 
+        if(ApplicationConstants.RESULT_FROM_ADD_BRANCH == getIntent().getIntExtra("resultCode",0)) {
+            resultCode = ApplicationConstants.RESULT_FROM_ADD_BRANCH;
+        }
+
 
     }
 
