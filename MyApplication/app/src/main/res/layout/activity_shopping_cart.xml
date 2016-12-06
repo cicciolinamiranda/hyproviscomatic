@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_shopping_cart"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Loader progress -->
+        <RelativeLayout
+            android:id="@+id/rl_shopping_cart_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|top"
+            android:background="@null"
+            android:alpha="0.4"
+            android:visibility="gone">
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true"/>
+        </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_shopping_cart_no_records"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="18dp"
+        android:visibility="gone"
+        android:paddingBottom="18dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/label_shopping_cart_no_label"
+            android:id="@+id/label_shopping_cart_no_label"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="20dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_shopping_cart_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".80"
+        android:orientation="horizontal">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_shopping_cart"
+            android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_shopping_cart_lower_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_shopping_cart_estimated_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:background="@color/grey_100"
+            android:orientation="horizontal">
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/estimated_total_label"
+            android:id="@+id/tv_estimated_total"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="20dp"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="100.00 Php"
+                android:id="@+id/tv_estimated_total_value"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_shopping_cart_proceed_checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:background="@color/orange_700"
+        android:clickable="true"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/btn_proceed_to_checkout"
+            android:textAllCaps="true"
+            android:id="@+id/tv_proceed_to_checkout"
+            android:layout_weight="1"
+            android:textColor="@color/light"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            />
+        </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

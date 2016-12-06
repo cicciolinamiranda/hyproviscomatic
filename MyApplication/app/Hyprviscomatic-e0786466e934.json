@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "graphite-store-147003",
+  "private_key_id": "e0786466e934ed74d818624f67fb89835591e135",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZKK6YMuESgRv1\nbAqNYr7ymzKZP9MTfKEJYg+l2k3PMJukCjTvldkhLf8ZWbFxQtbtbQ+l2v0gNo+D\neG6Oa3zv1G1qtWKxwDJEHOiy4Fg4c4Y0b9H3gjTSL/xS7J372t26B6AEaqklz5yl\neTbO0TS5d1hYQrdk4VtDJ7miXkH0A9lQ5mmQ71sDnZo56To0ENaH4bM3M8o4lI3+\nDCmJZZMvYlFgolbs5Q4FmrY9lNxP1PGVXPpPJe3/qcoO38w0UWuwDTD0xH+WbGvs\nsXc/4B9mPfc89VJoBCWnvFV0PYRsQzl0q3TZPMQKUvBKw/3bPJyiHwzazj/o5Nuh\npFkIhVJ9AgMBAAECggEBAIOu3LjkWYF8EzUur/NuhrXdEMDHaDqv34MuGKkNCRPz\nuN2vZsxGBOXO25tGvYgd7PEKqmt7sPUgwMQLepcYbSmNmlAT7+Yz0wdktGMMEdMh\nkqcni55YMamneY3beC2qWbweNZWYDDwmeioJqAef6yXwTf0vb8BXu5yscTAZkkri\nEGXFJUPgKwZUgKx5sbQDQY0LSC2u9MvVJgczk84RuKP4LUrvqQHLwiE3yrrnZNBl\noVBBRQi2+EKWP/t0K2k2XOHRFBhWzbWNBCmcRQKb/c6Qa5m/NMSItrM42iEREd4W\n2oDp5qhIoGEmvh9DhIs/i4rNji7TOMiZAgQjBJt3FcECgYEA9gs9x9poWH4hvX8v\nG1A0WU1X6OqQLOHcmA3ca3aVS3Ntf0FIBNMNF6XjNcPqHtViZe//XJ6C/fiDlSpf\n957mSdNmT6Uefv8SGmnkPvFeYNvAFe7UPtwePKFBTYM9o8kR1GhkgRAoAgHv8I5j\n5Oj9AaySFJEsCQCsVms5MEJGsS0CgYEA4fI44XQd8+BO/T9O1TSLQW2nf3qoZ3Yu\nJcxB1lKGcNWVJzxuVeEZn4vWKivTFHfwUl30oIs0I+5//nL7iAwYdxdNzFworbQV\nqHarSz1YmTHfJHV9QqZiH85YDoTXiJJjaSjFziHquLTjc4t8MORBqVxQi/YdQPAh\n7oiaCYkR2JECgYAblh8TLVXNtjaqPHxXn6J+8MEOiF4p6hkFo2g3VFBg6Uw5nGQq\nxk8Ne7gB6zlww5QIwePryon9V8PJEbs41EQVuvIZs/W7X3X0KDNDK2Tdj0X2L5T0\nh1GMkrfzrOdYWc759cpu/hS+ROFWI2Dn5YeYjHTEgZJiYATym4sJ8iRi8QKBgQCN\nFxBl2HiLvVoV0d6MTE9Y//xEInfeg3G1sKK8DrRc6UJGSfosLnAtrMiDdPJOKccr\n5/fF+KcKePf8EBj5j3QHicnO/w13yqhrlg7I4PneT8Ijpiod4IANlHBwQIvGgIML\nO6apXYyQ4oPVtxhJ/37xHvA9NeZ2knzd0vc9VRaLwQKBgCImaIX0Qyh3ZMN3mUC0\nJ1Htw3tAHonQ4TAoSj5qVp5Gq1mhN53o8cMb/zD4g+mqh3yO4r0R0dnFyBJuHrfM\nNH9gn1A2M3IjK5bcMumGloglrzmPL/v5trdVuf4UnkeQxv8DVH1w93rO/Vg4kSzH\nfjNoCQxGLG0GYc/XyPatmIxe\n-----END PRIVATE KEY-----\n",
+  "client_email": "android-app@graphite-store-147003.iam.gserviceaccount.com",
+  "client_id": "105266075288144715349",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/android-app%40graphite-store-147003.iam.gserviceaccount.com"
+}

@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">Hyprviscomatic</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username/Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="action_register">Create New Account?</string>
+    <string name="action_shops">Distributor Shop</string>
+    <string name="welcome">Welcome</string>
+    <string name="reg_shopname">Shop Name or \n Name Of Owner</string>
+    <string name="reg_shopaddress">Shop address</string>
+    <string name="reg_shop_contact_num">Contact Number</string>
+    <string name="reg_shop_shipping_address">Shipping Address</string>
+    <string name="reg_shop_picture">Pictures of the\nStore Branch</string>
+    <string name="reg_shop_picture_permit">Pictures of\nMayor\'s Permit or\nDTI or \nBrgy Permit</string>
+    <string name="reg_shop_branch">Branch</string>
+    <string name="action_add_branch">Add Branch</string>
+    <string name="tv_reg_password">Password</string>
+    <string name="tv_reg_email_address">Email</string>
+    <string name="action_submit">Submit</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="nav_logout">Log out</string>
+    <string name="label_branch_name">Branch Name</string>
+    <string name="label_branch_address">Address</string>
+    <string name="label_branch_phone">Contact Number</string>
+    <string name="cancel">Cancel</string>
+    <string name="is_required">Required</string>
+    <string name="action_ok">OK</string>
+    <string name="save">SAVE</string>
+    <string name="tv_branch_list_permit_header">Pictures of Mayor\\\'s Permit or DTI or Barangay Permit</string>
+    <string name="save_modification">Save Changes</string>
+    <string name="nav_products">Shop now!</string>
+    <string name="nav_shopping_cart">Cart Items</string>
+    <string name="nav_branch">Branch</string>
+    <string name="add_to_cart">Add to\ncart</string>
+    <string name="label_brand_default_value">0</string>
+    <string name="label_brand_qty">Qty</string>
+    <string name="brand_qty_default">How many?</string>
+    <string name="added_to_cart">Added to\ncart</string>
+    <string name="action_save_new_qty">Save new\nquantity</string>
+    <string name="label_shopping_cart_no_label">Your cart is empty!</string>
+    <string name="label_brand_name">Brand name: </string>
+    <string name="label_product_name">Product name:</string>
+    <string name="changes_saved">Changes saved</string>
+    <string name="btn_proceed_to_checkout">Proceed to checkout</string>
+    <string name="estimated_total_label">Estimated total:</string>
+    <string name="action_checkout">Order sent. Please wait for email approval</string>
+    <string name="notif_msg_action_delete">Delete Message</string>
+    <string name="label_existing_branch_no_label">No Branch saved</string>
+    <string name="order_number_label">Order #</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyABg9rxXdKz6R5r6VvFDxwVVsbjvXIxyw4</string>
+    <string name="google_app_id">graphite-store-147003</string>
+    <string name="shops_page_label">Shops</string>
+    <string name="shops_search_hint">Search location</string>
+
+    <string name="address_found">Address found</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="service_not_available">Sorry, Address is currently unavailable when not connected to a network.</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+    <string name="no_geocoder_available">No geocoder available</string>
+    <string name="label_sign_in_here">Sign in here</string>
+    <string name="title_activity_products">Products</string>
+    <string name="title_activity_products_distributor">Distributor Shop</string>
+    <string name="title_activity_orders">My Orders</string>
+    <string name="title_activity_branches">Branches</string>
+    <string name="title_activity_cart">Cart Items</string>
+    <string name="title_activity_notif">Notifications</string>
+    <string name="title_activity_add_branch">Branch Details</string>
+    <string name="unable_to_register">Unable to Register. Please Try Again. Maybe your email is already existing</string>
+    <string name="registration_inp">Please wait...</string>
+    <string name="currently_registering">Submitting request : %s</string>
+    <string name="try_again">Please try again.</string>
+    <string name="max_of_three_photos">Max of 3 photos only</string>
+    <string name="title_activity_search_address">Search Location</string>
+    <string name="reg_address_lat_lng">Map Location</string>
+    <string name="place_details">
+    <![CDATA[
+        <b>%1$s</b>
+        <br/>
+        <i>Place Id: %2$s</i>
+        <br/>
+        Address: %3$s
+        <br/>
+        Phone: %4$s
+        <br/>
+        Website: %5$s
+    ]]>
+    </string>
+    <string name="gPlaces_url">\"https://maps.googleapis.com/maps/api/place\"</string>
+    <string name="reg_shop_branch_address">Complete Address</string>
+    <string name="autocomplete_hint">Search Location</string>
+
+
+<!--Endpoints-->
+    <string name="endpoint_server">http://139.162.57.95</string>
+    <string name="endpoint_post_registration">/api/registration</string>
+    <string name="endpoint_get_purchase">/api/purchase?ordering=-date_added</string>
+    <string name="endpoint_get_notifications">/api/announcement?ordering=-date_added</string>
+    <string name="endpoint_post_login">/api-token-auth</string>
+    <string name="endpoint_get_products">/api/product</string>
+    <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>
+    <string name="endpoint_get_branch">/api/branch</string>
+    <string name="unable_to_retrieve_branch">Unable to retrieve Branch(es)</string>
+    <string name="label_existing_products_no_label">No Products Available</string>
+    <string name="unable_to_checkout_order">Unable to process checkout your items. Please Try Again.</string>
+    <string name="unable_to_retrieve_products">Unable to retrieve list of products.</string>
+    <string name="unable_to_add_branch">Unable to save branch. Please Try Again</string>
+    <string name="unable_to_save_branch">Unable to save branch. Please Try Again.</string>
+    <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
+    <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
+    <string name="estimated_discount_label">Discount</string>
+    <string name="unable_to_get_notif">Unable to get notifications</string>
+    <string name="total_label">Total</string>
+    <string name="label_order_no_label">No Order Records</string>
+</resources>
