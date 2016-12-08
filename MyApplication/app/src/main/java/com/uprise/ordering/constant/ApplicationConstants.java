@@ -58,4 +58,5 @@ public class ApplicationConstants {
     public static final int RESULT_FROM_ADD_BRANCH_SIGNED_IN = 0x17;
 
 
+    public static final int RESULT_FROM_SORT_BY_BRANCH = 0x18;
 }

@@ -108,7 +108,7 @@
     <string name="autocomplete_hint">Search Location</string>
 
 
-<!--Endpoints-->
+    <!--Endpoints-->
     <string name="endpoint_server">http://139.162.57.95</string>
     <string name="endpoint_post_registration">/api/registration</string>
     <string name="endpoint_get_purchase">/api/purchase?ordering=-date_added</string>
@@ -129,4 +129,9 @@
     <string name="unable_to_get_notif">Unable to get notifications</string>
     <string name="total_label">Total</string>
     <string name="label_order_no_label">No Order Records</string>
+    <string name="sort_by_brand">Sort By Brand</string>
+    <string name="brand_names">Brand Names</string>
+    <string name="label_brand_no_label">No Brands Available</string>
+    <string name="unable_to_retrieve_brand">Unable to retrieve Brand Names</string>
+    <string name="endpoint_get_brand_names">/api/brand</string>
 </resources>

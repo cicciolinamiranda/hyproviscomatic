@@ -18,6 +18,7 @@ import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.model.SorterBrandModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
@@ -61,6 +62,7 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private LinearLayout llNoRecords;
     private SqlDatabaseHelper sqlDatabaseHelper;
     private LoginModel loginModel;
+    private SorterBrandModel sorterBrandModel;
 
     @Nullable
     @Override
@@ -78,17 +80,29 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
         restCallServices = new RestCallServices(getContext());
+
+        sorterBrandModel = getActivity().getIntent().getParcelableExtra("sorterBrandModel");
         final String productsEndpoint = getResources().getString(R.string.endpoint_server)
         + getResources().getString(R.string.endpoint_get_products);
+
         if(loginModel != null && loginModel.getToken() != null &&
                 Util.getInstance().isNetworkAvailable(getContext())) {
-            restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
+
+
+            if(sorterBrandModel != null) {
+                restCallServices.getSortedBrands(getContext(), this, loginModel.getToken(), sorterBrandModel.getUrl());
+
+            } else {
+                restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
+
+            }
             mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
             mProgressView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
         }
+
         return rowView;
     }
 
@@ -113,38 +127,77 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         mProgressView.setVisibility(View.GONE);
         previousMenu.setVisible(false);
         nextMenu.setVisible(false);
-        try {
-            JSONObject jsnobject = new JSONObject(string);
-            JSONArray jsonArray = new JSONArray();
-            if(jsnobject != null) {
-                jsonArray = jsnobject.getJSONArray("results");
-            }
 
-            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
-
-                nextUrl = jsnobject.getString("next");
-                nextMenu.setVisible(true);
-            }
-            if(jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
-                    && !jsnobject.getString("previous").contentEquals("null")) {
-                prevUrl = jsnobject.getString("previous");
-                previousMenu.setVisible(true);
-            }
-
-
-            if(jsonArray != null) {
-                productModels = new ArrayList<>();
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    if(jsonArray.getJSONObject(i) != null) {
-                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
-                    }
-                    populateProductList();
+        if(callType == RestCalls.PRODUCTS) {
+            try {
+                JSONObject jsnobject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+                if (jsnobject != null) {
+                    jsonArray = jsnobject.getJSONArray("results");
                 }
-            }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+                if (jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null")) {
+
+                    nextUrl = jsnobject.getString("next");
+                    nextMenu.setVisible(true);
+                }
+                if (jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+                        && !jsnobject.getString("previous").contentEquals("null")) {
+                    prevUrl = jsnobject.getString("previous");
+                    previousMenu.setVisible(true);
+                }
+
+
+                if (jsonArray != null) {
+                    productModels = new ArrayList<>();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if (jsonArray.getJSONObject(i) != null) {
+                            productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                        }
+                        populateProductList();
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if(callType == RestCalls.BRAND) {
+            try {
+                JSONObject jsnobject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+                if (jsnobject != null) {
+                    jsonArray = jsnobject.getJSONArray("products");
+                }
+
+//                if (jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null")) {
+//
+//                    nextUrl = jsnobject.getString("next");
+//                    nextMenu.setVisible(true);
+//                }
+//                if (jsnobject.getString("previous") != null && !jsnobject.getString("previous").isEmpty()
+//                        && !jsnobject.getString("previous").contentEquals("null")) {
+//                    prevUrl = jsnobject.getString("previous");
+//                    previousMenu.setVisible(true);
+//                }
+
+
+                if (jsonArray != null) {
+                    productModels = new ArrayList<>();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if (jsonArray.getJSONObject(i) != null) {
+                            productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                        }
+                        populateProductList();
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

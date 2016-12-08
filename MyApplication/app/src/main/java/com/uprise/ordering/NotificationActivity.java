@@ -184,7 +184,7 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.pagination_menu, menu);
+        mi.inflate(R.menu.distributor_shop_menu, menu);
         previousMenu = menu.findItem(R.id.menu_orderlist_prev);
         previousMenu.setVisible(false);
         nextMenu = menu.findItem(R.id.menu_orderlist_next);

@@ -414,6 +414,51 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void getSortedBrands(final Context ctx, final RestServiceListener listener, final String token
+            , final String brandsEndpoint) {
+//        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_products);
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(brandsEndpoint, token);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
+
+            }
+
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.BRAND
+                            , ctx.getString(R.string.unable_to_retrieve_brand));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("products")) {
+                            listener.onSuccess(RestCalls.BRAND,  jsonResult);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.BRAND
+                                , ctx.getString(R.string.unable_to_retrieve_brand));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
+    }
+
     public void getProducts(final Context ctx, final RestServiceListener listener, final String token
             , final String productsEndpoint) {
 //        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
@@ -435,7 +480,7 @@ public class RestCallServices {
 
                 if (jsonResult == null || jsonResult.isEmpty()) {
 
-                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                    RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
                             , ctx.getString(R.string.unable_to_retrieve_branch));
                 } else {
                     try {
@@ -445,7 +490,7 @@ public class RestCallServices {
                             listener.onSuccess(RestCalls.PRODUCTS,  jsonResult);
                         }
                         else if(null != jsnobject.get("detail")) {
-                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
                                     , jsnobject.get("detail").toString());
                         }
 
@@ -541,6 +586,51 @@ public class RestCallServices {
     }
 
 
+    public void getBrandNames(final Context ctx, final RestServiceListener listener, final String token, final String brandEndpoint) {
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(brandEndpoint, token);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
+
+            }
+
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.BRAND
+                            , ctx.getString(R.string.unable_to_retrieve_brand));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.BRAND,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.BRAND
+                                    , jsnobject.get("detail").toString());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.BRAND
+                                , ctx.getString(R.string.unable_to_retrieve_brand));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
+    }
     public void getDistributorShop(final Context ctx, final RestServiceListener listener, final String productsEndpoint) {
 //        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
 //                + ctx.getResources().getString(R.string.endpoint_get_products);
@@ -561,7 +651,7 @@ public class RestCallServices {
 
                 if (jsonResult == null || jsonResult.isEmpty()) {
 
-                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                    RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
                             , ctx.getString(R.string.unable_to_retrieve_branch));
                 } else {
                     try {
@@ -571,7 +661,7 @@ public class RestCallServices {
                             listener.onSuccess(RestCalls.PRODUCTS,  jsonResult);
                         }
                         else if(null != jsnobject.get("detail")) {
-                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
                                     , jsnobject.get("detail").toString());
                         }
 

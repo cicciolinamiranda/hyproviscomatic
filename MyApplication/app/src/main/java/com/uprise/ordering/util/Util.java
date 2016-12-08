@@ -34,6 +34,7 @@ import com.uprise.ordering.model.NotificationsModel;
 import com.uprise.ordering.model.OrderItemsModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.model.SorterBrandModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -382,8 +383,6 @@ public class Util {
     public ProductModel generateProductModelFromJson(JSONObject jsonObject) {
         ProductModel productModel = new ProductModel();
 
-
-
         try {
             if(jsonObject.getString("id") != null) productModel.setId(jsonObject.getString("id"));
             if(jsonObject.getString("name") != null) productModel.setName(jsonObject.getString("name"));
@@ -415,6 +414,21 @@ public class Util {
         return null;
     }
 
+    public SorterBrandModel generateBrandNamesFromJson(JSONObject jsonObject) {
+        SorterBrandModel sorterBrandModel = new SorterBrandModel();
+
+        try {
+            if(jsonObject.getString("id") != null) sorterBrandModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) sorterBrandModel.setName(jsonObject.getString("name"));
+            if(jsonObject.getString("url") != null) sorterBrandModel.setUrl(jsonObject.getString("url"));
+
+        return sorterBrandModel;
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+    }
     public ProductModel generateDistributorShopFromJson(JSONObject jsonObject) {
         ProductModel productModel = new ProductModel();
 

@@ -160,7 +160,14 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+
+        int id = item.getItemId();
+
+        if(id == R.id.menu_sort_by_brand) {
+            startActivity(new Intent(this, SortedByBrandActivity.class));
+            finish();
+        }
+        return true;
 
 
     }
