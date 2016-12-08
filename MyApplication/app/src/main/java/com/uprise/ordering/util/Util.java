@@ -401,7 +401,7 @@ public class Util {
                         if(jsonValue.getString("brand") != null) brandModel.setId(jsonValue.getString("brand"));
                         if(jsonValue.getString("brand_name") != null) brandModel.setBrandName(jsonValue.getString("brand_name"));
                         if(jsonValue.getString("image") != null) brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
-                        if(jsonValue.getString("price") != null) brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
+                        if(jsonValue.getString("price") != null && !jsonValue.getString("price").isEmpty()) brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
                         brands.add(brandModel);
                     }
                 }
