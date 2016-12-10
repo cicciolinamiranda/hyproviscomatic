@@ -221,6 +221,29 @@ public class Util {
         return result;
     }
 
+    public BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels) {
+        BrandModel result = new BrandModel();
+        for(int i=0; i<brandModels.size(); i++) {
+            if(brandModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getBrandId())) {
+                result = brandModels.get(i);
+            }
+        }
+        return result;
+    }
+
+
+    public ProductModel getMatchedProductModel(CartItemsModel cartItemsModel, List<ProductModel> productModels, String brandId) {
+        ProductModel result = new ProductModel();
+        for(int i=0; i<productModels.size(); i++) {
+            if(cartItemsModel.getBrandId().equalsIgnoreCase(brandId) &&
+                    productModels.get(i).getId().equalsIgnoreCase(cartItemsModel.getProductModelId()) &&
+                    productModels.get(i).getAttributeId().equalsIgnoreCase(cartItemsModel.getAttributeId())) {
+                result = productModels.get(i);
+            }
+        }
+        return result;
+    }
+
 
     public BrandModel getMatchedBrandModel(CartItemsModel cartItemsModel, List<BrandModel> brandModels, String productId) {
         BrandModel result = new BrandModel();
@@ -235,9 +258,15 @@ public class Util {
     }
 
     public boolean isProductsAndCartItemsNotEmpty(List<ProductModel> productModels,
-                                                   List<CartItemsModel> cartItemsModels) {
+                                                       List<CartItemsModel> cartItemsModels) {
         return cartItemsModels != null && !cartItemsModels.isEmpty() && productModels != null
                 && !productModels.isEmpty();
+    }
+
+    public boolean isBrandsAndCartItemsNotEmpty(List<BrandModel> brandModels,
+                                                  List<CartItemsModel> cartItemsModels) {
+        return cartItemsModels != null && !cartItemsModels.isEmpty() && brandModels != null
+                && !brandModels.isEmpty();
     }
 
     //Mock only
@@ -294,6 +323,30 @@ public class Util {
         }
         return cartItemsModels;
     }
+
+    public double computeBrandEstimatedTotal(List<BrandModel> brandModels, List<CartItemsModel> cartItemsModels) {
+        double total = 0d;
+
+
+        for (CartItemsModel model : cartItemsModels) {
+            if (Util.getInstance().isBrandsAndCartItemsNotEmpty(brandModels, cartItemsModels)) {
+
+
+                BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(model, brandModels);
+
+                if (matchedBrandModel != null && matchedBrandModel.getProducts() != null &&
+                        !matchedBrandModel.getProducts().isEmpty()) {
+                    ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(model, matchedBrandModel.getProducts(), matchedBrandModel.getId());
+                    if (matchedProductModel != null) {
+                        total += matchedProductModel.getPrice() * model.getQuantity();
+                    }
+                }
+
+            }
+        }
+        return total;
+    }
+
 
     public double computeEstimatedTotal(List<ProductModel> productModels, List<CartItemsModel> cartItemsModels) {
         double total = 0d;
@@ -379,6 +432,42 @@ public class Util {
 
     }
 
+    public BrandModel generateBrandModelFromJson(JSONObject jsonObject) {
+        BrandModel brandModel = new BrandModel();
+
+
+
+        try {
+            if(jsonObject.getString("id") != null) brandModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) brandModel.setBrandName(jsonObject.getString("name"));
+
+            if(jsonObject.getString("attributes") != null) {
+                JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");
+                ArrayList<ProductModel> products = new ArrayList<>();
+
+                for(int i = 0; i < jsonAttributesArray.length(); i++) {
+                    ProductModel productModel = new ProductModel();
+                    JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
+                    if(attributeItem.getString("id") != null) productModel.setAttributeId(attributeItem.getString("id"));
+                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("product") && attributeItem.getJSONObject("value") != null) {
+                        JSONObject jsonValue = attributeItem.getJSONObject("value");
+                        if(jsonValue.getString("product") != null) productModel.setId(jsonValue.getString("product"));
+                        if(jsonValue.getString("product_name") != null) productModel.setName(jsonValue.getString("product_name"));
+                        if(jsonValue.getString("image") != null) productModel.setProductPhotoUrl(jsonValue.getString("image"));
+                        if(jsonValue.getString("price") != null && !jsonValue.getString("price").isEmpty()) productModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
+                        products.add(productModel);
+                    }
+                }
+                brandModel.setProducts(products);
+            }
+            return brandModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public ProductModel generateProductModelFromJson(JSONObject jsonObject) {
         ProductModel productModel = new ProductModel();
 
@@ -401,7 +490,7 @@ public class Util {
                         if(jsonValue.getString("brand") != null) brandModel.setId(jsonValue.getString("brand"));
                         if(jsonValue.getString("brand_name") != null) brandModel.setBrandName(jsonValue.getString("brand_name"));
                         if(jsonValue.getString("image") != null) brandModel.setBrandPhotoUrl(jsonValue.getString("image"));
-                        if(jsonValue.getString("price") != null) brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
+                        if(jsonValue.getString("price") != null && !jsonValue.getString("price").isEmpty()) brandModel.setPrice(Double.parseDouble(jsonValue.getString("price")));
                         brands.add(brandModel);
                     }
                 }
@@ -412,6 +501,40 @@ public class Util {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    public BrandModel generateBrandsDistributorShopFromJson(JSONObject jsonObject) {
+        BrandModel brandModel = new BrandModel();
+
+
+
+        try {
+            if(jsonObject.getString("id") != null) brandModel.setId(jsonObject.getString("id"));
+            if(jsonObject.getString("name") != null) brandModel.setBrandName(jsonObject.getString("name"));
+
+            if(jsonObject.getString("attributes") != null) {
+                JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");
+                ArrayList<ProductModel> products = new ArrayList<>();
+
+                for(int i = 0; i < jsonAttributesArray.length(); i++) {
+                    ProductModel productModel = new ProductModel();
+                    JSONObject attributeItem = jsonAttributesArray.getJSONObject(i);
+                    if(attributeItem.getString("id") != null) productModel.setAttributeId(attributeItem.getString("id"));
+                    if(attributeItem.getString("name") != null & attributeItem.getString("name").equalsIgnoreCase("product") && attributeItem.getJSONObject("value") != null) {
+                        JSONObject jsonValue = attributeItem.getJSONObject("value");
+                        if(jsonValue.getString("product") != null) productModel.setId(jsonValue.getString("product"));
+                        if(jsonValue.getString("product_name") != null) productModel.setName(jsonValue.getString("product_name"));
+                        if(jsonValue.getString("image") != null) productModel.setProductPhotoUrl(jsonValue.getString("image"));
+                        products.add(productModel);
+                    }
+                }
+                brandModel.setProducts(products);
+            }
+            return brandModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

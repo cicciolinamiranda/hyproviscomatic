@@ -23,8 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
+import com.uprise.ordering.fragment.BrandsFragment;
 import com.uprise.ordering.fragment.MapLocationFragment;
-import com.uprise.ordering.fragment.ProductsFragment;
 import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.model.LoginModel;
 
@@ -37,7 +37,8 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
         SearchView.OnSuggestionListener {
 
     private MapLocationFragment mapLocationFragment;
-    private ProductsFragment productsFragment;
+//    private ProductsFragment productsFragment;
+    private BrandsFragment brandsFragment;
 
     private View headerLayout;
     private SearchView searchShopsView;
@@ -87,7 +88,8 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
 //            tx.replace(R.id.content_frame, productsFragment);
 //            tx.commit();
 
-            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_products);
+//            productsFragment = (ProductsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_shop_now);
+            brandsFragment = (BrandsFragment) getSupportFragmentManager().findFragmentById(R.id.frag_shop_now);
         }
 
         shopOnMapModelList = new ArrayList<>();
@@ -128,7 +130,7 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
 //                break;
             case R.id.nav_shopping_cart:
                 finish();
-                startActivity(new Intent(MainActivity.this, ShoppingCartActivity.class));
+                startActivity(new Intent(MainActivity.this, BrandBasedShoppingCartActivity.class));
                 break;
             case R.id.nav_notifications:
                 finish();

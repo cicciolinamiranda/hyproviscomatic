@@ -14,6 +14,9 @@ public class ProductModel implements Parcelable {
     private String id;
     private String name;
     private ArrayList<BrandModel> brands;
+    private String productPhotoUrl;
+    private String attributeId;
+    private double price;
 
     public ProductModel() {
         this.brands = new ArrayList<>();
@@ -24,6 +27,9 @@ public class ProductModel implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeTypedList(brands);
+        parcel.writeString(productPhotoUrl);
+        parcel.writeString(attributeId);
+        parcel.writeDouble(price);
     }
 
     protected ProductModel(Parcel in) {
@@ -31,6 +37,9 @@ public class ProductModel implements Parcelable {
         id = in.readString();
         name = in.readString();
         brands = in.createTypedArrayList(BrandModel.CREATOR);
+        productPhotoUrl = in.readString();
+        attributeId = in.readString();
+        price = in.readDouble();
     }
 
     public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
@@ -67,6 +76,30 @@ public class ProductModel implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getProductPhotoUrl() {
+        return productPhotoUrl;
+    }
+
+    public void setProductPhotoUrl(String productPhotoUrl) {
+        this.productPhotoUrl = productPhotoUrl;
+    }
+
+    public String getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override

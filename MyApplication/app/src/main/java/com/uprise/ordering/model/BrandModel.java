@@ -3,6 +3,8 @@ package com.uprise.ordering.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by cicciolina on 10/22/16.
  */
@@ -14,6 +16,7 @@ public class BrandModel implements Parcelable {
     private String brandPhotoUrl;
     private String brandName;
     private double price;
+    private ArrayList<ProductModel> products;
 
     public BrandModel() {}
 
@@ -24,6 +27,7 @@ public class BrandModel implements Parcelable {
         parcel.writeDouble(price);
         parcel.writeString(brandPhotoUrl);
         parcel.writeString(attributeId);
+        parcel.writeTypedList(products);
     }
 
     public BrandModel(Parcel in) {
@@ -33,6 +37,7 @@ public class BrandModel implements Parcelable {
         price = in.readDouble();
         brandPhotoUrl = in.readString();
         attributeId = in.readString();
+        products = in.createTypedArrayList(ProductModel.CREATOR);
     }
 
     public static final Creator<BrandModel> CREATOR = new Creator<BrandModel>() {
@@ -85,6 +90,14 @@ public class BrandModel implements Parcelable {
 
     public void setAttributeId(String attributeId) {
         this.attributeId = attributeId;
+    }
+
+    public ArrayList<ProductModel> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<ProductModel> products) {
+        this.products = products;
     }
 
     @Override

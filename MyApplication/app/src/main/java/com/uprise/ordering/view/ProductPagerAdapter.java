@@ -22,21 +22,21 @@ import android.widget.TextView;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * Created by cicciolina on 10/24/16.
+ * Created by cicciolina on 12/10/16.
  */
 
-public class BrandsPagerAdapter extends PagerAdapter {
+public class ProductPagerAdapter extends PagerAdapter {
 
-    private final List<BrandModel> web;
+    private final List<ProductModel> web;
     private Context mContext;
     private final Resources resources;
     private LayoutInflater mLayoutInflater;
@@ -46,26 +46,25 @@ public class BrandsPagerAdapter extends PagerAdapter {
     private ImageView itemImage;
     private Button addToCartBtn;
     private int oldQtyValue;
-    private BrandsPagerAdapter.BrandsPagerAdapterListener listener;
+    private ProductPagerAdapter.ProductPagerAdapterListener listener;
     private Button saveEditBtn;
-    private String productId;
+    private String brandId;
     private CartItemsModel savedCardItem;
     private List<CartItemsModel> cartItemsModelList;
-    private LinearLayout llBrandPrice;
-    private LinearLayout llBrandQty;
+    private LinearLayout llProductPrice;
+    private LinearLayout llProductQty;
     private LinearLayout llQtyButtons;
     private LinearLayout llTransacBtn;
     private SqlDatabaseHelper sqlDatabaseHelper;
     private LoginModel loginModel;
 
-    public BrandsPagerAdapter(Context context, List<BrandModel> web, List<CartItemsModel> cartItemsModelList, BrandsPagerAdapter.BrandsPagerAdapterListener listener, String productId) {
+    public ProductPagerAdapter(Context context, List<ProductModel> web, List<CartItemsModel> cartItemsModelList, ProductPagerAdapter.ProductPagerAdapterListener listener, String brandId) {
         this.mContext = context;
         this.mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.resources = context.getResources();
         this.web = web;
         this.listener = listener;
-        this.productId = productId;
-//        this.productPosition = productPosition;
+        this.brandId = brandId;
         savedCardItem = new CartItemsModel();
         this.cartItemsModelList = cartItemsModelList;
         sqlDatabaseHelper = new SqlDatabaseHelper(context);
@@ -87,7 +86,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.custom_brand_list, container, false);
         TextView tvBrandName =(TextView) itemView.findViewById(R.id.tv_brand_name);
-        tvBrandName.setText(web.get(position).getBrandName());
+        tvBrandName.setText(web.get(position).getName());
         TextView tvBrandPrice =(TextView) itemView.findViewById(R.id.tv_brand_price);
 //        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
@@ -97,8 +96,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
         //TODO: Since no storage, response is Base64
 //        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) new ImageDownloaderTask(itemImage).execute(web.get(position).getBrandPhotoUrl());
 
-        if(web.get(position).getBrandPhotoUrl() != null && !web.get(position).getBrandPhotoUrl().isEmpty()) {
-            String replacedBase64 = web.get(position).getBrandPhotoUrl().replace("data:image/jpeg;base64,","");
+        if(web.get(position).getProductPhotoUrl() != null && !web.get(position).getProductPhotoUrl().isEmpty()) {
+            String replacedBase64 = web.get(position).getProductPhotoUrl().replace("data:image/jpeg;base64,","");
             if(replacedBase64.contains("data:image/png;base64,")) {
                 replacedBase64 = replacedBase64.replace("data:image/png;base64,","");
             }
@@ -112,19 +111,19 @@ public class BrandsPagerAdapter extends PagerAdapter {
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
-        BrandsPagerAdapter.CountListener count = new BrandsPagerAdapter.CountListener(itemView, web.get(position).getId(), productId, web.get(position).getPrice(), web.get(position).getAttributeId());
+        ProductPagerAdapter.CountListener count = new ProductPagerAdapter.CountListener(itemView, web.get(position).getId(), brandId, web.get(position).getPrice(), web.get(position).getAttributeId());
 
 
 //        LoginSharedPref loginSharedPref = new LoginSharedPref();
         loginModel = sqlDatabaseHelper.getLoginCredentials();
 
-        llBrandPrice = (LinearLayout) itemView.findViewById(R.id.ll_brand_price);
-        llBrandQty = (LinearLayout) itemView.findViewById(R.id.ll_brand_qty);
+        llProductPrice = (LinearLayout) itemView.findViewById(R.id.ll_brand_price);
+        llProductQty = (LinearLayout) itemView.findViewById(R.id.ll_brand_qty);
         llQtyButtons = (LinearLayout) itemView.findViewById(R.id.ll_item_qty_buttons);
         llTransacBtn = (LinearLayout) itemView.findViewById(R.id.ll_transac_buttons);
         if(loginModel == null || loginModel.getUsername() == null) {
-            llBrandPrice.setVisibility(View.INVISIBLE);
-            llBrandQty.setVisibility(View.INVISIBLE);
+            llProductPrice.setVisibility(View.INVISIBLE);
+            llProductQty.setVisibility(View.INVISIBLE);
             llQtyButtons.setVisibility(View.INVISIBLE);
             llTransacBtn.setVisibility(View.INVISIBLE);
         }
@@ -138,8 +137,8 @@ public class BrandsPagerAdapter extends PagerAdapter {
 //        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext, loginSharedPref.getUsername(mContext));
         if(cartItemsModelList != null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
-                if (cartItemsModel.getBrandId().equalsIgnoreCase(web.get(position).getId())
-                        && cartItemsModel.getProductModelId().equalsIgnoreCase(productId)) {
+                if (cartItemsModel.getBrandId().equalsIgnoreCase(brandId)
+                        && cartItemsModel.getProductModelId().equalsIgnoreCase(web.get(position).getId())) {
                     addToCartBtn.setEnabled(false);
                     addToCartBtn.setText(resources.getString(R.string.added_to_cart));
                     saveEditBtn.setVisibility(View.GONE);
@@ -159,10 +158,6 @@ public class BrandsPagerAdapter extends PagerAdapter {
         container.removeView((LinearLayout) object);
     }
 
-    public interface BrandsPagerAdapterListener {
-        void addToCart(CartItemsModel cartItemsModel);
-        void editCartItem(CartItemsModel cartItemsModel);
-    }
 
     private class CountListener implements View.OnClickListener, TextWatcher {
         int count;
@@ -171,7 +166,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         ImageButton plusBtn;
         Button addToCartBtn;
         Button saveEditBtn;
-//        int brandPosition;
+        //        int brandPosition;
 //        int productPosition;
         String brandId;
         String productId;
@@ -180,7 +175,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         View itemView;
         double price;
 
-        public CountListener(View itemView, String brandId, String productId, double price, String attributeId) {
+        public CountListener(View itemView, String productId, String brandId, double price, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
@@ -317,5 +312,10 @@ public class BrandsPagerAdapter extends PagerAdapter {
         }
 
 
+    }
+
+    public interface ProductPagerAdapterListener {
+        void addToCart(CartItemsModel cartItemsModel);
+        void editCartItem(CartItemsModel cartItemsModel);
     }
 }

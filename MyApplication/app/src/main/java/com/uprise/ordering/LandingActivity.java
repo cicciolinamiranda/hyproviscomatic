@@ -114,7 +114,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
                 break;
             case R.id.tv_distributor_shop:
                 tvDistributorShop.setTextColor(getResources().getColor(R.color.material_orange));
-                startActivity(new Intent(LandingActivity.this, DistributorShopActivity.class));
+                startActivity(new Intent(LandingActivity.this, BrandBasedDistributorShopActivity.class));
                 finish();
                 break;
         }

@@ -435,8 +435,8 @@ public class RestCallServices {
 
                 if (jsonResult == null || jsonResult.isEmpty()) {
 
-                    RestCallServices.this.failedPost(listener, RestCalls.LOGIN
-                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                    RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
+                            , ctx.getString(R.string.unable_to_retrieve_products));
                 } else {
                     try {
                         JSONObject jsnobject = new JSONObject(jsonResult);
@@ -445,7 +445,7 @@ public class RestCallServices {
                             listener.onSuccess(RestCalls.PRODUCTS,  jsonResult);
                         }
                         else if(null != jsnobject.get("detail")) {
-                            RestCallServices.this.failedPost(listener, RestCalls.LOGIN
+                            RestCallServices.this.failedPost(listener, RestCalls.PRODUCTS
                                     , jsnobject.get("detail").toString());
                         }
 

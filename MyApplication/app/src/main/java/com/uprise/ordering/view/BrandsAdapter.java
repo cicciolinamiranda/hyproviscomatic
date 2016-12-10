@@ -11,35 +11,35 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.uprise.ordering.R;
+import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
-import com.uprise.ordering.model.ProductModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by cicciolina on 10/22/16.
+ * Created by cicciolina on 12/10/16.
  */
 
-public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPager.OnPageChangeListener {
+public class BrandsAdapter extends BaseExpandableListAdapter implements ViewPager.OnPageChangeListener {
 
     private LayoutInflater inflater;
-    private ArrayList<ProductModel> mParent;
+    private ArrayList<BrandModel> mParent;
     private ExpandableListView accordion;
     public int lastExpandedGroupPosition;
     private Context context;
     private ViewPager viewPagerBrandList;
     private ImageButton leftNav;
     private ImageButton rightNav;
-    private BrandsPagerAdapter.BrandsPagerAdapterListener brandsAdapterListener;
+    private ProductPagerAdapter.ProductPagerAdapterListener productPagerAdapterListener;
     private List<CartItemsModel> cartItemsModelList;
-    private int brandListSize;
+    private int productListSize;
 
-    private ProductsAdapter.ProductsAdapterListener productsAdapterListener;
+    private BrandsAdapter.BrandsAdapterListener brandsAdapterListener;
 
-    public ProductsAdapter(Context context, ArrayList<ProductModel> parent, ExpandableListView accordion,
-                           BrandsPagerAdapter.BrandsPagerAdapterListener brandsAdapterListener,
-                           ProductsAdapter.ProductsAdapterListener productsAdapterListener,
+    public BrandsAdapter(Context context, ArrayList<BrandModel> parent, ExpandableListView accordion,
+                           ProductPagerAdapter.ProductPagerAdapterListener productPagerAdapterListener,
+                           BrandsAdapter.BrandsAdapterListener brandsAdapterListener,
                            List<CartItemsModel> cartItemsModelList) {
         this.mParent = parent;
         this.inflater = LayoutInflater.from(context);
@@ -47,8 +47,9 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         this.context = context;
         this.brandsAdapterListener = brandsAdapterListener;
         this.cartItemsModelList = cartItemsModelList;
-        this.productsAdapterListener = productsAdapterListener;
+        this.productPagerAdapterListener = productPagerAdapterListener;
     }
+
 
     @Override
     //counts the number of group/parent items so the list knows how many times calls getGroupView() method
@@ -59,21 +60,21 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
     @Override
     //counts the number of children items so the list knows how many times calls getChildView() method
     public int getChildrenCount(int i) {
-        this.brandListSize = mParent.get(i).getBrands().size();
+        this.productListSize = mParent.get(i).getProducts().size();
         return 1;
     }
 
     @Override
     //gets the title of each parent/group
     public Object getGroup(int i) {
-        return mParent.get(i).getName();
+        return mParent.get(i).getBrandName();
     }
 
     @Override
     //gets the name of each item
     public Object
     getChild(int i, int i1) {
-        return mParent.get(i).getBrands().get(i1);
+        return mParent.get(i).getProducts().get(i1);
     }
     @Override
     public long getGroupId(int i) {
@@ -125,11 +126,11 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         }
         viewPagerBrandList = (ViewPager) view.findViewById(R.id.viewpager_brand_list);
 
-            BrandsPagerAdapter brandsPagerAdapter = new BrandsPagerAdapter(context, mParent.get(i).getBrands(), cartItemsModelList, brandsAdapterListener, mParent.get(i).getId());
-            brandsPagerAdapter.notifyDataSetChanged();
-            viewPagerBrandList.setAdapter(brandsPagerAdapter);
+        ProductPagerAdapter productPagerAdapter = new ProductPagerAdapter(context, mParent.get(i).getProducts(), cartItemsModelList, productPagerAdapterListener, mParent.get(i).getId());
+        productPagerAdapter.notifyDataSetChanged();
+        viewPagerBrandList.setAdapter(productPagerAdapter);
 
-        viewPagerBrandList.setOffscreenPageLimit(mParent.get(i).getBrands().size());
+        viewPagerBrandList.setOffscreenPageLimit(mParent.get(i).getProducts().size());
         viewPagerBrandList.addOnPageChangeListener(this);
         leftNav = (ImageButton) view.findViewById(R.id.left_nav);
         rightNav = (ImageButton) view.findViewById(R.id.right_nav);
@@ -166,14 +167,14 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
                 tab++;
                 leftNav.setVisibility(View.VISIBLE);
                 viewPagerBrandList.setCurrentItem(tab);
-                if(viewPagerBrandList.getCurrentItem() == mParent.get(i).getBrands().size() - 1) {
+                if(viewPagerBrandList.getCurrentItem() == mParent.get(i).getProducts().size() - 1) {
                     rightNav.setVisibility(View.GONE);
                 }
             }
         });
 
-        if(productsAdapterListener.isAddOrSaved()) {
-            viewPagerBrandList.setCurrentItem(productsAdapterListener.pageSaved());
+        if(brandsAdapterListener.isAddOrSaved()) {
+            viewPagerBrandList.setCurrentItem(brandsAdapterListener.pageSaved());
             hideOrShowViewPagerButtons();
         }
         return view;
@@ -205,7 +206,7 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         hideOrShowViewPagerButtons();
 
-        productsAdapterListener.onPageChange(viewPagerBrandList, position);
+        brandsAdapterListener.onPageChange(viewPagerBrandList, position);
     }
 
     @Override
@@ -228,14 +229,15 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
             leftNav.setVisibility(View.GONE);
         }
 
-        if(viewPagerBrandList.getCurrentItem() == brandListSize- 1) {
+        if(viewPagerBrandList.getCurrentItem() == productListSize- 1) {
             rightNav.setVisibility(View.GONE);
         }
     }
 
-    public interface ProductsAdapterListener {
+    public interface BrandsAdapterListener {
         void onPageChange(ViewPager viewPager, int position);
         boolean isAddOrSaved();
         int pageSaved();
     }
+
 }

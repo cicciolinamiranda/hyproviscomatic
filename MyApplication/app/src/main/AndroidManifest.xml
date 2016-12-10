@@ -49,11 +49,13 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -77,11 +79,6 @@
         <activity
             android:name=".ShoppingCartActivity"
             android:label="@string/title_activity_cart"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ProductsActivity"
-            android:label="@string/title_activity_products"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -110,13 +107,13 @@
             android:parentActivityName=".OrderListActivity"
             android:screenOrientation="portrait" />
 
-        <!--<meta-data-->
-            <!--android:name="com.google.android.maps.v2.API_KEY"-->
-            <!--android:value="@string/google_maps_key" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.maps.v2.API_KEY" -->
+        <!-- android:value="@string/google_maps_key" /> -->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key"/>
+            android:value="@string/google_maps_key" />
 
         <service
             android:name=".service.FetchAddressIntentService"
@@ -127,10 +124,20 @@
             android:label="@string/title_activity_products_distributor"
             android:parentActivityName=".LandingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SearchAddressActivity"
+        <activity
+            android:name=".SearchAddressActivity"
             android:label="@string/title_activity_search_address"
             android:parentActivityName=".AddBranchActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BrandBasedShoppingCartActivity"
+            android:label="@string/title_activity_cart"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".BrandBasedDistributorShopActivity"
+            android:label="@string/title_activity_products_distributor"
+            android:parentActivityName=".LandingActivity"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

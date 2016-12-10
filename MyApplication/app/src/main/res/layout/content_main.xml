@@ -8,10 +8,10 @@
     tools:context="com.uprise.ordering.MainActivity"
     tools:showIn="@layout/app_bar_main">
     <fragment
-        android:name="com.uprise.ordering.fragment.ProductsFragment"
+        android:name="com.uprise.ordering.fragment.BrandsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/frag_products"
+        android:id="@+id/frag_shop_now"
         tools:layout="@layout/layout_shop_now"></fragment>
     <!--<FrameLayout-->
         <!--android:id="@+id/content_frame"-->

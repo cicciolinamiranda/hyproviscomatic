@@ -15,14 +15,14 @@ import android.widget.LinearLayout;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.database.SqlDatabaseHelper;
+import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
-import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
-import com.uprise.ordering.view.BrandsPagerAdapter;
-import com.uprise.ordering.view.ProductsAdapter;
+import com.uprise.ordering.view.BrandsAdapter;
+import com.uprise.ordering.view.ProductPagerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,13 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by cicciolina on 11/21/16.
+ * Created by cicciolina on 12/10/16.
  */
 
-public class ProductsFragment extends Fragment implements ExpandableListView.OnChildClickListener,
+public class BrandsFragment extends Fragment implements ExpandableListView.OnChildClickListener,
         ExpandableListView.OnGroupExpandListener,
-        BrandsPagerAdapter.BrandsPagerAdapterListener,
-        ProductsAdapter.ProductsAdapterListener,
+        ProductPagerAdapter.ProductPagerAdapterListener,
+        BrandsAdapter.BrandsAdapterListener,
         RestCallServices.RestServiceListener {
 
     private MenuItem previousMenu;
@@ -46,9 +46,11 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
     private String nextUrl;
     private String prevUrl;
     private View rowView;
-    private ProductsAdapter productsAdapter;
+//    private ProductsAdapter productsAdapter;
+    private BrandsAdapter brandsAdapter;
     private ExpandableListView expandableListView;
-    private ArrayList<ProductModel> productModels;
+//    private ArrayList<ProductModel> productModels;
+    private ArrayList<BrandModel> brandModels;
     //    private CartItemsSharedPref sharedPreferences;
 //    private LoginSharedPref loginSharedPref;
     private String username;
@@ -78,11 +80,11 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
         if(loginModel != null && loginModel.getUsername() != null) username = loginModel.getUsername();
 
         restCallServices = new RestCallServices(getContext());
-        final String productsEndpoint = getResources().getString(R.string.endpoint_server)
-        + getResources().getString(R.string.endpoint_get_products);
+        final String brandEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_brand);
         if(loginModel != null && loginModel.getToken() != null &&
                 Util.getInstance().isNetworkAvailable(getContext())) {
-            restCallServices.getProducts(getContext(), this, loginModel.getToken(), productsEndpoint);
+            restCallServices.getProducts(getContext(), this, loginModel.getToken(), brandEndpoint);
             mProgressView = rowView.findViewById(R.id.rl_shop_now_loading_layout);
             mProgressView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
@@ -133,11 +135,11 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
 
             if(jsonArray != null) {
-                productModels = new ArrayList<>();
-
+//                productModels = new ArrayList<>();
+                 brandModels = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        productModels.add(Util.getInstance().generateProductModelFromJson(jsonArray.getJSONObject(i)));
+                        brandModels.add(Util.getInstance().generateBrandModelFromJson(jsonArray.getJSONObject(i)));
                     }
                     populateProductList();
                 }
@@ -193,16 +195,20 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
 
         if(getContext() != null) {
             if (items != null && !items.isEmpty()) {
-                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
+//                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, items);
+                brandsAdapter = new BrandsAdapter(getContext(), brandModels, expandableListView, this, this, items);
             } else {
 //            cartItemsSharedPref.storeCartItems(this, new ArrayList<CartItemsModel>());
-                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, new ArrayList<CartItemsModel>());
+                brandsAdapter = new BrandsAdapter(getContext(), brandModels, expandableListView, this, this, new ArrayList<CartItemsModel>());
+//                productsAdapter = new ProductsAdapter(getContext(), productModels, expandableListView, this, this, new ArrayList<CartItemsModel>());
             }
-            productsAdapter.notifyDataSetChanged();
-            expandableListView.setAdapter(productsAdapter);
+//            productsAdapter.notifyDataSetChanged();
+//            expandableListView.setAdapter(productsAdapter);
+            brandsAdapter.notifyDataSetChanged();
+            expandableListView.setAdapter(brandsAdapter);
             mProgressView.setVisibility(View.GONE);
 
-            if (productModels.size() <= 0) llNoRecords.setVisibility(View.VISIBLE);
+            if (brandModels.size() <= 0) llNoRecords.setVisibility(View.VISIBLE);
             if (lastExpandedPosition != -1) {
                 expandableListView.expandGroup(lastExpandedPosition);
             }
@@ -226,13 +232,13 @@ public class ProductsFragment extends Fragment implements ExpandableListView.OnC
             case R.id.menu_orderlist_prev:
                 lastExpandedPosition = -1;
                 mProgressView.setVisibility(View.VISIBLE);
-              productModels = new ArrayList<>();
+                brandModels = new ArrayList<>();
                 restCallServices.getProducts(getActivity(), this, loginModel.getToken(), prevUrl);
                 break;
             case R.id.menu_orderlist_next:
                 lastExpandedPosition = -1;
                 mProgressView.setVisibility(View.VISIBLE);
-                productModels = new ArrayList<>();
+                brandModels = new ArrayList<>();
                 restCallServices.getProducts(getActivity(), this, loginModel.getToken(), nextUrl);
                 break;
         }

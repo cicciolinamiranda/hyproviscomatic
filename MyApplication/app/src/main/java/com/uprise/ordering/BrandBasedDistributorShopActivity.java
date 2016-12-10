@@ -11,12 +11,13 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
+import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
-import com.uprise.ordering.model.ProductModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
-import com.uprise.ordering.view.BrandsPagerAdapter;
+import com.uprise.ordering.view.BrandsAdapter;
+import com.uprise.ordering.view.ProductPagerAdapter;
 import com.uprise.ordering.view.ProductsAdapter;
 
 import org.json.JSONArray;
@@ -25,14 +26,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DistributorShopActivity extends LandingSubPageBaseActivity implements ExpandableListView.OnChildClickListener,
-        BrandsPagerAdapter.BrandsPagerAdapterListener,
-        ProductsAdapter.ProductsAdapterListener,
+public class BrandBasedDistributorShopActivity extends LandingSubPageBaseActivity implements ExpandableListView.OnChildClickListener,
+        ProductPagerAdapter.ProductPagerAdapterListener,
+        BrandsAdapter.BrandsAdapterListener,
         RestCallServices.RestServiceListener {
 
-    private ProductsAdapter productsAdapter;
+    private BrandsAdapter brandsAdapter;
     private ExpandableListView expandableListView;
-    private ArrayList<ProductModel> productModels;
+//    private ArrayList<ProductModel> productModels;
+    private ArrayList<BrandModel> brandModels;
     private View mProgressView;
     private RestCallServices restCallServices;
     private LinearLayout llNoRecords;
@@ -47,17 +49,17 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_shop_now);
-        productModels = new ArrayList<>();
+        brandModels = new ArrayList<>();
         expandableListView = (ExpandableListView) findViewById(R.id.el_shop_now_products);
 
         expandableListView.setOnChildClickListener(this);
         llNoRecords =(LinearLayout) findViewById(R.id.ll_existing_products_no_records);
         restCallServices = new RestCallServices(this);
-        final String productsEndpoint = getResources().getString(R.string.endpoint_server)
-        + getResources().getString(R.string.endpoint_get_products);
+        final String brandEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_brand);
 
         if(Util.getInstance().isNetworkAvailable(this)) {
-            restCallServices.getDistributorShop(this, this, productsEndpoint);
+            restCallServices.getDistributorShop(this, this, brandEndpoint);
             mProgressView = findViewById(R.id.rl_shop_now_loading_layout);
             mProgressView.setVisibility(View.VISIBLE);
         } else {
@@ -88,7 +90,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
                 if ( iIdx == childPosition )
                 {
                     // Here you would toggle checked state in the data for this item
-                     llBrandPrice.setVisibility(View.GONE);
+                    llBrandPrice.setVisibility(View.GONE);
                     llQtyButtons.setVisibility(View.GONE);
                     llBrandQty.setVisibility(View.GONE);
                     llTransacBtn.setVisibility(View.GONE);
@@ -132,11 +134,11 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
     }
 
     private void populateProductList() {
-        productsAdapter = new ProductsAdapter(this, productModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
-        productsAdapter.notifyDataSetChanged();
-        expandableListView.setAdapter(productsAdapter);
+        brandsAdapter = new BrandsAdapter(this, brandModels, expandableListView, this, this,new ArrayList<CartItemsModel>());
+        brandsAdapter.notifyDataSetChanged();
+        expandableListView.setAdapter(brandsAdapter);
         mProgressView.setVisibility(View.GONE);
-        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
+        if(brandModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -150,13 +152,13 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
                 break;
             case R.id.menu_orderlist_prev:
                 mProgressView.setVisibility(View.VISIBLE);
-                productModels = new ArrayList<>();
-                restCallServices.getDistributorShop(DistributorShopActivity.this, this, prevUrl);
+                brandModels = new ArrayList<>();
+                restCallServices.getDistributorShop(BrandBasedDistributorShopActivity.this, this, prevUrl);
                 break;
             case R.id.menu_orderlist_next:
                 mProgressView.setVisibility(View.VISIBLE);
-                productModels = new ArrayList<>();
-                restCallServices.getDistributorShop(DistributorShopActivity.this, this, nextUrl);
+                brandModels = new ArrayList<>();
+                restCallServices.getDistributorShop(BrandBasedDistributorShopActivity.this, this, nextUrl);
                 break;
         }
         return true;
@@ -217,7 +219,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
             if(jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if(jsonArray.getJSONObject(i) != null) {
-                        productModels.add(Util.getInstance().generateDistributorShopFromJson(jsonArray.getJSONObject(i)));
+                        brandModels.add(Util.getInstance().generateBrandsDistributorShopFromJson(jsonArray.getJSONObject(i)));
                     }
                     populateProductList();
                 }
@@ -225,7 +227,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
 
         } catch (JSONException e) {
             e.printStackTrace();
-            if(productModels.size() <=0) {llNoRecords.setVisibility(View.VISIBLE);}
+            if(brandModels.size() <=0) {llNoRecords.setVisibility(View.VISIBLE);}
         }
 
     }
@@ -235,7 +237,7 @@ public class DistributorShopActivity extends LandingSubPageBaseActivity implemen
         mProgressView.setVisibility(View.GONE);
         nextMenu.setVisible(false);
         previousMenu.setVisible(false);
-        if(productModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
+        if(brandModels.size() <=0) llNoRecords.setVisibility(View.VISIBLE);
     }
 
 }
