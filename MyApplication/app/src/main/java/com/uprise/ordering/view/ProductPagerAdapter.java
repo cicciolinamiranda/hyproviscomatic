@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,7 +43,7 @@ public class ProductPagerAdapter extends PagerAdapter {
     private LayoutInflater mLayoutInflater;
     private ImageButton plusBtn;
     private ImageButton minusBtn;
-    private TextView etQuantity;
+    private EditText etQuantity;
     private ImageView itemImage;
     private Button addToCartBtn;
     private int oldQtyValue;
@@ -107,7 +108,7 @@ public class ProductPagerAdapter extends PagerAdapter {
         }
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
-        etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
+        etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
@@ -138,13 +139,15 @@ public class ProductPagerAdapter extends PagerAdapter {
         if(cartItemsModelList != null && !cartItemsModelList.isEmpty()) {
             for (CartItemsModel cartItemsModel : cartItemsModelList) {
                 if (cartItemsModel.getBrandId().equalsIgnoreCase(brandId)
-                        && cartItemsModel.getProductModelId().equalsIgnoreCase(web.get(position).getId())) {
+                        && cartItemsModel.getProductModelId().equalsIgnoreCase(web.get(position).getId())
+                        && cartItemsModel.getAttributeId().equalsIgnoreCase(web.get(position).getAttributeId())) {
                     addToCartBtn.setEnabled(false);
+                    addToCartBtn.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_corners_disabled));
                     addToCartBtn.setText(resources.getString(R.string.added_to_cart));
                     saveEditBtn.setVisibility(View.GONE);
                     etQuantity.setText(cartItemsModel.getQuantity()+"");
+                    oldQtyValue = cartItemsModel.getQuantity();
                 }
-                oldQtyValue = cartItemsModel.getQuantity();
             }
         }
         container.addView(itemView);
@@ -161,7 +164,7 @@ public class ProductPagerAdapter extends PagerAdapter {
 
     private class CountListener implements View.OnClickListener, TextWatcher {
         int count;
-        TextView etQuantity;
+        EditText etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
         Button addToCartBtn;
@@ -178,7 +181,7 @@ public class ProductPagerAdapter extends PagerAdapter {
         public CountListener(View itemView, String productId, String brandId, double price, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
-            etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
+            etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
@@ -236,7 +239,6 @@ public class ProductPagerAdapter extends PagerAdapter {
                 addToCartBtn.setVisibility(View.VISIBLE);
             }
 
-            etQuantity.setText(count+"");
         }
 
         @Override
@@ -251,6 +253,7 @@ public class ProductPagerAdapter extends PagerAdapter {
 
         @Override
         public void afterTextChanged(Editable editable) {
+
             if(!etQuantity.getText().toString().isEmpty() && !etQuantity.getText().toString().contentEquals(beforeTextChanged)) {
                 count = Integer.parseInt(etQuantity.getText().toString());
                 isCountZero();

@@ -440,6 +440,7 @@ public class Util {
         try {
             if(jsonObject.getString("id") != null) brandModel.setId(jsonObject.getString("id"));
             if(jsonObject.getString("name") != null) brandModel.setBrandName(jsonObject.getString("name"));
+            if(jsonObject.getString("image") != null) brandModel.setBrandPhotoUrl(jsonObject.getString("image"));
 
             if(jsonObject.getString("attributes") != null) {
                 JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");
@@ -512,6 +513,7 @@ public class Util {
         try {
             if(jsonObject.getString("id") != null) brandModel.setId(jsonObject.getString("id"));
             if(jsonObject.getString("name") != null) brandModel.setBrandName(jsonObject.getString("name"));
+            if(jsonObject.getString("image") != null) brandModel.setBrandPhotoUrl(jsonObject.getString("image"));
 
             if(jsonObject.getString("attributes") != null) {
                 JSONArray jsonAttributesArray = jsonObject.getJSONArray("attributes");

@@ -67,24 +67,48 @@ tools:context=".LandingActivity">
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="10dp">
             <TextView
-                android:id="@+id/title_initialpage_1"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_distributor_shop"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_sign_in_here"
+                android:text="@string/action_shops"
+                android:background="@drawable/rounded_corners_accent"
                 android:gravity="bottom|center_horizontal"
-                android:textColor="@color/material_orange"
-                android:textSize="34sp"/>
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:textColorHint="#fff"
+                android:layout_weight="1"
                 android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/email"
                     android:layout_marginLeft="4dp"
                     android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:textColor="@color/material_orange"
                     android:theme="@style/LandingEditText"
@@ -94,9 +118,22 @@ tools:context=".LandingActivity">
                     android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
+            </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp">
+
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:textColorHint="#fff"
+                android:layout_weight="1"
                 android:layout_height="wrap_content">
 
                 <EditText
@@ -104,6 +141,7 @@ tools:context=".LandingActivity">
                     android:layout_marginLeft="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:hint="@string/prompt_password"
                     android:textColor="@color/material_orange"
@@ -113,6 +151,7 @@ tools:context=".LandingActivity">
                     android:singleLine="true"/>
 
             </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -129,7 +168,7 @@ tools:context=".LandingActivity">
                     android:textAllCaps="true"
                     android:text="@string/action_sign_in_short"
                     android:id="@+id/email_sign_in_button"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/rounded_corners_primary"
                     style="@style/Widget.AppCompat.Button.Colored" />
             </LinearLayout>
 
@@ -162,14 +201,14 @@ tools:context=".LandingActivity">
             android:layout_marginBottom="3dp"
             android:layout_marginTop="3dp">
             </LinearLayout>
-            <TextView
-                android:id="@+id/tv_distributor_shop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/action_shops"
-                android:gravity="bottom|center_horizontal"
-                android:textColor="@color/light"
-                android:textSize="14sp"/>
+            <!--<TextView-->
+                <!--android:id="@+id/tv_distributor_shop"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/action_shops"-->
+                <!--android:gravity="bottom|center_horizontal"-->
+                <!--android:textColor="@color/light"-->
+                <!--android:textSize="14sp"/>-->
             </LinearLayout>
         </RelativeLayout>
 </LinearLayout>

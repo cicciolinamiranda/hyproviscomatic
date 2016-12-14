@@ -15,7 +15,7 @@
         completions."
     </string>
     <string name="action_register">Create New Account?</string>
-    <string name="action_shops">Distributor Shop</string>
+    <string name="action_shops">Our Reseller and Our Products</string>
     <string name="welcome">Welcome</string>
     <string name="reg_shopname">Shop Name or \n Name Of Owner</string>
     <string name="reg_shopaddress">Shop address</string>
@@ -45,8 +45,6 @@
     <string name="tv_branch_list_permit_header">Pictures of Mayor\\\'s Permit or DTI or Barangay Permit</string>
     <string name="save_modification">Save Changes</string>
     <string name="nav_products">Shop now!</string>
-    <string name="nav_shopping_cart">Cart Items</string>
-    <string name="nav_branch">Branch</string>
     <string name="add_to_cart">Add to\ncart</string>
     <string name="label_brand_default_value">0</string>
     <string name="label_brand_qty">Qty</string>
@@ -77,11 +75,11 @@
     <string name="no_geocoder_available">No geocoder available</string>
     <string name="label_sign_in_here">Sign in here</string>
     <string name="title_activity_products">Products</string>
-    <string name="title_activity_products_distributor">Distributor Shop</string>
-    <string name="title_activity_orders">My Orders</string>
+    <string name="title_activity_products_distributor">Our Reseller and Our Products</string>
+    <string name="title_activity_orders">Transactions</string>
     <string name="title_activity_branches">Branches</string>
     <string name="title_activity_cart">Cart Items</string>
-    <string name="title_activity_notif">Notifications</string>
+    <string name="title_activity_notif">Notifications and Announcements</string>
     <string name="title_activity_add_branch">Branch Details</string>
     <string name="unable_to_register">Unable to Register. Please Try Again. Maybe your email is already existing</string>
     <string name="registration_inp">Please wait...</string>

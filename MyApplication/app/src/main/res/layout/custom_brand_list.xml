@@ -5,6 +5,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
     <ImageView
+        android:paddingTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".80"
@@ -66,16 +67,64 @@
             android:layout_gravity="center_vertical|right"
             />
 
-        <TextView
-            android:id="@+id/tv_brand_qty"
+        <EditText
+            android:id="@+id/et_brand_qty"
             android:layout_width="wrap_content"
+            android:selectAllOnFocus="true"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:inputType="number"
             android:layout_marginLeft="3dp"
-            android:background="@color/grey_500"
             android:text="@string/label_brand_default_value"
             android:layout_gravity="center_vertical|right"/>
 
+        <!--<TextView-->
+            <!--android:id="@+id/tv_brand_qty"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="#000"-->
+            <!--android:layout_marginLeft="3dp"-->
+            <!--android:background="@color/grey_500"-->
+            <!--android:text="@string/label_brand_default_value"-->
+            <!--android:layout_gravity="center_vertical|right"/>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_item_qty_buttons"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="3dp"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_weight="0.1"-->
+            <!--android:layout_gravity="center_vertical">-->
+
+            <!--<ImageButton-->
+            <!--android:id="@+id/btn_plus_brand_qty"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:backgroundTint="@null"-->
+                <!--android:src="@drawable/ic_add_grey600_48dp"  />-->
+            <!--<ImageButton-->
+                <!--android:id="@+id/btn_minus_brand_qty"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:backgroundTint="@null"-->
+                <!--android:src="@drawable/ic_remove_grey600_48dp" />-->
+            <!--</LinearLayout>-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_qty_btns"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
         <LinearLayout
             android:id="@+id/ll_item_qty_buttons"
             android:layout_width="0dp"
@@ -86,10 +135,10 @@
             android:layout_gravity="center_vertical">
 
             <ImageButton
-            android:id="@+id/btn_plus_brand_qty"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
+                android:id="@+id/btn_plus_brand_qty"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
                 android:scaleType="fitCenter"
                 android:backgroundTint="@null"
                 android:src="@drawable/ic_add_grey600_48dp"  />
@@ -101,8 +150,8 @@
                 android:scaleType="fitCenter"
                 android:backgroundTint="@null"
                 android:src="@drawable/ic_remove_grey600_48dp" />
-            </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_transac_buttons"
@@ -119,10 +168,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_to_cart"
-            android:textColor="@color/black"
+            android:textColor="@color/light"
             android:id="@+id/btn_add_to_cart"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:padding="20dp" />
+            android:background="@drawable/rounded_corners_accent"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -130,8 +178,7 @@
             android:textColor="@color/black"
             android:visibility="gone"
             android:id="@+id/btn_save_edit_brand_item"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:padding="20dp"  />
+            android:background="@drawable/rounded_corners_accent" />
     </LinearLayout>
 </LinearLayout>
 

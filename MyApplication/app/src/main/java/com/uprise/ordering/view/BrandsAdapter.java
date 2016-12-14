@@ -1,14 +1,17 @@
 package com.uprise.ordering.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
@@ -99,10 +102,21 @@ public class BrandsAdapter extends BaseExpandableListAdapter implements ViewPage
         // set category name as tag so view can be found view later
         view.setTag(getGroup(i).toString());
 
-        TextView textView = (TextView) view.findViewById(R.id.list_item_text_product);
+        ImageView logo = (ImageView) view.findViewById(R.id.iv_brand_logo);
+
+        if(mParent.get(i).getBrandPhotoUrl() != null && !mParent.get(i).getBrandPhotoUrl().isEmpty()) {
+            String replacedBase64 = mParent.get(i).getBrandPhotoUrl().replace("data:image/jpeg;base64,","");
+            if(replacedBase64.contains("data:image/png;base64,")) {
+                replacedBase64 = replacedBase64.replace("data:image/png;base64,","");
+            }
+            byte[] decodedString = Base64.decode(replacedBase64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            logo.setImageBitmap(decodedByte);
+        }
+//        TextView textView = (TextView) view.findViewById(R.id.list_item_text_product);
 
         //"i" is the position of the parent/group in the list
-        textView.setText(getGroup(i).toString());
+//        textView.setText(getGroup(i).toString());
 
 //        TextView sub = (TextView) view.findViewById(R.id.list_item_text_subscriptions);
 

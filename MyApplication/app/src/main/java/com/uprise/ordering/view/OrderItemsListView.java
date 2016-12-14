@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class OrderItemsListView extends ArrayAdapter<OrderItemsModel> {
     private ImageButton plusBtn;
     private ImageButton minusBtn;
     private ImageButton deleteBtn;
-    private TextView etQuantity;
+    private EditText etQuantity;
     private ImageView itemImage;
     private View rowView;
     private TextView tvBrandName;
@@ -64,7 +65,8 @@ public class OrderItemsListView extends ArrayAdapter<OrderItemsModel> {
         itemImage = (ImageView) rowView.findViewById(R.id.iv_brand_image);
         tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
         tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
-        etQuantity = (TextView) rowView.findViewById(R.id.tv_brand_qty);
+        etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
+        etQuantity.setEnabled(false);
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);

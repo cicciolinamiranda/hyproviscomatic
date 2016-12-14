@@ -108,7 +108,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         }
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
-        etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
+        etQuantity = (TextView) itemView.findViewById(R.id.et_brand_qty);
         minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
@@ -183,7 +183,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
         public CountListener(View itemView, String brandId, String productId, double price, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
-            etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
+            etQuantity = (TextView) itemView.findViewById(R.id.et_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.uprise.ordering.R;
 import com.uprise.ordering.model.CartItemsModel;
@@ -98,10 +97,10 @@ public class ProductsAdapter extends BaseExpandableListAdapter implements ViewPa
         // set category name as tag so view can be found view later
         view.setTag(getGroup(i).toString());
 
-        TextView textView = (TextView) view.findViewById(R.id.list_item_text_product);
+//        TextView textView = (TextView) view.findViewById(R.id.list_item_text_product);
 
         //"i" is the position of the parent/group in the list
-        textView.setText(getGroup(i).toString());
+//        textView.setText(getGroup(i).toString());
 
 //        TextView sub = (TextView) view.findViewById(R.id.list_item_text_subscriptions);
 

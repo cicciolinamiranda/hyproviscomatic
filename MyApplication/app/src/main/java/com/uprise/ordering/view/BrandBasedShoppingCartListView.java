@@ -6,12 +6,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +40,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
     private ImageButton plusBtn;
     private ImageButton minusBtn;
     private ImageButton deleteBtn;
-    private TextView etQuantity;
+    private EditText etQuantity;
     private ImageView itemImage;
     private View rowView;
     private TextView tvBrandName;
@@ -72,7 +75,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         itemImage = (ImageView) rowView.findViewById(R.id.iv_brand_image);
         tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
         tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
-        etQuantity = (TextView) rowView.findViewById(R.id.tv_brand_qty);
+        etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
@@ -115,6 +118,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         BrandBasedShoppingCartListView.CountListener count = new BrandBasedShoppingCartListView.CountListener(rowView, cartItemsModels.get(position).getBrandId(), cartItemsModels.get(position).getProductModelId(),
                 cartItemsModels.get(position).getAttributeId());
         minusBtn.setOnClickListener(count);
+        etQuantity.addTextChangedListener(count);
         plusBtn.setOnClickListener(count);
         deleteBtn.setOnClickListener(count);
 
@@ -164,9 +168,9 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
     }
 
 
-    private class CountListener implements View.OnClickListener {
+    private class CountListener implements View.OnClickListener, TextWatcher{
         int count;
-        TextView etQuantity;
+        EditText etQuantity;
         ImageButton minusBtn;
         ImageButton plusBtn;
         ImageButton deleteBtn;
@@ -177,7 +181,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         public CountListener(View itemView, String brandId, String productId, String attributeId) {
             this.count = 0;
             this.itemView = itemView;
-            etQuantity = (TextView) itemView.findViewById(R.id.tv_brand_qty);
+            etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
             minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
             plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_delete_cart_item) ;
@@ -224,7 +228,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
                 minusBtn.setVisibility(View.GONE);
             }
 
-            etQuantity.setText(count+"");
+//            etQuantity.setText(count+"");
         }
 
         private void saveItem() {
@@ -232,6 +236,27 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
             savedCardItem.setBrandId(brandId);
             savedCardItem.setProductModelId(productId);
             savedCardItem.setAttributeId(attributeId);
+        }
+
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(!etQuantity.getText().toString().isEmpty()) {
+                count = Integer.parseInt(etQuantity.getText().toString());
+                isCountZero();
+                saveItem();
+                listener.editCartItem(savedCardItem);
+            }
+
         }
     }
 
