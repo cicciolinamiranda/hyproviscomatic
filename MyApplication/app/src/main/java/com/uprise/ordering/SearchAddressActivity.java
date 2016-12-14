@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,7 +60,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         AdapterView.OnClickListener,
         AdapterView.OnItemClickListener{
 
-    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 1  ;
 
     private MapLocationFragment mapLocationFragment;
     private LinearLayout llSearchAddress;
@@ -72,14 +71,7 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
 
     private PlaceAutocompleteAdapter mAdapter;
 
-    private AutoCompleteTextView mAutocompleteView;
-
     private boolean isFromSuggestion;
-
-//    private TextView mPlaceDetailsText;
-//
-//    private TextView mPlaceDetailsAttribution;
-
 
     private LatLngBounds PHILIPPINES = new LatLngBounds(new LatLng(4.6145711,119.6272661), new LatLng(19.966096,124.173694));
 
