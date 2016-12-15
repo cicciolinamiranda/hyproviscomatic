@@ -147,6 +147,8 @@ public class ProductPagerAdapter extends PagerAdapter {
                     saveEditBtn.setVisibility(View.GONE);
                     etQuantity.setText(cartItemsModel.getQuantity()+"");
                     oldQtyValue = cartItemsModel.getQuantity();
+                } else {
+                    minusBtn.setVisibility(View.GONE);
                 }
             }
         }

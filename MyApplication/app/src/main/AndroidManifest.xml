@@ -134,10 +134,15 @@
             android:label="@string/title_activity_cart"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".BrandBasedDistributorShopActivity"
+        <activity
+            android:name=".BrandBasedDistributorShopActivity"
             android:label="@string/title_activity_products_distributor"
             android:parentActivityName=".LandingActivity"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ResellerActivity"
+            android:label="@string/title_activity_resellers"
+            android:parentActivityName=".LandingActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

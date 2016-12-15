@@ -56,9 +56,9 @@ tools:context=".LandingActivity">
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.45"
+        android:layout_weight="0.50"
         android:background="@color/black"
-        android:padding="5dp">
+        android:padding="3dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -68,6 +68,26 @@ tools:context=".LandingActivity">
             android:gravity="center_vertical"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:id="@+id/tv_resellers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_reseller"
+                    android:background="@drawable/rounded_corners_orange"
+                    android:gravity="bottom|center_horizontal"
+                    android:textColor="@color/light"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -76,22 +96,22 @@ tools:context=".LandingActivity">
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="3dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="3dp">
             <TextView
                 android:id="@+id/tv_distributor_shop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/action_shops"
-                android:background="@drawable/rounded_corners_accent"
+                android:text="@string/action_products"
+                android:background="@drawable/rounded_corners_orange"
                 android:gravity="bottom|center_horizontal"
-                android:textColor="@color/black"
+                android:textColor="@color/light"
                 android:textSize="14sp"/>
             </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -122,8 +142,8 @@ tools:context=".LandingActivity">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -160,7 +180,7 @@ tools:context=".LandingActivity">
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="3dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="3dp">
 
                 <Button
                     android:layout_width="wrap_content"

@@ -15,7 +15,8 @@
         completions."
     </string>
     <string name="action_register">Create New Account?</string>
-    <string name="action_shops">Our Reseller and Our Products</string>
+    <string name="action_products">Our Products</string>
+    <string name="action_reseller">Our Resellers</string>
     <string name="welcome">Welcome</string>
     <string name="reg_shopname">Shop Name or \n Name Of Owner</string>
     <string name="reg_shopaddress">Shop address</string>
@@ -75,7 +76,8 @@
     <string name="no_geocoder_available">No geocoder available</string>
     <string name="label_sign_in_here">Sign in here</string>
     <string name="title_activity_products">Products</string>
-    <string name="title_activity_products_distributor">Our Reseller and Our Products</string>
+    <string name="title_activity_resellers">Our Resellers</string>
+    <string name="title_activity_products_distributor">Our Products</string>
     <string name="title_activity_orders">Transactions</string>
     <string name="title_activity_branches">Branches</string>
     <string name="title_activity_cart">Cart Items</string>

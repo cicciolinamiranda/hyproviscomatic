@@ -85,7 +85,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
 //            ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);
             BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), brandModels);
 
-            if(matchedBrandModel != null &&
+            if(matchedBrandModel != null && matchedBrandModel.getProducts() != null &&
                     !matchedBrandModel.getProducts().isEmpty()) {
                 ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), matchedBrandModel.getProducts(), matchedBrandModel.getId());
 //                BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
@@ -251,10 +251,15 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         @Override
         public void afterTextChanged(Editable s) {
             if(!etQuantity.getText().toString().isEmpty()) {
+
+                if(etQuantity.getText().toString().equalsIgnoreCase("0")) etQuantity.setText("1");
                 count = Integer.parseInt(etQuantity.getText().toString());
                 isCountZero();
-                saveItem();
-                listener.editCartItem(savedCardItem);
+
+                if(count > 0) {
+                    saveItem();
+                    listener.editCartItem(savedCardItem);
+                }
             }
 
         }

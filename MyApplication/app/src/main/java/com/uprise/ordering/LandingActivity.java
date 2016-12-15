@@ -33,6 +33,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
     private Button btnSignIn;
     private TextView tvCreateNewAccount;
     private TextView tvDistributorShop;
+    private TextView tvReseller;
 //    private RestCallServices restCallServices;
     boolean cancel;
 
@@ -46,6 +47,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         btnSignIn =(Button) findViewById(R.id.email_sign_in_button);
         tvCreateNewAccount = (TextView) findViewById(R.id.tv_create_new_account);
         tvDistributorShop = (TextView) findViewById(R.id.tv_distributor_shop);
+        tvReseller = (TextView) findViewById(R.id.tv_resellers);
 
 //        btnRegister =(Button) findViewById(R.id.btn_landing_register);
 //        btnShop =(Button) findViewById(R.id.btn_landing_shop);
@@ -53,6 +55,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         btnSignIn.setOnClickListener(this);
         tvCreateNewAccount.setOnClickListener(this);
         tvDistributorShop.setOnClickListener(this);
+        tvReseller.setOnClickListener(this);
 //        btnRegister.setOnClickListener(this);
 //        btnShop.setOnClickListener(this);
 
@@ -115,6 +118,11 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             case R.id.tv_distributor_shop:
                 tvDistributorShop.setTextColor(getResources().getColor(R.color.light));
                 startActivity(new Intent(LandingActivity.this, BrandBasedDistributorShopActivity.class));
+                finish();
+                break;
+            case R.id.tv_resellers:
+                tvReseller.setTextColor(getResources().getColor(R.color.light));
+                startActivity(new Intent(LandingActivity.this, ResellerActivity.class));
                 finish();
                 break;
         }
