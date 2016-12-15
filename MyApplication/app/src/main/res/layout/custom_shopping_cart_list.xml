@@ -136,7 +136,6 @@
                     <EditText
                         android:id="@+id/et_brand_qty"
                         android:layout_width="wrap_content"
-                        android:selectAllOnFocus="true"
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:layout_marginLeft="3dp"
