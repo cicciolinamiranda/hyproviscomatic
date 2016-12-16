@@ -303,6 +303,54 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void getResellers(final Context ctx, final RestServiceListener listener,
+                          final String branchEndpoint) {
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamAndAuth(branchEndpoint);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
+
+            }
+
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.BRANCH
+                            , ctx.getString(R.string.unable_to_retrieve_branch));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.LOGIN,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.BRANCH
+                                    , jsnobject.get("detail").toString());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.BRANCH
+                                , ctx.getString(R.string.unable_to_retrieve_branch));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
+    }
+
     public void getBranch(final Context ctx, final RestServiceListener listener, final String token,
                           final String branchEndpoint) {
 

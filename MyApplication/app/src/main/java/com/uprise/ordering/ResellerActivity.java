@@ -11,12 +11,14 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.fragment.BranchFragment;
 import com.uprise.ordering.fragment.MapLocationFragment;
 import com.uprise.ordering.model.LocationDetailsModel;
 
@@ -27,7 +29,8 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         SearchView.OnSuggestionListener, LocationTrackingBase.LocationTrackingBaseListener
     {
 
-    private MapLocationFragment mapLocationFragment;
+        private MapLocationFragment mapLocationFragment;
+        private BranchFragment branchFragment;
         private SearchView searchShopsView;
         protected SimpleCursorAdapter shopsAdapter;
         private List<LocationDetailsModel> shopOnMapModelList;
@@ -37,8 +40,11 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reseller);
-        mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
-        mapLocationFragment.setOnFocusChangedListener(this);
+//        mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
+//        mapLocationFragment.setOnFocusChangedListener(this);
+
+        branchFragment = (BranchFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
+
         shopOnMapModelList = new ArrayList<>();
         final String[] from = new String[] {"addresses"};
         final int[] to = new int[] {android.R.id.text1};
@@ -94,12 +100,15 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
             MenuInflater mi = getMenuInflater();
             mi.inflate(R.menu.main, menu);
             searchShopsView = (SearchView) menu.findItem(R.id.search_shop).getActionView();
+            menu.findItem(R.id.search_shop).setVisible(false);
             searchShopsView.setQueryHint(getString(R.string.shops_search_hint));
             searchShopsView.setOnQueryTextListener(this);
             searchShopsView.setOnSuggestionListener(this);
             searchShopsView.setSuggestionsAdapter(shopsAdapter);
             searchShopsView.setIconifiedByDefault(false);
-            return true;
+
+            //TODO: when fragment is change to MapFragment, please change this to true
+            return false;
 
         }
 
@@ -179,5 +188,10 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
             else {
                 mapLocationFragment.setLocation(latlng);
             }
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            return false;
         }
     }
