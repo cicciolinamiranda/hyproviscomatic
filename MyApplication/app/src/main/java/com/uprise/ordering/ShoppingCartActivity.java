@@ -140,6 +140,11 @@ View.OnClickListener, RestCallServices.RestServiceListener {
         switch (view.getId()) {
             case R.id.ll_shopping_cart_proceed_checkout:
 
+                mProgressView.setVisibility(View.VISIBLE);
+                llShopCartList.setVisibility(View.GONE);
+                llLowerLayouts.setVisibility(View.GONE);
+
+
                 //TODO: Must transfer in MyOrders
                 restCallServices.postPurchase(ShoppingCartActivity.this, new RestCallServices.RestServiceListener() {
                     @Override
@@ -149,6 +154,8 @@ View.OnClickListener, RestCallServices.RestServiceListener {
 
                     @Override
                     public void onSuccess(RestCalls callType, String string) {
+                        llShopCartList.setVisibility(View.GONE);
+                        llLowerLayouts.setVisibility(View.GONE);
                         for(CartItemsModel cartItemsModel: cartItemsModelArrayList) {
                             cartItemsModel.setUserName(loginModel.getUsername());
                             sqlDatabaseHelper.deleteCartItem(cartItemsModel);
@@ -175,6 +182,9 @@ View.OnClickListener, RestCallServices.RestServiceListener {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                mProgressView.setVisibility(View.GONE);
+                                                llShopCartList.setVisibility(View.VISIBLE);
+                                                llLowerLayouts.setVisibility(View.VISIBLE);
                                                 dialog.dismiss();
                                             }
                                         });

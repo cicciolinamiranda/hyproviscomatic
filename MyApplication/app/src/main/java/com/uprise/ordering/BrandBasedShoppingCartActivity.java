@@ -141,6 +141,10 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
         switch (view.getId()) {
             case R.id.ll_shopping_cart_proceed_checkout:
 
+                mProgressView.setVisibility(View.VISIBLE);
+                llShopCartList.setVisibility(View.GONE);
+                llLowerLayouts.setVisibility(View.GONE);
+
                 //TODO: Must transfer in MyOrders
                 restCallServices.postPurchase(BrandBasedShoppingCartActivity.this, new RestCallServices.RestServiceListener() {
                     @Override
@@ -150,6 +154,7 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
 
                     @Override
                     public void onSuccess(RestCalls callType, String string) {
+                        mProgressView.setVisibility(View.GONE);
                         for(CartItemsModel cartItemsModel: cartItemsModelArrayList) {
                             cartItemsModel.setUserName(loginModel.getUsername());
                             sqlDatabaseHelper.deleteCartItem(cartItemsModel);
@@ -177,6 +182,9 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
+                                                mProgressView.setVisibility(View.GONE);
+                                                llShopCartList.setVisibility(View.VISIBLE);
+                                                llLowerLayouts.setVisibility(View.VISIBLE);
                                             }
                                         });
                             }
