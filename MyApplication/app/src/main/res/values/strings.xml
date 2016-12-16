@@ -116,7 +116,7 @@
     <string name="endpoint_post_login">/api-token-auth</string>
     <string name="endpoint_get_products">/api/product</string>
     <string name="endpoint_get_brand">/api/brand</string>
-    <string name="endpoint_get_branch">/api/branch</string>
+    <string name="endpoint_get_branch">/api/branch?ordering=name</string>
 
     <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>
     <string name="unable_to_retrieve_branch">Unable to retrieve Branch(es)</string>
