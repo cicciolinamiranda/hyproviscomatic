@@ -229,6 +229,11 @@ public class BrandsFragment extends Fragment implements ExpandableListView.OnChi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+//                Intent mainIntent = new Intent(getActivity(), LandingActivity.class);
+//                getActivity().startActivity(mainIntent);
+                getActivity().finish();
+                break;
             case R.id.menu_orderlist_prev:
                 lastExpandedPosition = -1;
                 mProgressView.setVisibility(View.VISIBLE);

@@ -123,7 +123,7 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             case R.id.tv_resellers:
                 tvReseller.setTextColor(getResources().getColor(R.color.light));
                 startActivity(new Intent(LandingActivity.this, ResellerActivity.class));
-                finish();
+//                finish();
                 break;
         }
     }

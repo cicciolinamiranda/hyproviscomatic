@@ -213,6 +213,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
                     populateBranchListView();
                     isNotFromFirstPage = false;
                 }
+
             }
 
         } catch (JSONException e) {

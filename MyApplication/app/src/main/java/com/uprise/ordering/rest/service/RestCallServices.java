@@ -131,7 +131,7 @@ public class RestCallServices {
 
 
 //                      Photos of store
-                int numStorePics = 0;
+                int numStorePics = 1;
                 for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                     JSONObject storePhotoJson = new JSONObject();
                     Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
@@ -142,12 +142,12 @@ public class RestCallServices {
                 }
 
 //                       Photos of permit
-                int numPermitPics = 0;
+                int numPermitPics = 1;
                 for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                     JSONObject permitPhotoJsonObj = new JSONObject();
                     Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
                     permitPhotoJsonObj.put("image", "data:image/png;base64,"+bitmapToBase64(permitBmpImage));
-                    permitPhotoJsonObj.put("description", "Photo of Permit No. "+ numPermitPics);
+                    permitPhotoJsonObj.put("description", "Photo of Store No. "+ numPermitPics);
                     photosJsonArray.put(permitPhotoJsonObj);
                     numPermitPics++;
                 }
@@ -258,18 +258,18 @@ public class RestCallServices {
 
 
 //                      Photos of store
-                    int numStorePics = 0;
+                    int numStorePics = 1;
                     for(String storeImgPath: branchModel.getBranchsPic().getStringBase()) {
                         JSONObject storePhotoJson = new JSONObject();
                         Bitmap storeBmpImage = getBitmapFrom(storeImgPath, ApplicationConstants.RESULT_GALLERY_STORE);
                         storePhotoJson.put("image", "data:image/png;base64,"+bitmapToBase64(storeBmpImage));
-                        storePhotoJson.put("description", "Photo of Permit No. "+ numStorePics);
+                        storePhotoJson.put("description", "Photo of Store No. "+ numStorePics);
                         photosJsonArray.put(storePhotoJson);
                         numStorePics++;
                     }
 
 //                       Photos of permit
-                    int numPermitPics = 0;
+                    int numPermitPics = 1;
                     for(String permitImgPath: branchModel.getPermitsPic().getStringBase()) {
                         JSONObject permitPhotoJsonObj = new JSONObject();
                         Bitmap permitBmpImage = getBitmapFrom(permitImgPath, ApplicationConstants.RESULT_GALLERY_PERMIT);
