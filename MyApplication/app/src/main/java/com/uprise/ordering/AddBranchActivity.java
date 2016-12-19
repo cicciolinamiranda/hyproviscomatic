@@ -532,16 +532,16 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //            canBeAdded = false;
 //        }
 //
-//        if(tvLatValue.getText().toString().isEmpty()) {
-//            Util.getInstance().showDialog(this, "Address and its coordinates are required", this.getString(R.string.action_ok),
-//                    new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//            canBeAdded = false;
-//        }
+        if(selectedAddressLocation == null || selectedAddressLocation.getLocation() == null) {
+            Util.getInstance().showDialog(this, "Address and its coordinates are required", this.getString(R.string.action_ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            canBeAdded = false;
+        }
 
         if (imageStoreModel.getIntegerBase().isEmpty()) {
             Util.getInstance().showDialog(this, "Please upload atleast 1 photo of your Branch", this.getString(R.string.action_ok),
@@ -570,8 +570,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         BranchModel branchModel = new BranchModel();
         branchModel.setName(etBranchName.getText().toString());
         branchModel.setContactNum(etBranchPhone.getText().toString());
-//        branchModel.setLat(Double.toString(selectedAddressLocation.getLocation().latitude));
-//        branchModel.setLng(Double.toString(selectedAddressLocation.getLocation().longitude));
+        branchModel.setLat(Double.toString(selectedAddressLocation.getLocation().latitude));
+        branchModel.setLng(Double.toString(selectedAddressLocation.getLocation().longitude));
 //        branchModel.setAddress(selectedAddressLocation.getAddress());
         branchModel.setAddress(etBranchAdd.getText().toString());
         branchModel.setPermitsPic(imagePermitModel);

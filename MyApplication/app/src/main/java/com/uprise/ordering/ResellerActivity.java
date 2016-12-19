@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.LocationTrackingBase;
@@ -20,7 +24,9 @@ import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.fragment.BranchFragment;
 import com.uprise.ordering.fragment.MapLocationFragment;
+import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.LocationDetailsModel;
+import com.uprise.ordering.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +39,18 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         private BranchFragment branchFragment;
         private SearchView searchShopsView;
         protected SimpleCursorAdapter shopsAdapter;
-        private List<LocationDetailsModel> shopOnMapModelList;
-        private List<LocationDetailsModel> matchedResults;
+        private List<BranchModel> shopOnMapModelList;
+        private List<BranchModel> matchedResults;
+        protected LocationTrackingBase locationTrackingBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reseller);
-//        mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
-//        mapLocationFragment.setOnFocusChangedListener(this);
+        mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
+        mapLocationFragment.setOnFocusChangedListener(this);
 
-        branchFragment = (BranchFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
+//        branchFragment = (BranchFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
 
         shopOnMapModelList = new ArrayList<>();
         final String[] from = new String[] {"addresses"};
@@ -56,6 +63,7 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
                 CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
+
         @Override
         public boolean onQueryTextSubmit(String query) {
             return false;
@@ -64,19 +72,17 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         @Override
         public boolean onQueryTextChange(String newText) {
             if(null != shopOnMapModelList) populateAdapter(newText);
-            return false;
+            return true;
         }
 
         @Override
         public boolean onSuggestionSelect(int position) {
-            setSelectedShopAddress(position);
-            return false;
+            return setSelectedShopAddress(position);
         }
 
         @Override
         public boolean onSuggestionClick(int position) {
-            setSelectedShopAddress(position);
-            return false;
+            return setSelectedShopAddress(position);
         }
 
         @Override
@@ -85,9 +91,14 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         }
 
         @Override
-        public void address(LocationDetailsModel shopOnMapModel) {
-            shopOnMapModelList.add(shopOnMapModel);
+        public void address(BranchModel branchModel) {
+            shopOnMapModelList.add(branchModel);
         }
+
+//        @Override
+//        public void address(LocationDetailsModel shopOnMapModel) {
+//            shopOnMapModelList.add(shopOnMapModel);
+//        }
 
         @Override
         public boolean isOnShopNowPage() {
@@ -100,7 +111,6 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
             MenuInflater mi = getMenuInflater();
             mi.inflate(R.menu.main, menu);
             searchShopsView = (SearchView) menu.findItem(R.id.search_shop).getActionView();
-            menu.findItem(R.id.search_shop).setVisible(false);
             searchShopsView.setQueryHint(getString(R.string.shops_search_hint));
             searchShopsView.setOnQueryTextListener(this);
             searchShopsView.setOnSuggestionListener(this);
@@ -108,7 +118,7 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
             searchShopsView.setIconifiedByDefault(false);
 
             //TODO: when fragment is change to MapFragment, please change this to true
-            return false;
+            return true;
 
         }
 
@@ -126,13 +136,13 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
             mainLoop:
             for (int i = 0; i < shopOnMapModelList.size(); i++) {
 
-                if(shopOnMapModelList.get(i).getAddress().toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+                if(shopOnMapModelList.get(i).getAddress().toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
+                        shopOnMapModelList.get(i).getName().toLowerCase().indexOf(query.toLowerCase()) >= 0) {
 
                     addresses.add(shopOnMapModelList.get(i).getAddress());
                     matchedResults.add(shopOnMapModelList.get(i));
                     c.addRow(new Object[] {i, shopOnMapModelList.get(i).getAddress()
-                            +" | lat: "+ shopOnMapModelList.get(i).getLocation().latitude
-                            +" | long: "+ shopOnMapModelList.get(i).getLocation().longitude});
+                            +" | Name: "+ shopOnMapModelList.get(i).getName()});
                 }
             }
 
@@ -155,8 +165,9 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         }
 
         private boolean setSelectedShopAddress(int position) {
-            mapLocationFragment.setLocation(matchedResults.get(position).getLocation());
-            return false;
+            LatLng location = Util.convertStrToLocation(matchedResults.get(position).getLat(), matchedResults.get(position).getLng());
+            mapLocationFragment.setLocation(location);
+            return true;
         }
 
         @Override
@@ -194,4 +205,50 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
         public boolean onOptionsItemSelected(MenuItem item) {
             return false;
         }
+
+        protected LatLng getLocation() {
+            return locationTrackingBase.getLocation();
+        }
+
+        protected void onStart() {
+            if(locationTrackingBase == null) {
+                locationTrackingBase = new LocationTrackingBase(this);
+            }
+            super.onStart();
+            locationTrackingBase.getGoogleApiClient().connect();
+        }
+
+        protected void onStop() {
+            //
+            super.onStop();
+            locationTrackingBase.getGoogleApiClient().disconnect();
+        }
+
+        @Override
+        public void onConnected(@Nullable Bundle bundle) {
+            super.onConnected(bundle);
+            locationTrackingBase.setLatLng(locationTrackingBase.getLocation());
+        }
+
+        @Override
+        public void onConnectionSuspended(int i) {
+            super.onConnectionSuspended(i);
+            locationTrackingBase.setLastLocation(null);
+            locationTrackingBase.setLatLng(null);
+        }
+
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+            //super.onConnectionFailed(connectionResult);
+            if(connectionResult.getErrorMessage() != null) Log.i(ApplicationConstants.APP_CODE, connectionResult.getErrorMessage());
+            locationTrackingBase.setLastLocation(null);
+            locationTrackingBase.setLatLng(null);
+        }
+
+        @Override
+        public boolean onPrepareOptionsMenu(Menu menu) {
+            return super.onPrepareOptionsMenu(menu);
+        }
+
+
     }

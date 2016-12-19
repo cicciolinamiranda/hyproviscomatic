@@ -425,10 +425,8 @@ public class Util {
      */
     public static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(ApplicationConstants.APP_CODE, res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
+        Log.e(ApplicationConstants.APP_CODE, res.getString(R.string.place_details, name, address));
+        return Html.fromHtml(res.getString(R.string.place_details, name, address));
 
     }
 
@@ -583,8 +581,8 @@ public class Util {
             if(jsonObject.getString("lat") != null && jsonObject.getString("lng") != null) {
                 double lat = 0;
                 double lng = 0;
-                if(!jsonObject.getString("lat").isEmpty()) lat = Double.parseDouble(jsonObject.getString("lat"));
-                if(!jsonObject.getString("lng").isEmpty()) lng = Double.parseDouble(jsonObject.getString("lng"));
+                if(!jsonObject.getString("lat").isEmpty()) lat = parseDoubleWithDefault(jsonObject.getString("lat"));
+                if(!jsonObject.getString("lng").isEmpty()) lng = parseDoubleWithDefault(jsonObject.getString("lng"));
                 shopsLocation.setLocation(new LatLng(lat, lng));
             }
 
@@ -595,6 +593,10 @@ public class Util {
         }
 
         return null;
+    }
+
+    public static LatLng convertStrToLocation(String lat, String lng) {
+        return new LatLng(parseDoubleWithDefault(lat), parseDoubleWithDefault(lng));
     }
 
     public OrderModel generateOrderModelFromJson(JSONObject jsonObject) {
@@ -668,6 +670,9 @@ public class Util {
             if(jsonObject.getString("name") != null && !jsonObject.getString("name").isEmpty()) branchModel.setName(jsonObject.getString("name"));
             if(jsonObject.getString("address") != null && !jsonObject.getString("address").isEmpty()) branchModel.setAddress(jsonObject.getString("address"));
             if(jsonObject.getString("phone") != null && !jsonObject.getString("phone").isEmpty()) branchModel.setContactNum(jsonObject.getString("phone"));
+            if(jsonObject.getString("lat") != null && !jsonObject.getString("lat").isEmpty()) branchModel.setLat(jsonObject.getString("lat"));
+            if(jsonObject.getString("lng") != null && !jsonObject.getString("lng").isEmpty()) branchModel.setLng(jsonObject.getString("lng"));
+
             return branchModel;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -702,5 +707,17 @@ public class Util {
             Util.getInstance().showSnackBarToast(ctx, "You need to be connected to a network");
         }
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static double parseDoubleWithDefault(String s) {
+
+        if(s == null || s.isEmpty()) return 0;
+        try {
+            return Double.parseDouble(s);
+        }
+        catch (NumberFormatException e) {
+            // It's OK to ignore "e" here because returning a default value is the documented behaviour on invalid input.
+            return 0;
+        }
     }
 }

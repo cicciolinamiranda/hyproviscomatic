@@ -25,8 +25,10 @@ import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.fragment.BrandsFragment;
 import com.uprise.ordering.fragment.MapLocationFragment;
+import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +45,8 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
     private View headerLayout;
     private SearchView searchShopsView;
     protected SimpleCursorAdapter shopsAdapter;
-    private List<LocationDetailsModel> shopOnMapModelList;
-    private List<LocationDetailsModel> matchedResults;
+    private List<BranchModel> shopOnMapModelList;
+    private List<BranchModel> matchedResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,9 +223,14 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
     }
 
     @Override
-    public void address(LocationDetailsModel shopOnMapModel) {
-        shopOnMapModelList.add(shopOnMapModel);
+    public void address(BranchModel branchModel) {
+        shopOnMapModelList.add(branchModel);
     }
+//
+//    @Override
+//    public void address(LocationDetailsModel shopOnMapModel) {
+//        shopOnMapModelList.add(shopOnMapModel);
+//    }
 
     @Override
     public boolean isOnShopNowPage() {
@@ -301,8 +308,8 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
                 addresses.add(shopOnMapModelList.get(i).getAddress());
                 matchedResults.add(shopOnMapModelList.get(i));
                 c.addRow(new Object[] {i, shopOnMapModelList.get(i).getAddress()
-                        +" | lat: "+ shopOnMapModelList.get(i).getLocation().latitude
-                        +" | long: "+ shopOnMapModelList.get(i).getLocation().longitude});
+                        +" | lat: "+ shopOnMapModelList.get(i).getLat()
+                        +" | long: "+ shopOnMapModelList.get(i).getLng()});
             }
         }
 
@@ -325,7 +332,8 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
     }
 
     private boolean setSelectedShopAddress(int position) {
-        mapLocationFragment.setLocation(matchedResults.get(position).getLocation());
+        LatLng location = Util.convertStrToLocation(matchedResults.get(position).getLat(), matchedResults.get(position).getLng());
+        mapLocationFragment.setLocation(location);
         return false;
     }
 }

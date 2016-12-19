@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.uprise.ordering.ResellerActivity">
-    <!--<fragment-->
-        <!--android:name="com.uprise.ordering.fragment.MapLocationFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/frag_reseller"-->
-        <!--tools:layout="@layout/frag_map_location"></fragment>-->
-
     <fragment
-        android:name="com.uprise.ordering.fragment.BranchFragment"
+        android:name="com.uprise.ordering.fragment.MapLocationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frag_reseller"
         tools:layout="@layout/frag_map_location"></fragment>
+
+    <!--<fragment-->
+        <!--android:name="com.uprise.ordering.fragment.BranchFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/frag_reseller"-->
+        <!--tools:layout="@layout/frag_map_location"></fragment>-->
 </RelativeLayout>

@@ -10,8 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.GpsStatus;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,11 +39,10 @@ import com.uprise.ordering.base.LocationTrackingBase;
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
-import com.uprise.ordering.model.LocationDetailsModel;
+import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
-import com.uprise.ordering.service.FetchAddressIntentService;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.util.WifiScanManager;
 
@@ -81,6 +79,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     private MapView mapView;
     private View v;
     private int markerSize = 150;
+    private String nextUrl;
 
     /** Location name purposes **/
     private static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
@@ -88,9 +87,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
     private String mAddressOutput;
     private boolean mAddressRequested;
 
-    private AddressResultReceiver mResultReceiver;
+//    private AddressResultReceiver mResultReceiver;
     private RestCallServices restCallServices;
-    private ArrayList<LocationDetailsModel> shopOnMapModels;
+    private ArrayList<BranchModel> shopOnMapModels;
     private RelativeLayout rlLoadingLayout;
 
     @Nullable
@@ -115,9 +114,9 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         mAddressOutput = "";
         final String branchEndpoint = getResources().getString(R.string.endpoint_server)
                 + getResources().getString(R.string.endpoint_get_branch);
-        if(loginModel != null && loginModel.getUsername() != null) {
-            restCallServices.getBranch(getContext(), this, loginModel.getToken(), branchEndpoint);
-        }
+//        if(loginModel != null && loginModel.getUsername() != null) {
+            restCallServices.getResellers(getContext(), this, branchEndpoint);
+//        }
 
         updateValuesFromBundle(savedInstanceState);
 
@@ -177,6 +176,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title(MARKER_TITLE));
         marker.setVisible(true);
+        if(listener.isOnShopNowPage()) marker.setVisible(false);
 
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerDragListener(this);
@@ -246,6 +246,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .title("My Location"));
         marker.setVisible(true);
+        if(listener.isOnShopNowPage()) marker.setVisible(false);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerDragListener(this);
@@ -302,10 +303,10 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void setLocation(LatLng latlng) {
-        if (!isCurrPointExisting()) {
-            onMapClick(latlng);
+//        if (!isCurrPointExisting()) {
+            if(latlng != null) onMapClick(latlng);
 
-        }
+//        }
     }
 
     public LatLng getCurrPoint() {
@@ -369,12 +370,12 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         currPoint = marker.getPosition();
         locationTrackingBase.setLatLng(currPoint);
         listener.onLatLngChanged(currPoint);
-        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
-            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
-                startIntentService(shopOnMap);
-            }
-
-        }
+//        if(listener.isOnShopNowPage()  && shopOnMapModels != null && shopOnMapModels.size() > 0) {
+//            for (LocationDetailsModel shopOnMap : shopOnMapModels) {
+////                startIntentService(shopOnMap);
+//            }
+//
+//        }
     }
 
     @Override
@@ -453,11 +454,16 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
                     jsonArray = jsnobject.getJSONArray("results");
                 }
 
+                if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+
+                    nextUrl = jsnobject.getString("next");
+                }
+
                 if (jsonArray != null) {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         if (jsonArray.getJSONObject(i) != null) {
-                            shopOnMapModels.add(Util.getInstance().generateLocationDetailsModelFromJson(jsonArray.getJSONObject(i)));
+                            shopOnMapModels.add(Util.getInstance().generateBranchModelFromJson(jsonArray.getJSONObject(i)));
                         }
 
                     }
@@ -468,13 +474,40 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
 
                     if (listener.isOnShopNowPage() && shopOnMapModels != null && shopOnMapModels.size() > 0) {
-                        for (LocationDetailsModel shopOnMap : shopOnMapModels) {
-                            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(shopOnMap.getLocation())
+                        for (BranchModel shopOnMap : shopOnMapModels) {
+                            LatLng location = Util.convertStrToLocation(shopOnMap.getLat(), shopOnMap.getLng());
+                            Marker shopMaker = mMap.addMarker(new MarkerOptions().position(location)
                                     .icon(BitmapDescriptorFactory.fromBitmap(storeMarker))
-                                    .title(shopOnMap.getAddress()));
+                                    .title("Branch Name: "+shopOnMap.getName())
+                                    .snippet("Address: "+shopOnMap.getAddress()+"\n "+"Contact Number: "+shopOnMap.getContactNum()));
                             shopMaker.setVisible(true);
-                            startIntentService(shopOnMap);
+//                            startIntentService(shopOnMap);
+                            listener.address(shopOnMap);
                         }
+                    }
+
+                    mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                        @Override
+                        public View getInfoWindow(Marker marker) {
+                            return null;
+                        }
+
+                        @Override
+                        public View getInfoContents(Marker marker) {
+                            View v = getActivity().getLayoutInflater().inflate(R.layout.marker, null);
+                            TextView title= (TextView) v.findViewById(R.id.title);
+                            TextView info= (TextView) v.findViewById(R.id.info);
+
+                            title.setText(marker.getTitle());
+                            info.setText(marker.getSnippet());
+
+                            return v;
+                        }
+                    });
+
+                    if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+                        nextUrl = jsnobject.getString("next");
+                        restCallServices.getResellers(getActivity(), this, nextUrl);
                     }
 
 
@@ -523,60 +556,60 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    private class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        /**
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-         */
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-//            // Display the address string or an error message sent from the intent service.
-//            mAddressOutput = resultData.getString(EndpointConstants.RESULT_DATA_KEY);
-//            displayAddressOutput();
+//    private class AddressResultReceiver extends ResultReceiver {
+//        public AddressResultReceiver(Handler handler) {
+//            super(handler);
+//        }
 //
-//            // Reset. Enable the Fetch Address button and stop showing the progress bar.
-//            mAddressRequested = false;
-            listener.address((LocationDetailsModel) resultData.getParcelable(ApplicationConstants.RESULT_DATA_KEY));
-
-        }
-    }
-
-    protected void startIntentService(LocationDetailsModel shopOnMapModel) {
-        // Create an intent for passing to the intent service responsible for fetching the address.
-        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
-        mResultReceiver = new AddressResultReceiver(new Handler());
-        // Pass the result receiver as an extra to the service.
-        intent.putExtra(ApplicationConstants.RECEIVER, mResultReceiver);
-
-        // Pass the location data as an extra to the service.
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-
-//            Location loc = new Location(ApplicationConstants.APP_CODE);
-//            loc.setLatitude(shopOnMap.getLocation().latitude);
-//            loc.setLongitude(shopOnMap.getLocation().longitude);
-            intent.putExtra(ApplicationConstants.LOCATION_DATA_EXTRA, shopOnMapModel);
-
-            // Start the service. If the service isn't already running, it is instantiated and started
-            // (creating a process for it if needed); if it is running then it remains running. The
-            // service kills itself automatically once all intents are processed.
-            getActivity().startService(intent);
-
-
-    }
+//        /**
+//         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+//         */
+//        @Override
+//        protected void onReceiveResult(int resultCode, Bundle resultData) {
+//
+////            // Display the address string or an error message sent from the intent service.
+////            mAddressOutput = resultData.getString(EndpointConstants.RESULT_DATA_KEY);
+////            displayAddressOutput();
+////
+////            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+////            mAddressRequested = false;
+////            listener.address((LocationDetailsModel) resultData.getParcelable(ApplicationConstants.RESULT_DATA_KEY));
+//
+//        }
+//    }
+//
+//    protected void startIntentService(LocationDetailsModel shopOnMapModel) {
+//        // Create an intent for passing to the intent service responsible for fetching the address.
+//        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+//        mResultReceiver = new AddressResultReceiver(new Handler());
+//        // Pass the result receiver as an extra to the service.
+//        intent.putExtra(ApplicationConstants.RECEIVER, mResultReceiver);
+//
+//        // Pass the location data as an extra to the service.
+//
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//
+//
+////            Location loc = new Location(ApplicationConstants.APP_CODE);
+////            loc.setLatitude(shopOnMap.getLocation().latitude);
+////            loc.setLongitude(shopOnMap.getLocation().longitude);
+//            intent.putExtra(ApplicationConstants.LOCATION_DATA_EXTRA, shopOnMapModel);
+//
+//            // Start the service. If the service isn't already running, it is instantiated and started
+//            // (creating a process for it if needed); if it is running then it remains running. The
+//            // service kills itself automatically once all intents are processed.
+//            getActivity().startService(intent);
+//
+//
+//    }
 
 }

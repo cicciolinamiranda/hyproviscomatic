@@ -122,9 +122,9 @@ public class RestCallServices {
             try {
                 branchJsonObj.put("name", branchModel.getName());
 
-                branchJsonObj.put("lat", "0");
+                branchJsonObj.put("lat", branchModel.getLat());
 //                Log.i(TAG, "LAT:-->" + branchModel.getLat());
-                branchJsonObj.put("lng", "0");
+                branchJsonObj.put("lng", branchModel.getLat());
 //                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                 branchJsonObj.put("phone", branchModel.getContactNum());
                 branchJsonObj.put("address", branchModel.getAddress());
@@ -248,9 +248,9 @@ public class RestCallServices {
                     branchJsonObj.put("name", branchModel.getName());
 
 //                    branchJsonObj.put("lat", branchModel.getLat());
-                    branchJsonObj.put("lat", "0");
+                    branchJsonObj.put("lat", branchModel.getLat());
 //                Log.i(TAG, "LAT:-->" + branchModel.getLat());
-                    branchJsonObj.put("lng", "0");
+                    branchJsonObj.put("lng", branchModel.getLng());
 //                    branchJsonObj.put("lng", branchModel.getLng());
 //                Log.i(TAG, "LNG:-->" + branchModel.getLng());
                     branchJsonObj.put("phone", branchModel.getContactNum());

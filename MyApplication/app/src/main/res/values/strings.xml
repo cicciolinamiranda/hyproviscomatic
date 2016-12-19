@@ -62,7 +62,8 @@
     <string name="notif_msg_action_delete">Delete Message</string>
     <string name="label_existing_branch_no_label">No Branch saved</string>
     <string name="order_number_label">Order #</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyABg9rxXdKz6R5r6VvFDxwVVsbjvXIxyw4</string>
+    <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyABg9rxXdKz6R5r6VvFDxwVVsbjvXIxyw4</string>-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDwQegDahFZPfbQ9PW50_RBi1wTnEZDiyU</string>
     <string name="google_app_id">graphite-store-147003</string>
     <string name="shops_page_label">Shops</string>
     <string name="shops_search_hint">Search location</string>
@@ -94,13 +95,7 @@
     <![CDATA[
         <b>%1$s</b>
         <br/>
-        <i>Place Id: %2$s</i>
-        <br/>
-        Address: %3$s
-        <br/>
-        Phone: %4$s
-        <br/>
-        Website: %5$s
+        Address: %2$s
     ]]>
     </string>
     <string name="gPlaces_url">\"https://maps.googleapis.com/maps/api/place\"</string>

@@ -45,6 +45,7 @@ import com.uprise.ordering.base.LocationTrackingBase.LocationTrackingBaseListene
 import com.uprise.ordering.base.MapLocationListener;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.fragment.MapLocationFragment;
+import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.LocationDetailsModel;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.PlaceAutocompleteAdapter;
@@ -150,14 +151,24 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
     }
 
     @Override
-    public void address(LocationDetailsModel shopOnMapModel) {
-
+    public void address(BranchModel branchModel) {
         locationDetailsModel = new LocationDetailsModel();
-        locationDetailsModel.setAddress(shopOnMapModel.getAddress());
-        locationDetailsModel.setLocation(shopOnMapModel.getLocation());
+        locationDetailsModel.setAddress(branchModel.getAddress());
+
+        locationDetailsModel.setLocation(Util.convertStrToLocation(branchModel.getLat(), branchModel.getLng()));
 //        mAutocompleteView.setText(locationDetailsModel.getAddress());
         tvSearchAddress.setText(locationDetailsModel.getAddress());
     }
+
+//    @Override
+//    public void address(LocationDetailsModel shopOnMapModel) {
+//
+//        locationDetailsModel = new LocationDetailsModel();
+//        locationDetailsModel.setAddress(shopOnMapModel.getAddress());
+//        locationDetailsModel.setLocation(shopOnMapModel.getLocation());
+////        mAutocompleteView.setText(locationDetailsModel.getAddress());
+//        tvSearchAddress.setText(locationDetailsModel.getAddress());
+//    }
 
     @Override
     public boolean isOnShopNowPage() {
@@ -359,10 +370,8 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(ApplicationConstants.APP_CODE, res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
+        Log.e(ApplicationConstants.APP_CODE, res.getString(R.string.place_details, name, address));
+        return Html.fromHtml(res.getString(R.string.place_details, name, address));
 
     }
 
@@ -416,6 +425,10 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
                 tvSearchAddress.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri()));
+
+                locationDetailsModel.setAddress(place.getName().toString());
+                locationDetailsModel.setLocation(place.getLatLng());
+                mapLocationFragment.onMapClick(place.getLatLng());
 
                 // Display attributions if required.
 //                CharSequence attributions = place.getAttributions();
