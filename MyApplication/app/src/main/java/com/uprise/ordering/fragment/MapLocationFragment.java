@@ -220,49 +220,38 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
         currPoint = new LatLng( 0.0f
                 , 0.0f);
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+                mMap.setMyLocationEnabled(true);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            mMap.setMyLocationEnabled(true);
-        }
-        catch (SecurityException e) {
-            e.printStackTrace();
-        }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currPoint, 10.0f));
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            MapsInitializer.initialize(this.getActivity());
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currPoint, 10.0f));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        MapsInitializer.initialize(this.getActivity());
+            marker = mMap.addMarker(new MarkerOptions().position(currPoint)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .title("My Location"));
+            marker.setVisible(true);
+            if (listener.isOnShopNowPage()) marker.setVisible(false);
+            mMap.getUiSettings().setScrollGesturesEnabled(true);
+            mMap.setOnMapClickListener(this);
+            mMap.setOnMarkerDragListener(this);
 
-        marker = mMap.addMarker(new MarkerOptions().position(currPoint)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .title("My Location"));
-        marker.setVisible(true);
-        if(listener.isOnShopNowPage()) marker.setVisible(false);
-        mMap.getUiSettings().setScrollGesturesEnabled(true);
-        mMap.setOnMapClickListener(this);
-        mMap.setOnMarkerDragListener(this);
-
-        if (mapView != null &&
-                mapView.findViewById(Integer.parseInt("1")) != null) {
-            // Get the button view
-            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-            View zoomButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("1"));
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams locLayoutParams = (RelativeLayout.LayoutParams)
-                    locationButton.getLayoutParams();
-            // position on right bottom
-            locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            locLayoutParams.setMargins(0, 0, 35, 450);
+            if (mapView != null &&
+                    mapView.findViewById(Integer.parseInt("1")) != null) {
+                // Get the button view
+                View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+                View zoomButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("1"));
+                // and next place it, on bottom right (as Google Maps app)
+                RelativeLayout.LayoutParams locLayoutParams = (RelativeLayout.LayoutParams)
+                        locationButton.getLayoutParams();
+                // position on right bottom
+                locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                locLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                locLayoutParams.setMargins(0, 0, 35, 450);
 
 //
 //            RelativeLayout.LayoutParams zoomLayoutParams = (RelativeLayout.LayoutParams)
@@ -272,6 +261,7 @@ public class MapLocationFragment extends Fragment implements OnMapReadyCallback,
 //            zoomLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
 
 
+            }
         }
 
     }
