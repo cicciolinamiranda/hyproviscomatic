@@ -57,7 +57,7 @@
     <string name="label_product_name">Product name:</string>
     <string name="changes_saved">Changes saved</string>
     <string name="btn_proceed_to_checkout">Proceed to checkout</string>
-    <string name="estimated_total_label">Estimated total:</string>
+    <string name="estimated_total_label">Sub total:</string>
     <string name="action_checkout">Order sent. Please wait for email approval</string>
     <string name="notif_msg_action_delete">Delete Message</string>
     <string name="label_existing_branch_no_label">No Branch saved</string>
@@ -112,6 +112,7 @@
     <string name="endpoint_get_products">/api/product</string>
     <string name="endpoint_get_brand">/api/brand</string>
     <string name="endpoint_get_branch">/api/branch?ordering=name</string>
+    <string name="endpoint_get_discount">/api/discount</string>
 
     <string name="unable_to_login">Unable to Login. Username or password maybe incorrect \nPlease Try Again</string>
     <string name="unable_to_retrieve_branch">Unable to retrieve Branch(es)</string>
@@ -126,4 +127,5 @@
     <string name="unable_to_get_notif">Unable to get notifications</string>
     <string name="total_label">Total</string>
     <string name="label_order_no_label">No Order Records</string>
+    <string name="net_total_label">Net Total</string>
 </resources>

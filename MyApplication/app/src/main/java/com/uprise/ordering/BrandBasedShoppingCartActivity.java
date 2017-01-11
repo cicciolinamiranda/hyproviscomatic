@@ -35,6 +35,8 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
     private LinearLayout llProceedToCheckout;
     private ListView lvShoppingCartList;
     private TextView tvEstimatedTotal;
+    private TextView tvDiscount;
+    private TextView tvSubTotal;
     private ArrayAdapter<CartItemsModel> cartItemsModelArrayAdapter;
     //    private CartItemsSharedPref cartItemsSharedPref;
 //    private LoginSharedPref loginSharedPref;
@@ -44,6 +46,9 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
     private RestCallServices restCallServices;
     private View mProgressView;
     private double total;
+    private double netTotal;
+    private double discountValue;
+    private double computedDiscountPercentage;
     private String nextUrl;
     private boolean isNextUrl;
 //    private DecimalFormat decimalFormat;
@@ -58,6 +63,8 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);
         llLowerLayouts = (LinearLayout) findViewById(R.id.ll_shopping_cart_lower_layout);
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_estimated_total_value);
+        tvDiscount = (TextView) findViewById(R.id.tv_shopping_cart_discount_value);
+        tvSubTotal = (TextView) findViewById(R.id.tv_order_item__sub_total_value);
         llProceedToCheckout = (LinearLayout) findViewById(R.id.ll_shopping_cart_proceed_checkout);
         llProceedToCheckout.setOnClickListener(this);
 
@@ -68,9 +75,12 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         final String brandEndpoint = getResources().getString(R.string.endpoint_server)
                 + getResources().getString(R.string.endpoint_get_brand);
+        final String discountEndpoint = getResources().getString(R.string.endpoint_server)
+                + getResources().getString(R.string.endpoint_get_discount);
         if(loginModel != null && loginModel.getToken() != null &&
                 Util.getInstance().isNetworkAvailable(this)) {
             restCallServices.getProducts(this, this, loginModel.getToken(), brandEndpoint);
+            restCallServices.getDiscount(this, this, loginModel.getToken(), discountEndpoint);
             mProgressView = findViewById(R.id.rl_shopping_cart_loading_layout);
             mProgressView.setVisibility(View.VISIBLE);
         } else {
@@ -116,7 +126,12 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
             registerForContextMenu(lvShoppingCartList);
 
             total = Util.getInstance().computeBrandEstimatedTotal(brandModels, cartItemsModelArrayList);
-            tvEstimatedTotal.setText(String.format("%.2f", total)+" Php");
+            computedDiscountPercentage = 0;
+            computedDiscountPercentage = total * (discountValue/100);
+            netTotal = total - computedDiscountPercentage;
+            tvSubTotal.setText(String.format("%.2f", total)+" Php");
+            tvDiscount.setText(String.format("%.2f", computedDiscountPercentage)+" Php");
+            tvEstimatedTotal.setText(String.format("%.2f", netTotal)+" Php");
         } else {
             llNoRecords.setVisibility(View.VISIBLE);
             llShopCartList.setVisibility(View.GONE);
@@ -203,31 +218,65 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
-        try {
-            JSONObject jsnobject = new JSONObject(string);
-            JSONArray jsonArray = new JSONArray();
-            if(jsnobject != null) {
-                jsonArray = jsnobject.getJSONArray("results");
-            }
 
-            if(jsonArray != null) {
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    if(jsonArray.getJSONObject(i) != null) {
-                        brandModels.add(Util.getInstance().generateBrandModelFromJson(jsonArray.getJSONObject(i)));
-                    }
-                    populateList();
+        if(callType == RestCalls.PRODUCTS) {
+            try {
+                JSONObject jsnobject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+                if(jsnobject != null) {
+                    jsonArray = jsnobject.getJSONArray("results");
                 }
-            }
 
-            if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
-                nextUrl = jsnobject.getString("next");
-                isNextUrl = true;
-                restCallServices.getProducts(this, this, loginModel.getToken(), nextUrl);
-            }
+                if(jsonArray != null) {
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if(jsonArray.getJSONObject(i) != null) {
+                            brandModels.add(Util.getInstance().generateBrandModelFromJson(jsonArray.getJSONObject(i)));
+                        }
+                        populateList();
+                    }
+                }
+
+                if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+                    nextUrl = jsnobject.getString("next");
+                    isNextUrl = true;
+                    restCallServices.getProducts(this, this, loginModel.getToken(), nextUrl);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if(callType == RestCalls.DISCOUNT) {
+            try {
+                JSONObject jsnobject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+                if(jsnobject != null) {
+                    jsonArray = jsnobject.getJSONArray("results");
+                }
+
+                if(jsonArray != null) {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if(jsonArray.getJSONObject(i) != null) {
+                            if(jsonArray.getJSONObject(i).getString("value") != null) {
+                                discountValue = Double.parseDouble(jsonArray.getJSONObject(i).getString("value"));
+                            }
+                        }
+                        populateList();
+                    }
+                }
+
+                if(jsnobject.getString("next") != null && !jsnobject.getString("next").isEmpty() && !jsnobject.getString("next").contentEquals("null"))  {
+                    nextUrl = jsnobject.getString("next");
+                    isNextUrl = true;
+                    restCallServices.getProducts(this, this, loginModel.getToken(), nextUrl);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

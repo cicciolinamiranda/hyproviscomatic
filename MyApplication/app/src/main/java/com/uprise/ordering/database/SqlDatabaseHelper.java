@@ -53,6 +53,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LOGIN_ID = "_id";
     private static final String COLUMN_LOGIN_USERNAME = "username";
     private static final String COLUMN_LOGIN_PASSWORD = "password";
+    private static final String COLUMN_LOGIN_DISCOUNT = "discount";
     private static final String COLUMN_LOGIN_TOKEN = "productModelId";
 
     // Database creation sql statement

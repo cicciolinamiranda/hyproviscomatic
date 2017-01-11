@@ -462,6 +462,55 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void getDiscount(final Context ctx, final RestServiceListener listener, final String token
+            , final String discountEndpoint) {
+//        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+//                + ctx.getResources().getString(R.string.endpoint_get_products);
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            JSONObject obj;
+            String jsonResult;
+            @Override
+            public void doInBackground() {
+                obj = HttpClient.SendHttpGetWithoutParamWithAuthorization(discountEndpoint, token);
+                if(obj   != null) {
+                    jsonResult = obj.toString();
+                }
+
+            }
+
+            @Override
+            public void result() {
+
+                if (jsonResult == null || jsonResult.isEmpty()) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.DISCOUNT
+                            , ctx.getString(R.string.unable_to_retrieve_products));
+                } else {
+                    try {
+                        JSONObject jsnobject = new JSONObject(jsonResult);
+
+                        if(null != jsnobject.get("results")) {
+                            listener.onSuccess(RestCalls.DISCOUNT,  jsonResult);
+                        }
+                        else if(null != jsnobject.get("detail")) {
+                            RestCallServices.this.failedPost(listener, RestCalls.DISCOUNT
+                                    , jsnobject.get("detail").toString());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        RestCallServices.this.failedPost(listener, RestCalls.DISCOUNT
+                                , ctx.getString(R.string.unable_to_retrieve_products));
+
+                    }
+
+
+
+                }
+            }
+        }).execute();
+    }
+
     public void getProducts(final Context ctx, final RestServiceListener listener, final String token
             , final String productsEndpoint) {
 //        final String productsEndpoint = ctx.getResources().getString(R.string.endpoint_server)
