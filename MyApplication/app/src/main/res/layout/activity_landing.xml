@@ -38,18 +38,9 @@ tools:context=".LandingActivity">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/app_logo"
+            android:src="@drawable/app_logo2"
             android:adjustViewBounds="true"
             />
-        <!--<ImageView-->
-        <!--android:id="@+id/google_icon"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight=".50"-->
-        <!--android:scaleType="fitCenter"-->
-        <!--android:layout_marginTop="@dimen/g_top_margin"-->
-        <!--android:src="@drawable/app_logo" />-->
-
     </RelativeLayout>
 
     <RelativeLayout
