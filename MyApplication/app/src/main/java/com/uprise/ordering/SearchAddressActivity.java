@@ -205,7 +205,6 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
         locationDetailsModel = getIntent().getParcelableExtra("locationDetailsModel");
         if(locationDetailsModel != null) {
             mapLocationFragment.setLocation(locationDetailsModel.getLocation());
-//            mAutocompleteView.setText(locationDetailsModel.getAddress());
             tvSearchAddress.setText(locationDetailsModel.getAddress());
         }
         else {

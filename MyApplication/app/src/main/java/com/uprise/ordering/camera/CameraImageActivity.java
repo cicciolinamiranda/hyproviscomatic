@@ -49,6 +49,7 @@ public class CameraImageActivity extends AppCompatActivity implements
         Fragment frag = null;
 
         if(display == FULLSCREEN) {
+            Log.d(ApplicationConstants.APP_CODE,"imageIndex: "+intent.getIntExtra("imageIndex", 0));
             frag =
                     PhotoFullScreenFragment.newInstance(intent.getIntExtra("imageIndex", 0),
                             images.get(intent.getIntExtra("imageIndex", 0)),resultCode);
