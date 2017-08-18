@@ -18,7 +18,7 @@
     <string name="action_products">Our Products</string>
     <string name="action_reseller">Our Resellers</string>
     <string name="welcome">Welcome</string>
-    <string name="reg_shopname">Shop Name or \n Name Of Owner</string>
+    <string name="reg_shopname">Shop Name</string>
     <string name="reg_shopaddress">Shop address</string>
     <string name="reg_shop_contact_num">Contact Number</string>
     <string name="reg_shop_shipping_address">Shipping Address</string>
