@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.uprise.ordering.database.SqlDatabaseHelper;
@@ -31,8 +32,10 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
     private View mLoginFormView;
     private View mLoginLogoView;
     private Button btnSignIn;
-    private TextView tvCreateNewAccount;
-    private TextView tvDistributorShop;
+    private Button btnRegister;
+//    private TextView tvCreateNewAccount;
+//    private TextView tvDistributorShop;
+    private LinearLayout llDistributorShop;
     private TextView tvReseller;
 //    private RestCallServices restCallServices;
     boolean cancel;
@@ -45,16 +48,16 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
         getSupportActionBar().hide();
 
         btnSignIn =(Button) findViewById(R.id.email_sign_in_button);
-        tvCreateNewAccount = (TextView) findViewById(R.id.tv_create_new_account);
-        tvDistributorShop = (TextView) findViewById(R.id.tv_distributor_shop);
+        btnRegister = (Button) findViewById(R.id.create_new_account);
+        llDistributorShop = (LinearLayout) findViewById(R.id.ll_distributor_shop);
         tvReseller = (TextView) findViewById(R.id.tv_resellers);
 
 //        btnRegister =(Button) findViewById(R.id.btn_landing_register);
 //        btnShop =(Button) findViewById(R.id.btn_landing_shop);
 //
         btnSignIn.setOnClickListener(this);
-        tvCreateNewAccount.setOnClickListener(this);
-        tvDistributorShop.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
+        llDistributorShop.setOnClickListener(this);
         tvReseller.setOnClickListener(this);
 //        btnRegister.setOnClickListener(this);
 //        btnShop.setOnClickListener(this);
@@ -110,13 +113,11 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
 //                finish();
                 attemptLogin();
                 break;
-            case R.id.tv_create_new_account:
-                tvCreateNewAccount.setTextColor(getResources().getColor(R.color.material_orange));
+            case R.id.create_new_account:
                 startActivity(new Intent(LandingActivity.this, RegistrationActivity.class));
                 finish();
                 break;
-            case R.id.tv_distributor_shop:
-                tvDistributorShop.setTextColor(getResources().getColor(R.color.light));
+            case R.id.ll_distributor_shop:
                 startActivity(new Intent(LandingActivity.this, BrandBasedDistributorShopActivity.class));
                 finish();
                 break;

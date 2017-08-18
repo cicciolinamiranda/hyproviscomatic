@@ -72,4 +72,7 @@
     <color name="material_orange">#FF9800</color>
     <color name="material_deeporange">#FF5722</color>
     <color name="linear_pressed_false">#E0F7FA</color>
+
+    <color name="edittext_color">#0f0f0f</color>
+    <color name="icon_login_bg_color">#2e567d</color>
 </resources>
