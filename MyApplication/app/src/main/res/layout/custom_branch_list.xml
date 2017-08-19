@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light"
+        android:background="@color/colorPrimary"
         android:paddingBottom="14dp"
         android:orientation="vertical">
 
@@ -16,6 +18,7 @@
         <TextView
             android:id="@+id/tv_branch_name_header"
             android:layout_width="0dp"
+            android:textColor="@android:color/white"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:text="@string/label_branch_name" />
@@ -39,10 +42,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
+                android:textColor="@android:color/white"
                 android:text="@string/label_branch_address" />
             <TextView
                 android:id="@+id/tv_item_branch_address"
                 android:layout_width="0dp"
+                android:textColor="@android:color/white"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
                 android:text="Sample Address" />
@@ -56,12 +61,14 @@
             android:id="@+id/tv_branch_address_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:layout_weight="0.1"
             android:text="@string/label_branch_phone" />
         <TextView
             android:id="@+id/tv_item_branch_contact_num"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:layout_weight="0.1"
             android:text="23243242342" />
         </LinearLayout>
@@ -74,6 +81,7 @@
             android:id="@+id/tv_branch_pic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:layout_weight="0.4"
             android:text="@string/reg_shop_picture" />
 
@@ -155,6 +163,7 @@
             android:id="@+id/tv_branch_permit_pic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:layout_weight="0.3"
             android:text="@string/reg_shop_picture_permit" />
         </LinearLayout>
@@ -222,7 +231,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/black_highlight"
-                    android:textColor="@color/light"
+                    android:textColor="@android:color/white"
                     android:text="+10"/>
             </LinearLayout>
         </LinearLayout>

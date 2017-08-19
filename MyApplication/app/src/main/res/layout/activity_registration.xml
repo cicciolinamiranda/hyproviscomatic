@@ -46,10 +46,10 @@
                 android:id="@+id/iv_reg_account_email"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_dialog_email"
+                android:src="@drawable/asset_email"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -90,10 +90,10 @@
                 android:id="@+id/iv_reg_account_password"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_lock_idle_lock"
+                android:src="@drawable/asset_lock"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -143,10 +143,10 @@
                 android:id="@+id/iv_reg_shop_name"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_lock_idle_lock"
+                android:src="@drawable/asset_shop_open"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -184,10 +184,10 @@
                 android:id="@+id/iv_reg_shop_address"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_lock_idle_lock"
+                android:src="@drawable/asset_store"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -226,10 +226,10 @@
                 android:id="@+id/iv_reg_shop_shipping_address"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_lock_idle_lock"
+                android:src="@drawable/asset_shipping_truck"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -267,10 +267,10 @@
                 android:id="@+id/iv_reg_shop_contact_num"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
-                android:src="@android:drawable/ic_lock_idle_lock"
+                android:src="@drawable/asset_phone"
                 android:background="@color/icon_reg_bg_color" />
 
             <android.support.design.widget.TextInputLayout
@@ -321,9 +321,9 @@
         <!--Register Button-->
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_marginBottom="20dp"
             android:layout_height="wrap_content"
             android:id="@+id/ll_reg_btns"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
             <Button

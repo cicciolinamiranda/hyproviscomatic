@@ -68,6 +68,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
     //Maps with address
     private Button addLatLngBtn;
+    private ImageView ivAddLatLngBtn;
 //    private ImageButton editLatlngBtn;
 //    private TextView tvLatValue;
 //    private TextView tvLngValue;
@@ -93,6 +94,8 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         llShopPermit = (LinearLayout) findViewById(R.id.ll_shop_picture_permit_camera);
         llShopPermit.setVisibility(View.GONE);
         addLatLngBtn=(Button) findViewById(R.id.btn_add_lat_lng) ;
+        ivAddLatLngBtn= (ImageView) findViewById(R.id.iv_add_lat_lng);
+        ivAddLatLngBtn.setOnClickListener(this);
 //        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
         addLatLngBtn.setOnClickListener(this);
 
@@ -240,11 +243,10 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //                break;
 
             case R.id.btn_add_lat_lng:
-//                addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
-                Intent searchAddressIntent = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
-//                finish();
-//                startActivity(searchAddressIntent);
-                startActivityForResult(searchAddressIntent, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
+                openSearchAddressView();
+                break;
+            case R.id.iv_add_lat_lng:
+                openSearchAddressView();
                 break;
 //            case R.id.btn_edit_lat_lng:
 ////                editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
@@ -257,6 +259,14 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //                }
 //                break;
         }
+    }
+
+    private void openSearchAddressView() {
+        //                addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+        Intent searchAddressIntent = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
+//                finish();
+//                startActivity(searchAddressIntent);
+        startActivityForResult(searchAddressIntent, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
     }
 
     @Override
