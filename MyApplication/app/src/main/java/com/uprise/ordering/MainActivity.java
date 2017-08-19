@@ -1,7 +1,9 @@
 package com.uprise.ordering;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
@@ -17,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.uprise.ordering.base.MapLocationListener;
@@ -63,9 +64,12 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
         getSupportActionBar().setTitle("Products");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setBackgroundColor(getResources().getColor(R.color.navigation_drawer_bg_color));
+        navigationView.setItemTextColor(ColorStateList.valueOf(Color.WHITE));
+        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
         navigationView.setNavigationItemSelectedListener(this);
-        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
+//        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+//        TextView tvEmail = (TextView) headerLayout.findViewById(R.id.tv_nav_header_username);
 
 //        loginSharedPref = new LoginSharedPref();
         loginModel = new LoginModel();
@@ -75,7 +79,7 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
             finish();
         } else {
-            tvEmail.setText(loginModel.getUsername());
+//            tvEmail.setText(loginModel.getUsername());
 
 //            mapLocationFragment = new MapLocationFragment();
 //            mapLocationFragment.setOnFocusChangedListener(this);
