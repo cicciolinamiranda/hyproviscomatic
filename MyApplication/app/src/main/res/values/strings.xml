@@ -86,7 +86,7 @@
     <string name="title_activity_products_distributor">Our Products</string>
     <string name="title_activity_orders">Transactions</string>
     <string name="title_activity_branches">Branches</string>
-    <string name="title_activity_cart">Cart Items</string>
+    <string name="title_activity_cart">Shopping Cart</string>
     <string name="title_activity_notif">Notifications and Announcements</string>
     <string name="title_activity_add_branch">Branch Details</string>
     <string name="unable_to_register">Unable to Register. Please Try Again. Maybe your email is already existing</string>

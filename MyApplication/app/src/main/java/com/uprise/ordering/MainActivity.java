@@ -61,7 +61,7 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        getSupportActionBar().setTitle("Products");
+        getSupportActionBar().setTitle("");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setBackgroundColor(getResources().getColor(R.color.navigation_drawer_bg_color));
