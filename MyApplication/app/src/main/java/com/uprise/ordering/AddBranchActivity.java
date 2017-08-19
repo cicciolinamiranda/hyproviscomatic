@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,17 +56,19 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
     private EditText etBranchAdd;
     private  EditText etBranchPhone;
 //    private Button btnAddBranch;
-    private ImageButton btnPicsOfStore;
+    private Button btnPicsOfStore;
     private  ImageButton btnPicsOfPermit;
     private int selectedBranchId;
     private int resultCode;
     private LoginModel loginModel;
     private SqlDatabaseHelper sqlDatabaseHelper;
     private RestCallServices restCallServices;
+    private LinearLayout llShopPicture;
+    private LinearLayout llShopPermit;
 
     //Maps with address
-    private ImageButton addLatLngBtn;
-    private ImageButton editLatlngBtn;
+    private Button addLatLngBtn;
+//    private ImageButton editLatlngBtn;
 //    private TextView tvLatValue;
 //    private TextView tvLngValue;
     private LocationDetailsModel selectedAddressLocation;
@@ -83,18 +86,21 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         llEditTextAddress = (LinearLayout) findViewById(R.id.ll_edittext_address);
 //        llEditTextAddress.setVisibility(View.GONE);
         etBranchPhone = (EditText) findViewById(R.id.et_dialog_add_branch_phone);
-        btnPicsOfStore = (ImageButton) findViewById(R.id.btn_shop_picture_camera);
+        btnPicsOfStore = (Button) findViewById(R.id.btn_shop_picture_camera);
         btnPicsOfPermit=(ImageButton) findViewById(R.id.btn_shop_picture_permit_camera);
-
-        addLatLngBtn=(ImageButton) findViewById(R.id.btn_add_lat_lng) ;
-        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
+        llShopPicture = (LinearLayout) findViewById(R.id.ll_shop_picture_camera);
+        llShopPicture.setVisibility(View.GONE);
+        llShopPermit = (LinearLayout) findViewById(R.id.ll_shop_picture_permit_camera);
+        llShopPermit.setVisibility(View.GONE);
+        addLatLngBtn=(Button) findViewById(R.id.btn_add_lat_lng) ;
+//        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
         addLatLngBtn.setOnClickListener(this);
 
-        editLatlngBtn=(ImageButton) findViewById(R.id.btn_edit_lat_lng);
-        editLatlngBtn.setVisibility(View.GONE);
-        editLatlngBtn.setOnClickListener(this);
-        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
-        editLatlngBtn.setOnClickListener(this);
+//        editLatlngBtn=(ImageButton) findViewById(R.id.btn_edit_lat_lng);
+//        editLatlngBtn.setVisibility(View.GONE);
+//        editLatlngBtn.setOnClickListener(this);
+//        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
+//        editLatlngBtn.setOnClickListener(this);
 //        tvLatValue=(TextView) findViewById(R.id.tv_lat_add_branch);
 //        tvLngValue=(TextView) findViewById(R.id.tv_lng_val_add_branch);
 
@@ -111,7 +117,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
             resultCode = ApplicationConstants.RESULT_EDIT_BRANCH;
             etBranchName.setText(branchModel.getName());
             etBranchAdd.setText(branchModel.getAddress());
-            editLatlngBtn.setVisibility(View.VISIBLE);
+//            editLatlngBtn.setVisibility(View.VISIBLE);
             addLatLngBtn.setVisibility(View.GONE);
             llEditTextAddress.setVisibility(View.VISIBLE);
 //            tvLatValue.setVisibility(View.VISIBLE);
@@ -234,22 +240,22 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //                break;
 
             case R.id.btn_add_lat_lng:
-                addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+//                addLatLngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
                 Intent searchAddressIntent = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
 //                finish();
 //                startActivity(searchAddressIntent);
                 startActivityForResult(searchAddressIntent, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
                 break;
-            case R.id.btn_edit_lat_lng:
-                editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
-                if(selectedAddressLocation != null) {
-                    Intent searchAddressIntentEdit = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
-                    searchAddressIntentEdit.putExtra("locationDetailsModel", selectedAddressLocation);
-//                    finish();
-//                    startActivity(searchAddressIntentEdit);
-                    startActivityForResult(searchAddressIntentEdit, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
-                }
-                break;
+//            case R.id.btn_edit_lat_lng:
+////                editLatlngBtn.setColorFilter(getResources().getColor(R.color.colorAccent));
+//                if(selectedAddressLocation != null) {
+//                    Intent searchAddressIntentEdit = new Intent(AddBranchActivity.this, SearchAddressActivity.class);
+//                    searchAddressIntentEdit.putExtra("locationDetailsModel", selectedAddressLocation);
+////                    finish();
+////                    startActivity(searchAddressIntentEdit);
+//                    startActivityForResult(searchAddressIntentEdit, ApplicationConstants.REQUEST_CODE_ADD_BRANCH_LAT_LNG);
+//                }
+//                break;
         }
     }
 
@@ -364,6 +370,7 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 
     private void refreshImageList(final String idPrefix, final int maxOfThreeId, final int btnId, final ImageModel imageModel, final int resultCode) {
         //clear imageviews
+
         for (int k = 0; k < NUM_IMAGES; k++) {
             int resId = getResources()
                     .getIdentifier(idPrefix + k, "id", getPackageName());
@@ -405,6 +412,26 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
 //            findViewById(imageExcessLinearId).setVisibility(View.GONE);
 //            ((TextView) findViewById(imageExcessCount)).setText("+" + (imageModel.getIntegerBase().size() - NUM_IMAGES));
         }
+
+        if(imageModel != null && imageModel.getIntegerBase() != null &&
+                imageModel.getIntegerBase().size() > 0 && resultCode == ApplicationConstants.RESULT_GALLERY_STORE) {
+            llShopPicture.setVisibility(View.VISIBLE);
+        }
+        else if(imageModel != null && imageModel.getIntegerBase() != null &&
+                imageModel.getIntegerBase().size() <= 0 && resultCode == ApplicationConstants.RESULT_GALLERY_STORE) {
+            llShopPicture.setVisibility(View.GONE);
+        }
+
+        else if (imageModel != null && imageModel.getIntegerBase() != null &&
+                imageModel.getIntegerBase().size() > 0 && resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT) {
+            llShopPermit.setVisibility(View.VISIBLE);
+        }
+
+        else if (imageModel != null && imageModel.getIntegerBase() != null &&
+                imageModel.getIntegerBase().size() <= 0 && resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT) {
+            llShopPermit.setVisibility(View.GONE);
+        }
+
     }
 
     private void resultFromGallery (Intent data, ImageModel imageModel, int requestCode) {
@@ -590,12 +617,12 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         String lng = "";
         String address = "";
         selectedAddressLocation = null;
-        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
-        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
+//        addLatLngBtn.setColorFilter(getResources().getColor(R.color.black));
+//        editLatlngBtn.setColorFilter(getResources().getColor(R.color.black));
         if(null != data && data.getParcelableExtra("locationDetailsModel") != null) selectedAddressLocation = data.getParcelableExtra("locationDetailsModel");
         if(null != selectedAddressLocation && selectedAddressLocation.getLocation() != null) {
-            addLatLngBtn.setVisibility(View.GONE);
-            editLatlngBtn.setVisibility(View.VISIBLE);
+//            addLatLngBtn.setVisibility(View.GONE);
+//            editLatlngBtn.setVisibility(View.VISIBLE);
             lat = selectedAddressLocation.getLocation().latitude+"";
             lng = selectedAddressLocation.getLocation().longitude+"";
             address = selectedAddressLocation.getAddress();

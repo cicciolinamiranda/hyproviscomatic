@@ -24,8 +24,13 @@
     <string name="reg_shop_shipping_address">Shipping Address</string>
     <string name="reg_shop_picture">Pictures of the\nStore Branch</string>
     <string name="reg_shop_picture_permit">Pictures of\nMayor\'s Permit or\nDTI or \nBrgy Permit</string>
+    <string name="reg_shop_picture_permit_2">Add Business Permit</string>
+    <string name="reg_shop_picture_permit_2_subtitle">(DTI, Mayor\'s or Brgy Permit)</string>
+
     <string name="reg_shop_branch">Branch</string>
     <string name="action_add_branch">Add Branch</string>
+    <string name="action_add_branch_photo">Branch Photo</string>
+
     <string name="tv_reg_password">Password</string>
     <string name="tv_reg_email_address">Email</string>
     <string name="action_submit">Submit</string>

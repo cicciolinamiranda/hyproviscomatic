@@ -15,7 +15,7 @@
         android:paddingRight="30dp"
         android:id="@+id/ll_connect">
 
-
+        <!--App Logo-->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -258,7 +258,6 @@
         <!--Shop Contact Num-->
         <LinearLayout
             android:layout_marginBottom="5dp"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ll_shop_contact_num"
@@ -305,7 +304,8 @@
             android:drawableLeft="@drawable/ic_add_grey600_48dp"
             android:background="@color/icon_reg_bg_color"
             android:textColor="@color/edittext_reg_color"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
+            android:textAllCaps="false"
             android:text="@string/action_add_branch"/>
 
         <com.uprise.ordering.view.ExpandableHeightListView

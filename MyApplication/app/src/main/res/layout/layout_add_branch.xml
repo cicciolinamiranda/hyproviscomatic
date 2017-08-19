@@ -1,34 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_margin="20dp"
     android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
-        <!--Branch Name-->
+
+        <!--App Logo-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:src="@drawable/app_logo_3"
+            android:adjustViewBounds="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <!--Header-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:textColor="@android:color/white"
+            android:text="@string/label_shop_details"/>
+
+        <!--Shop Name-->
     <LinearLayout
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_edittext_branch_name"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:gravity="bottom"
-            android:text="@string/label_branch_name"
-            android:layout_gravity="center_vertical"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_dialog_add_branch_name"
-        android:lines="1"
-        android:layout_gravity="center_horizontal"
-         />
+
+        <ImageView
+            android:id="@+id/iv_dialog_add_branch_name"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:src="@android:drawable/ic_lock_idle_lock"
+            android:background="@color/icon_reg_bg_color" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:textColorHint="#fff"
+            android:background="@color/edittext_color"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_dialog_add_branch_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="left"
+                android:textSize="12sp"
+                android:hint="@string/reg_shopname"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:theme="@style/LandingEditText" />
+        </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
         <!--Address with Map Coordinate-->
@@ -37,171 +83,204 @@
         android:layout_height="wrap_content"
         android:id="@+id/ll_address_lat_lng"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:gravity="bottom"
-            android:text="@string/reg_address_lat_lng"
-            android:layout_gravity="center_vertical"/>
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginRight="2dp"-->
-            <!--android:textSize="12dp"-->
-            <!--android:visibility="gone"-->
-            <!--android:text="lat"-->
-            <!--android:id="@+id/tv_lat_add_branch"-->
-            <!--android:layout_gravity="center_vertical"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="2dp"-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_marginRight="2dp"-->
-            <!--android:textSize="18dp"-->
-            <!--android:text="lng"-->
-            <!--android:id="@+id/tv_lng_val_add_branch"-->
-            <!--android:layout_gravity="center_vertical"/>-->
-        <ImageButton
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_add_location_black_48dp"
-            android:id="@+id/btn_add_lat_lng"
-            android:textColor="@color/colorAccent"
-            android:background="@null"/>
 
-        <ImageButton
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:visibility="visible"
-            android:layout_marginTop="5dp"
+        <Button
             android:layout_marginBottom="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_edit_googblue_48dp"
-            android:id="@+id/btn_edit_lat_lng"
-            android:textColor="@color/colorAccent"
-            android:background="@null"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_add_lat_lng"
+            android:drawableLeft="@drawable/ic_add_location_black_48dp"
+            android:background="@color/icon_reg_bg_color"
+            android:textColor="@color/edittext_reg_color"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:text="@string/reg_address_lat_lng"/>
+
+        <!--<ImageButton-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:padding="10dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@drawable/ic_add_location_black_48dp"-->
+            <!--android:id="@+id/btn_add_lat_lng"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:background="@null"/>-->
+
+        <!--<ImageButton-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:padding="10dp"-->
+            <!--android:visibility="visible"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@drawable/ic_edit_googblue_48dp"-->
+            <!--android:id="@+id/btn_edit_lat_lng"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:background="@null"/>-->
 
         </LinearLayout>
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="5dp"-->
-                <!--android:layout_marginRight="2dp"-->
-                <!--android:textSize="12dp"-->
-                <!--android:visibility="gone"-->
-                <!--android:text="lat"-->
-                <!--android:id="@+id/tv_lat_add_branch"-->
-                <!--android:layout_gravity="center_vertical"/>-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="2dp"-->
-                <!--android:visibility="gone"-->
-                <!--android:layout_marginRight="2dp"-->
-                <!--android:textSize="12dp"-->
-                <!--android:text="lng"-->
-                <!--android:id="@+id/tv_lng_val_add_branch"-->
-                <!--android:layout_gravity="center_vertical"/>-->
-        <!--</LinearLayout>-->
 
+        <!--Shop Address-->
     <LinearLayout
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_edittext_address"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:text="@string/reg_shop_branch_address"
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center_vertical"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_dialog_add_branch_address"
-        android:lines="1"
-        android:layout_gravity="center_horizontal"
-        />
+
+        <ImageView
+            android:id="@+id/iv_dialog_add_branch_addresss"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:src="@android:drawable/ic_lock_idle_lock"
+            android:background="@color/icon_reg_bg_color" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:textColorHint="#fff"
+            android:background="@color/edittext_color"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_dialog_add_branch_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="left"
+                android:textSize="12sp"
+                android:hint="@string/reg_shopaddress"
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:theme="@style/LandingEditText" />
+        </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
         <!--Contact num-->
     <LinearLayout
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_edittext_branch_contact_num"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iv_dialog_add_branch_phone"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:src="@android:drawable/ic_lock_idle_lock"
+            android:background="@color/icon_reg_bg_color" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:textColorHint="#fff"
+            android:background="@color/edittext_color"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_dialog_add_branch_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="left"
+                android:textSize="12sp"
+                android:hint="@string/reg_shop_contact_num"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:theme="@style/LandingEditText" />
+        </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
         <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tv_max_of_three_pic_store"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:text="@string/label_branch_phone"
-            android:layout_marginRight="5dp"
+            android:textColor="@color/edittext_reg_color"
+            android:text="@string/max_of_three_photos"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_dialog_add_branch_phone"
-        android:inputType="phone"
-        android:lines="1"
-        android:layout_gravity="center_horizontal"
-         />
-        </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_shop_picture"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_shop_picture"
-            android:layout_gravity="center_vertical"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/edittext_reg_color"-->
+            <!--android:text="@string/reg_shop_picture"-->
+            <!--android:layout_gravity="center_vertical"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical|end">
+            android:gravity="center_vertical|start">
 
-            <TextView
-                android:id="@+id/tv_max_of_three_pic_store"
-                android:layout_width="wrap_content"
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_max_of_three_pic_store"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/edittext_reg_color"-->
+                <!--android:text="@string/max_of_three_photos"-->
+                <!--android:layout_gravity="center_vertical"/>-->
+
+            <!--<ImageButton-->
+                <!--android:layout_marginLeft="2dp"-->
+                <!--android:layout_marginRight="2dp"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:src="@drawable/ic_add_a_photo_grey600_48dp"-->
+                <!--android:id="@+id/btn_shop_picture_camera"-->
+                <!--android:textColor="@color/colorAccent"-->
+                <!--android:background="@drawable/btn_ripple_dark"/>-->
+
+            <Button
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/max_of_three_photos"
-                android:visibility="gone"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_add_a_photo_grey600_48dp"
-            android:id="@+id/btn_shop_picture_camera"
-            android:textColor="@color/colorAccent"
-            android:background="@drawable/btn_ripple_dark"/>
+                android:id="@+id/btn_shop_picture_camera"
+                android:drawableLeft="@drawable/ic_add_a_photo_grey600_48dp"
+                android:background="@color/icon_reg_bg_color"
+                android:textColor="@color/edittext_reg_color"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:text="@string/action_add_branch_photo"/>
+
             </LinearLayout>
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/edittext_reg_color"-->
+            <!--android:text="@string/reg_shop_picture"-->
+            <!--android:layout_gravity="center_vertical"/>-->
 
     </LinearLayout>
         <LinearLayout
@@ -285,44 +364,65 @@
         </LinearLayout>
 
 
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tv_max_of_three_pic_permit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/edittext_reg_color"
+            android:text="@string/max_of_three_photos"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_shop_picture_permits"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_shop_picture_permit"
-            android:layout_gravity="center_vertical"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical|end">
-            <TextView
-                android:id="@+id/tv_max_of_three_pic_permit"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <!--<TextView-->
+            <!--android:id="@+id/tv_max_of_three_pic_permit"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/edittext_reg_color"-->
+            <!--android:text="@string/max_of_three_photos"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_gravity="center_vertical"/>-->
+            <ImageButton
+                android:id="@+id/btn_shop_picture_permit_camera"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_ripple_dark"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_add_a_photo_grey600_48dp"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/max_of_three_photos"
-                android:visibility="gone"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_add_a_photo_grey600_48dp"
-            android:id="@+id/btn_shop_picture_permit_camera"
-            android:textColor="@color/colorAccent"
-            android:background="@drawable/btn_ripple_dark"/>
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reg_shop_picture_permit_2"
+                    android:textColor="@color/edittext_reg_color" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reg_shop_picture_permit_2_subtitle"
+                    android:textSize="8sp"
+                    android:textColor="@color/edittext_reg_color" />
             </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
         <LinearLayout
