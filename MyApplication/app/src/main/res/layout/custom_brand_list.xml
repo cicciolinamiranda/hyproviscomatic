@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
     <ImageView
         android:paddingTop="3dp"
@@ -10,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight=".80"
         android:weightSum="1"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         android:id="@+id/iv_brand_image"
         android:src="@drawable/placeholder"
         />
@@ -62,7 +63,7 @@
             android:id="@+id/tv_brand_qty_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:textColor="@android:color/white"
             android:text="@string/label_brand_qty"
             android:layout_gravity="center_vertical|right"
             />
@@ -74,6 +75,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:layout_marginLeft="3dp"
+            android:textColor="@android:color/white"
             android:text="@string/label_brand_default_value"
             android:layout_gravity="center_vertical|right"/>
 
