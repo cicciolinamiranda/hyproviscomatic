@@ -282,4 +282,13 @@ public class LandingActivity extends BaseAuthenticatedActivity implements View.O
             }
         });
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            finish();
+            return true;
+        }
+        return false;
+    }
 }
