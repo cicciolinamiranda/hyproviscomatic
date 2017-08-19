@@ -74,5 +74,7 @@
     <color name="linear_pressed_false">#E0F7FA</color>
 
     <color name="edittext_color">#0f0f0f</color>
+    <color name="icon_reg_bg_color">#0f0f0f</color>
+    <color name="edittext_reg_color">@color/grey_500</color>
     <color name="icon_login_bg_color">#2e567d</color>
 </resources>

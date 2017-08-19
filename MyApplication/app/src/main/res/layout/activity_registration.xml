@@ -4,368 +4,326 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:background="@color/light"
+    android:background="@color/colorPrimary"
     tools:context="com.uprise.ordering.RegistrationActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:id="@+id/ll_connect">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ll_shopname"
-        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reg_shopname"
-            android:layout_gravity="center_vertical"/>
+            android:textAllCaps="true"
+            android:layout_marginBottom="5dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:text="@string/label_account"/>
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_reg_shopname"
-            android:padding="13dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:layout_above="@+id/ll_connect"
-            android:layout_alignEnd="@+id/ll_connect" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ll_shopaddress"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_shopaddress"
-            android:layout_gravity="center_vertical"/>
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_reg_shopaddress"
-            android:padding="13dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
+        <!--Account Email-->
         <LinearLayout
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ll_shop_contact_num"
+            android:id="@+id/ll_reg_email_address"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reg_shop_contact_num"
-                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:id="@+id/iv_reg_account_email"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_dialog_email"
+                android:background="@color/icon_reg_bg_color" />
 
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_reg_shop_contact_num"
-                android:padding="13dp"
-                android:inputType="phone"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_reg_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp"
+                    android:gravity="left"
+                    android:hint="@string/tv_reg_email_address"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
+        <!--Account Password-->
         <LinearLayout
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_reg_password"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/iv_reg_account_password"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                android:background="@color/icon_reg_bg_color" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_reg_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp"
+                    android:gravity="left"
+                    android:hint="@string/prompt_password"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:textColor="@android:color/white"
+            android:text="@string/label_shop_details"/>
+        <!--Shop name-->
+        <LinearLayout
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_shopname"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/iv_reg_shop_name"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                android:background="@color/icon_reg_bg_color" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_reg_shopname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left"
+                    android:textSize="12sp"
+                    android:hint="@string/reg_shopname"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <!--Shop address-->
+        <LinearLayout
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_shopaddress"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/iv_reg_shop_address"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                android:background="@color/icon_reg_bg_color" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_reg_shopaddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left"
+                    android:textSize="12sp"
+                    android:hint="@string/reg_shopaddress"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <!--Shop Shipping Address-->
+        <LinearLayout
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ll_shop_shipping_address"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reg_shop_shipping_address"
-                android:layout_gravity="center_vertical"/>
 
-            <EditText
+            <ImageView
+                android:id="@+id/iv_reg_shop_shipping_address"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                android:background="@color/icon_reg_bg_color" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_reg_shop_shipping_address"
-                android:padding="13dp"
-                android:inputType="textPostalAddress"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"/>
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_reg_shop_shipping_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left"
+                    android:textSize="12sp"
+                    android:hint="@string/reg_shop_shipping_address"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
+
+        <!--Shop Contact Num-->
+        <LinearLayout
+            android:layout_marginBottom="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_shop_contact_num"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_reg_shop_contact_num"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/ic_lock_idle_lock"
+                android:background="@color/icon_reg_bg_color" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:textColorHint="#fff"
+                android:background="@color/edittext_color"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_reg_shop_contact_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left"
+                    android:textSize="12sp"
+                    android:hint="@string/reg_shop_contact_num"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/LandingEditText" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
         <Button
-            android:layout_width="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_add_branch"
+            android:drawableLeft="@drawable/ic_add_grey600_48dp"
+            android:background="@color/icon_reg_bg_color"
+            android:textColor="@color/edittext_reg_color"
+            android:textAlignment="textStart"
             android:text="@string/action_add_branch"/>
+
         <com.uprise.ordering.view.ExpandableHeightListView
             android:id="@+id/list_reg_branch"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:cacheColorHint="#00000000"
             android:fadingEdge="none"
             android:focusable="false"
             android:scrollbars="none"/>
-        <!--<LinearLayout-->
-            <!--android:id="@+id/ll_reg_branch_list"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_height="wrap_content">-->
-            <!--<ListView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:scrollbarAlwaysDrawVerticalTrack="true"-->
-                <!--android:layout_weight=".50"-->
-                <!--android:id="@+id/list_reg_branch"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/ll_shop_picture"-->
-            <!--android:orientation="horizontal">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/reg_shop_picture"-->
-                <!--android:layout_gravity="center_vertical"/>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:gravity="center_vertical|end"-->
-                <!--android:id="@+id/ll_shop_picture_camera">-->
-                        <!--<ImageView-->
-                            <!--android:layout_marginLeft="2dp"-->
-                            <!--android:layout_marginRight="2dp"-->
-                            <!--android:layout_width="50dp"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:scaleType="centerCrop"-->
-                            <!--android:id="@+id/iv_cam_store_3"-->
-                            <!--android:background="@android:color/transparent"-->
-                            <!--android:layout_alignParentTop="true"-->
-                            <!--android:layout_alignParentStart="true"/>-->
-                        <!--<ImageView-->
-                            <!--android:layout_marginLeft="2dp"-->
-                            <!--android:layout_marginRight="2dp"-->
-                            <!--android:layout_width="50dp"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:scaleType="centerCrop"-->
-                            <!--android:id="@+id/iv_cam_store_2"-->
-                            <!--android:background="@android:color/transparent"-->
-                            <!--android:layout_alignParentTop="true"-->
-                            <!--android:layout_alignParentStart="true"/>-->
-                        <!--<ImageView-->
-                            <!--android:layout_marginLeft="2dp"-->
-                            <!--android:layout_marginRight="2dp"-->
-                            <!--android:layout_width="50dp"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:scaleType="centerCrop"-->
-                            <!--android:id="@+id/iv_cam_store_1"-->
-                            <!--android:background="@android:color/transparent"-->
-                            <!--android:layout_alignParentTop="true"-->
-                            <!--android:layout_alignParentStart="true"/>-->
-                        <!--<ImageView-->
-                            <!--android:layout_marginLeft="2dp"-->
-                            <!--android:layout_marginRight="2dp"-->
-                            <!--android:layout_width="50dp"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:scaleType="centerCrop"-->
-                            <!--android:id="@+id/iv_cam_store_0"-->
-                            <!--android:background="@android:color/transparent"-->
-                            <!--android:layout_alignParentTop="true"-->
-                            <!--android:layout_alignParentStart="true"/>-->
-                        <!--<LinearLayout-->
-                            <!--android:id="@+id/ll_photo_store_imageExcessDisplay"-->
-                            <!--android:layout_marginLeft="2dp"-->
-                            <!--android:layout_marginRight="2dp"-->
-                            <!--android:layout_width="50dp"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:padding="10dp"-->
-                            <!--android:layout_margin="5dp"-->
-                            <!--android:gravity="center_vertical|center_horizontal"-->
-                            <!--android:background="@drawable/border_rectangle"-->
-                            <!--android:visibility="gone">-->
-                            <!--<TextView-->
-                                <!--android:id="@+id/tv_store_imageExcessCount"-->
-                                <!--android:background="@color/black_highlight"-->
-                                <!--android:textColor="@color/light"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:text="+10"/>-->
-                        <!--</LinearLayout>-->
-                <!--<ImageButton-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:layout_marginBottom="5dp"-->
-                    <!--android:scaleType="fitCenter"-->
-                    <!--android:src="@drawable/ic_add_a_photo_grey600_48dp"-->
-                    <!--android:id="@+id/btn_shop_picture_camera"-->
-                    <!--android:textColor="@color/colorAccent"-->
-                    <!--android:background="@drawable/btn_ripple_dark"/>-->
-                <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/ll_shop_picture_permits"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/reg_shop_picture_permit"-->
-                <!--android:layout_gravity="center_vertical"/>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:gravity="center_vertical|end"-->
-                <!--android:id="@+id/ll_shop_picture_permit_camera">-->
-
-                <!--<ImageView-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:id="@+id/iv_cam_permit_3"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_alignParentStart="true"/>-->
-                <!--<ImageView-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:id="@+id/iv_cam_permit_2"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_alignParentStart="true"/>-->
-                <!--<ImageView-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:id="@+id/iv_cam_permit_1"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_alignParentStart="true"/>-->
-                <!--<ImageView-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:id="@+id/iv_cam_permit_0"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_alignParentStart="true"/>-->
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/ll_photo_permit_imageExcessDisplay"-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:layout_margin="5dp"-->
-                    <!--android:gravity="center_vertical|center_horizontal"-->
-                    <!--android:background="@drawable/border_rectangle"-->
-                    <!--android:visibility="gone">-->
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_permit_imageExcessCount"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@color/black_highlight"-->
-                        <!--android:textColor="@color/light"-->
-                        <!--android:text="+10"/>-->
-                <!--</LinearLayout>-->
-                <!--<ImageButton-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:layout_marginBottom="5dp"-->
-                    <!--android:scaleType="fitCenter"-->
-                    <!--android:src="@drawable/ic_add_a_photo_grey600_48dp"-->
-                    <!--android:id="@+id/btn_shop_picture_permit_camera"-->
-                    <!--android:textColor="@color/colorAccent"-->
-                    <!--android:background="@drawable/btn_ripple_dark"/>-->
-                <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll_reg_email_address"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_reg_email_address"
-                android:layout_gravity="center_vertical"/>
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_reg_email"
-                android:padding="13dp"
-                android:inputType="textEmailAddress"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll_reg_password"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_reg_password"
-                android:layout_gravity="center_vertical"/>
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_reg_password"
-                android:padding="13dp"
-                android:inputType="textPassword"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
+        <!--Register Button-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ll_reg_btns"
             android:layout_marginBottom="10dp"
-            android:gravity="center_vertical|end"
+            android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:textAllCaps="true"
                 android:id="@+id/btn_reg_submit"
-                android:text="@string/action_submit"/>
-            </LinearLayout>
+                android:background="@drawable/register_button" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

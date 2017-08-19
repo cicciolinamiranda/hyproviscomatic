@@ -20,7 +20,7 @@
     <string name="welcome">Welcome</string>
     <string name="reg_shopname">Shop Name</string>
     <string name="reg_shopaddress">Shop address</string>
-    <string name="reg_shop_contact_num">Contact Number</string>
+    <string name="reg_shop_contact_num">Shop Contact Number</string>
     <string name="reg_shop_shipping_address">Shipping Address</string>
     <string name="reg_shop_picture">Pictures of the\nStore Branch</string>
     <string name="reg_shop_picture_permit">Pictures of\nMayor\'s Permit or\nDTI or \nBrgy Permit</string>
@@ -129,4 +129,6 @@
     <string name="label_order_no_label">No Order Records</string>
     <string name="net_total_label">Net Total</string>
     <string name="label_forgot_password">Forgot password? Click here</string>
+    <string name="label_account">Account</string>
+    <string name="label_shop_details">Shop details</string>
 </resources>
