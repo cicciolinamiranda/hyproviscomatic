@@ -3,6 +3,7 @@ package com.uprise.ordering;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
@@ -48,7 +50,11 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_existing_branch);
-
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.title_activity_branches));
         llNoBranchAvail =(LinearLayout) findViewById(R.id.ll_existing_branch_no_records);
         llExistingBranch =(LinearLayout) findViewById(R.id.ll_existing_branch);
         listViewBranch = (ExpandableHeightListView) findViewById(R.id.list_existing_branch);
