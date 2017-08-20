@@ -77,11 +77,6 @@
             android:parentActivityName=".RegistrationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ShoppingCartActivity"
-            android:label="@string/title_activity_cart"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".NotificationActivity"
             android:label="@string/title_activity_notif"
             android:parentActivityName=".MainActivity"
@@ -119,11 +114,6 @@
             android:name=".service.FetchAddressIntentService"
             android:exported="false" />
 
-        <activity
-            android:name=".DistributorShopActivity"
-            android:label="@string/title_activity_products_distributor"
-            android:parentActivityName=".LandingActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".SearchAddressActivity"
             android:label="@string/title_activity_search_address"

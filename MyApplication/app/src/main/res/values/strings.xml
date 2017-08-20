@@ -62,7 +62,7 @@
     <string name="label_product_name">Product name:</string>
     <string name="changes_saved">Changes saved</string>
     <string name="btn_proceed_to_checkout">Proceed to checkout</string>
-    <string name="estimated_total_label">Sub Total</string>
+    <string name="estimated_total_label">Total:</string>
     <string name="action_checkout">Order sent. Please wait for email approval</string>
     <string name="notif_msg_action_delete">Delete Message</string>
     <string name="label_existing_branch_no_label">No Branch saved</string>
@@ -128,12 +128,13 @@
     <string name="unable_to_save_branch">Unable to save branch. Please Try Again.</string>
     <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
     <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
-    <string name="estimated_discount_label">Discount</string>
+    <string name="estimated_discount_label">Discounts:</string>
     <string name="unable_to_get_notif">Unable to get notifications</string>
-    <string name="total_label">Sub Total</string>
+    <string name="total_label">Total:</string>
     <string name="label_order_no_label">No Order Records</string>
     <string name="net_total_label">Net Total</string>
     <string name="label_forgot_password">Forgot password? Click here</string>
     <string name="label_account">Account</string>
     <string name="label_shop_details">Shop details</string>
+    <string name="new_total_label">New Total:</string>
 </resources>

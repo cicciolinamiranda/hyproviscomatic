@@ -54,9 +54,9 @@ public class ProductPagerAdapter extends PagerAdapter {
     private String brandId;
     private CartItemsModel savedCardItem;
     private List<CartItemsModel> cartItemsModelList;
-    private LinearLayout llProductPrice;
+    private TextView tvProductPrice;
     private LinearLayout llProductQty;
-    private LinearLayout llQtyButtons;
+//    private LinearLayout llQtyButtons;
     private LinearLayout llTransacBtn;
     private SqlDatabaseHelper sqlDatabaseHelper;
     private LoginModel loginModel;
@@ -121,14 +121,14 @@ public class ProductPagerAdapter extends PagerAdapter {
 //        LoginSharedPref loginSharedPref = new LoginSharedPref();
         loginModel = sqlDatabaseHelper.getLoginCredentials();
 
-        llProductPrice = (LinearLayout) itemView.findViewById(R.id.ll_brand_price);
+        tvProductPrice = (TextView) itemView.findViewById(R.id.tv_brand_price);
         llProductQty = (LinearLayout) itemView.findViewById(R.id.ll_brand_qty);
-        llQtyButtons = (LinearLayout) itemView.findViewById(R.id.ll_item_qty_buttons);
+//        llQtyButtons = (LinearLayout) itemView.findViewById(R.id.ll_item_qty_buttons);
         llTransacBtn = (LinearLayout) itemView.findViewById(R.id.ll_transac_buttons);
         if(loginModel == null || loginModel.getUsername() == null) {
-            llProductPrice.setVisibility(View.INVISIBLE);
+            tvProductPrice.setVisibility(View.INVISIBLE);
             llProductQty.setVisibility(View.INVISIBLE);
-            llQtyButtons.setVisibility(View.INVISIBLE);
+//            llQtyButtons.setVisibility(View.INVISIBLE);
             llTransacBtn.setVisibility(View.INVISIBLE);
         }
 

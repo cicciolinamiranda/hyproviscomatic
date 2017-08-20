@@ -2,6 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_shopping_cart"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -56,6 +57,7 @@
         android:orientation="horizontal">
         <ListView
             android:layout_width="match_parent"
+            android:divider="@android:color/white"
             android:layout_height="match_parent"
             android:id="@+id/list_shopping_cart"
             android:layout_alignParentTop="true"/>
@@ -73,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:background="@color/grey_100"
+            android:background="@color/colorAccent"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +83,7 @@
                 android:text="@string/estimated_total_label"
                 android:id="@+id/tv_order_item_sub_total"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@android:color/white"
                 android:gravity="left|center_vertical"
                 android:layout_marginLeft="20dp"
                 />
@@ -92,7 +94,7 @@
                 android:text="0.00 Php"
                 android:id="@+id/tv_order_item__sub_total_value"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@android:color/white"
                 android:gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
                 />
@@ -103,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:background="@color/grey_300"
+            android:background="@color/colorAccentDark"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -111,7 +113,7 @@
                 android:text="@string/estimated_discount_label"
                 android:id="@+id/tv_shopping_cart_discount"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@android:color/white"
                 android:gravity="left|center_vertical"
                 android:layout_marginLeft="20dp"
                 />
@@ -122,7 +124,7 @@
                 android:text="0.00 Php"
                 android:id="@+id/tv_shopping_cart_discount_value"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@android:color/white"
                 android:gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
                 />
@@ -133,15 +135,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:background="@color/grey_500"
+            android:background="@color/colorAccent"
             android:orientation="horizontal">
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="@string/net_total_label"
+            android:text="@string/new_total_label"
             android:id="@+id/tv_estimated_total"
             android:layout_weight="1"
-            android:textColor="@color/black"
+                android:textColor="@android:color/white"
             android:gravity="left|center_vertical"
             android:layout_marginLeft="20dp"
             />
@@ -152,7 +154,7 @@
                 android:text="0.00 Php"
                 android:id="@+id/tv_estimated_total_value"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@android:color/white"
                 android:gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
                 />
@@ -163,7 +165,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:background="@color/orange_700"
+        android:background="@color/buttons_color"
         android:clickable="true"
         android:orientation="horizontal">
         <TextView

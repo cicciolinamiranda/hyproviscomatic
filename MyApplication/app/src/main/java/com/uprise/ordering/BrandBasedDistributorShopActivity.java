@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
@@ -18,7 +19,6 @@ import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 import com.uprise.ordering.view.BrandsAdapter;
 import com.uprise.ordering.view.ProductPagerAdapter;
-import com.uprise.ordering.view.ProductsAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,19 +70,18 @@ public class BrandBasedDistributorShopActivity extends LandingSubPageBaseActivit
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-        ProductsAdapter productsAdapter = (ProductsAdapter) parent.getExpandableListAdapter();
         int iCount;
         int iIdx;
         Object item;
 
-        iCount = productsAdapter.getChildrenCount(groupPosition);
+        iCount = brandsAdapter.getChildrenCount(groupPosition);
         for ( iIdx = 0; iIdx < iCount; ++iIdx )
         {
-            item = productsAdapter.getChild(groupPosition, iIdx);
+            item = brandsAdapter.getChild(groupPosition, iIdx);
             if ( item != null )
             {
                 // Here you would cast item to the appropriate type for this row
-                LinearLayout llBrandPrice = (LinearLayout) v.findViewById(R.id.ll_brand_price);
+                TextView tvBrandPrice = (TextView) v.findViewById(R.id.tv_brand_price);
                 LinearLayout llBrandQty = (LinearLayout) v.findViewById(R.id.ll_brand_qty);
                 LinearLayout llQtyButtons = (LinearLayout) v.findViewById(R.id.ll_item_qty_buttons);
                 LinearLayout llTransacBtn = (LinearLayout) v.findViewById(R.id.ll_transac_buttons);
@@ -90,7 +89,7 @@ public class BrandBasedDistributorShopActivity extends LandingSubPageBaseActivit
                 if ( iIdx == childPosition )
                 {
                     // Here you would toggle checked state in the data for this item
-                    llBrandPrice.setVisibility(View.GONE);
+                    tvBrandPrice.setVisibility(View.GONE);
                     llQtyButtons.setVisibility(View.GONE);
                     llBrandQty.setVisibility(View.GONE);
                     llTransacBtn.setVisibility(View.GONE);

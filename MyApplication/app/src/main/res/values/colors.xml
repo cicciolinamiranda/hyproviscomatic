@@ -2,12 +2,10 @@
 <resources>
     <color name="colorPrimary">#1B2431</color>
     <color name="colorPrimaryDark">#111111</color>
-    <!--<color name="colorAccent">#FF4081</color>-->
-    <!--<color name="colorAccentDark">#C51162</color>-->
     <!--<color name="colorAccentLight">#F8BBD0</color>-->
-    <color name="colorAccent">@color/material_orange</color>
-    <color name="colorAccentDark">@color/material_deeporange</color>
-    <color name="colorAccentLight">@color/orange_color</color>
+    <color name="colorAccent">#0a5c7d</color>
+    <color name="colorAccentDark">#022355</color>
+    <color name="colorAccentLight">#128bbc</color>
 
     <!--Grey-->
     <color name="grey_100">#F5F5F5</color>
@@ -79,5 +77,6 @@
     <color name="edittext_reg_color">@color/grey_500</color>
     <color name="icon_login_bg_color">#2e567d</color>
     <color name="quantity_bg_color">#043761</color>
+    <color name="buttons_color">#2F57F9</color>
 
 </resources>
