@@ -10,11 +10,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,6 +49,14 @@ public class ResellerActivity extends LandingSubPageBaseActivity implements MapL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reseller);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.title_activity_resellers));
+
         mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.frag_reseller);
         mapLocationFragment.setOnFocusChangedListener(this);
 

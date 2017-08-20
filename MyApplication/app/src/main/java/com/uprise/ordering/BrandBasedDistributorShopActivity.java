@@ -49,6 +49,8 @@ public class BrandBasedDistributorShopActivity extends LandingSubPageBaseActivit
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_shop_now);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
+        getSupportActionBar().setTitle("");
         brandModels = new ArrayList<>();
         expandableListView = (ExpandableListView) findViewById(R.id.el_shop_now_products);
 

@@ -50,6 +50,7 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_existing_branch);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

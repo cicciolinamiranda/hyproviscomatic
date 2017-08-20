@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
@@ -82,7 +83,12 @@ public class SearchAddressActivity extends AppCompatActivity implements MapLocat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_address);
-//        floatingSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.title_activity_search_address));
         mapLocationFragment = (MapLocationFragment) getSupportFragmentManager().findFragmentById(R.id.search_address_map_frag);
         mapLocationFragment.setOnFocusChangedListener(this);
         locationDetailsModel = new LocationDetailsModel();

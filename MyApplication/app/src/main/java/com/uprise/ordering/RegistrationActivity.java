@@ -56,7 +56,8 @@ public class RegistrationActivity extends LandingSubPageBaseActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        getSupportActionBar().setTitle("Registration");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
+        getSupportActionBar().setTitle("");
 
         shopName =(EditText) findViewById(R.id.et_reg_shopname);
         shopAddress=(EditText) findViewById(R.id.et_reg_shopaddress);

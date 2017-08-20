@@ -58,7 +58,7 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
-
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

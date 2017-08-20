@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.uprise.ordering.camera.CameraImageActivity;
@@ -82,6 +84,12 @@ public class AddBranchActivity extends AppCompatActivity implements View.OnClick
         imageStoreModel  = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
         imagePermitModel = new ImageModel(new ArrayList<Integer>(), new ArrayList<String>(),0);
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.asset_nav_back);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.action_add_branch));
         etBranchName = (EditText) findViewById(R.id.et_dialog_add_branch_name);
         etBranchAdd = (EditText) findViewById(R.id.et_dialog_add_branch_address);
         llEditTextAddress = (LinearLayout) findViewById(R.id.ll_edittext_address);
