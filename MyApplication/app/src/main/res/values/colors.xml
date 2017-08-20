@@ -78,4 +78,6 @@
     <color name="navigation_drawer_bg_color">#043761</color>
     <color name="edittext_reg_color">@color/grey_500</color>
     <color name="icon_login_bg_color">#2e567d</color>
+    <color name="quantity_bg_color">#043761</color>
+
 </resources>

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +27,7 @@ import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.LoginModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.util.InputFilterMinMax;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -42,8 +43,8 @@ public class ProductPagerAdapter extends PagerAdapter {
     private Context mContext;
     private final Resources resources;
     private LayoutInflater mLayoutInflater;
-    private ImageButton plusBtn;
-    private ImageButton minusBtn;
+//    private ImageButton plusBtn;
+//    private ImageButton minusBtn;
     private EditText etQuantity;
     private ImageView itemImage;
     private Button addToCartBtn;
@@ -110,8 +111,9 @@ public class ProductPagerAdapter extends PagerAdapter {
         addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
         addToCartBtn.setVisibility(View.GONE);
         etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
-        minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
-        plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
+        etQuantity.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "10000")});
+//        minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
+//        plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
         saveEditBtn = (Button)   itemView.findViewById(R.id.btn_save_edit_brand_item);
         ProductPagerAdapter.CountListener count = new ProductPagerAdapter.CountListener(itemView, web.get(position).getId(), brandId, web.get(position).getPrice(), web.get(position).getAttributeId());
 
@@ -132,8 +134,8 @@ public class ProductPagerAdapter extends PagerAdapter {
 
         saveEditBtn.setOnClickListener(count);
         etQuantity.addTextChangedListener(count);
-        minusBtn.setOnClickListener(count);
-        plusBtn.setOnClickListener(count);
+//        minusBtn.setOnClickListener(count);
+//        plusBtn.setOnClickListener(count);
         addToCartBtn.setOnClickListener(count);
 
 //        List<CartItemsModel> cartItemsModelList = sharedPreferences.loadCartItems(mContext, loginSharedPref.getUsername(mContext));
@@ -151,9 +153,10 @@ public class ProductPagerAdapter extends PagerAdapter {
                     saveEditBtn.setVisibility(View.GONE);
                     etQuantity.setText(cartItemsModel.getQuantity()+"");
                     oldQtyValue = cartItemsModel.getQuantity();
-                } else {
-                    minusBtn.setVisibility(View.GONE);
                 }
+//                else {
+//                    minusBtn.setVisibility(View.GONE);
+//                }
             }
         }
         container.addView(itemView);
@@ -171,8 +174,8 @@ public class ProductPagerAdapter extends PagerAdapter {
     private class CountListener implements View.OnClickListener, TextWatcher {
         int count;
         EditText etQuantity;
-        ImageButton minusBtn;
-        ImageButton plusBtn;
+//        ImageButton minusBtn;
+//        ImageButton plusBtn;
         Button addToCartBtn;
         Button saveEditBtn;
         //        int brandPosition;
@@ -188,8 +191,8 @@ public class ProductPagerAdapter extends PagerAdapter {
             this.count = 0;
             this.itemView = itemView;
             etQuantity = (EditText) itemView.findViewById(R.id.et_brand_qty);
-            minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
-            plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
+//            minusBtn = (ImageButton) itemView.findViewById(R.id.btn_minus_brand_qty);
+//            plusBtn = (ImageButton)  itemView.findViewById(R.id.btn_plus_brand_qty);
             addToCartBtn = (Button) itemView.findViewById(R.id.btn_add_to_cart);
             saveEditBtn = (Button) itemView.findViewById(R.id.btn_save_edit_brand_item);
             this.brandId = brandId;
@@ -238,11 +241,16 @@ public class ProductPagerAdapter extends PagerAdapter {
 
 
         private void isCountZero() {
-            minusBtn.setVisibility(View.GONE);
+//            minusBtn.setVisibility(View.GONE);
             addToCartBtn.setVisibility(View.GONE);
             if(count > 0) {
-                minusBtn.setVisibility(View.VISIBLE);
+//                minusBtn.setVisibility(View.VISIBLE);
                 addToCartBtn.setVisibility(View.VISIBLE);
+            }
+
+            saveEditBtn.setVisibility(View.GONE);
+            if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0) {
+                saveEditBtn.setVisibility(View.VISIBLE);
             }
 
         }
@@ -261,7 +269,11 @@ public class ProductPagerAdapter extends PagerAdapter {
         public void afterTextChanged(Editable editable) {
 
             if(!etQuantity.getText().toString().isEmpty() && !etQuantity.getText().toString().contentEquals(beforeTextChanged)) {
-                count = Integer.parseInt(etQuantity.getText().toString());
+                try {
+                    count = Integer.parseInt(etQuantity.getText().toString());
+                }catch (NumberFormatException e) {
+                    count = 0;
+                }
                 isCountZero();
             }
         }

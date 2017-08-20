@@ -27,6 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:id="@+id/ll_brand_price"
         android:orientation="horizontal">
 
@@ -58,8 +59,7 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp">
@@ -70,30 +70,43 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:text="@string/label_brand_qty"
-            android:layout_gravity="center_vertical|right"
+            android:layout_gravity="center_vertical|left"
             />
 
-        <EditText
-            android:id="@+id/et_brand_qty"
-            android:layout_width="wrap_content"
-            android:selectAllOnFocus="true"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:layout_marginLeft="3dp"
-            android:textColor="@android:color/white"
-            android:text="@string/label_brand_default_value"
-            android:layout_gravity="center_vertical|right"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:textColorHint="#fff"
+            android:background="@color/quantity_bg_color"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_brand_qty"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="#000"-->
-            <!--android:layout_marginLeft="3dp"-->
-            <!--android:background="@color/grey_500"-->
-            <!--android:text="@string/label_brand_default_value"-->
-            <!--android:layout_gravity="center_vertical|right"/>-->
+            <EditText
+                android:id="@+id/et_brand_qty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="left"
+                android:textSize="12sp"
+                android:text="@string/label_brand_default_value"
+                android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:theme="@style/LandingEditText" />
+        </android.support.design.widget.TextInputLayout>
 
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/ll_qty_btns"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginTop="10dp">-->
         <!--<LinearLayout-->
             <!--android:id="@+id/ll_item_qty_buttons"-->
             <!--android:layout_width="0dp"-->
@@ -104,10 +117,10 @@
             <!--android:layout_gravity="center_vertical">-->
 
             <!--<ImageButton-->
-            <!--android:id="@+id/btn_plus_brand_qty"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_gravity="center_vertical"-->
+                <!--android:id="@+id/btn_plus_brand_qty"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_gravity="center_vertical"-->
                 <!--android:scaleType="fitCenter"-->
                 <!--android:backgroundTint="@null"-->
                 <!--android:src="@drawable/ic_add_grey600_48dp"  />-->
@@ -119,53 +132,15 @@
                 <!--android:scaleType="fitCenter"-->
                 <!--android:backgroundTint="@null"-->
                 <!--android:src="@drawable/ic_remove_grey600_48dp" />-->
-            <!--</LinearLayout>-->
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_qty_btns"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp">
-        <LinearLayout
-            android:id="@+id/ll_item_qty_buttons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:orientation="vertical"
-            android:layout_weight="0.1"
-            android:layout_gravity="center_vertical">
-
-            <ImageButton
-                android:id="@+id/btn_plus_brand_qty"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:scaleType="fitCenter"
-                android:backgroundTint="@null"
-                android:src="@drawable/ic_add_grey600_48dp"  />
-            <ImageButton
-                android:id="@+id/btn_minus_brand_qty"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:scaleType="fitCenter"
-                android:backgroundTint="@null"
-                android:src="@drawable/ic_remove_grey600_48dp" />
-        </LinearLayout>
-        </LinearLayout>
+        <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_transac_buttons"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="right"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
