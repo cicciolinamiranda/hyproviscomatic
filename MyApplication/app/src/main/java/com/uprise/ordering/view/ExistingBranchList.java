@@ -41,6 +41,12 @@ public class ExistingBranchList extends ArrayAdapter<BranchModel> {
         TextView tvBranchAddress = (TextView) rowView.findViewById(R.id.tv_existing_branch_address);
         TextView tvBranchContactNum = (TextView) rowView.findViewById(R.id.tv_existing_branch_contact_num);
 
+        if (position % 2 == 1) {
+            rowView.setBackgroundColor(resources.getColor(R.color.colorAccent));
+        } else {
+            rowView.setBackgroundColor(resources.getColor(R.color.colorAccentDark));
+        }
+
         tvBranchName.setText(web.get(position).getName());
         tvBranchAddress.setText(web.get(position).getAddress());
         tvBranchContactNum.setText(web.get(position).getContactNum());

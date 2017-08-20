@@ -125,11 +125,13 @@ public class ExistingBranchActivity extends BaseAuthenticatedActivity implements
 
             case ApplicationConstants.RESULT_FROM_ADD_BRANCH_SIGNED_IN:
                 if (resultCode != RESULT_CANCELED && data != null) {
-                    BranchModel branchModel = data.getParcelableExtra("branchModel");
+                      startActivity(getIntent());
+                      finish();
+//                    BranchModel branchModel = data.getParcelableExtra("branchModel");
 //                    branchModelList.add(branchModel);
 
 //                    restCallServices.saveBranchToExistingUser(ExistingBranchActivity.this, this, branchModel, loginModel);
-                    populateBranchListView();
+//                    populateBranchListView();
                 }
                 break;
         }

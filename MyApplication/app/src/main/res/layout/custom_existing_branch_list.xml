@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent" >
 
     <LinearLayout
@@ -15,6 +16,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@null"
+            android:tint="@android:color/white"
             android:src="@drawable/ic_store_black_48dp"
             android:scaleType="centerInside"
             android:layout_marginRight="10dp" />
@@ -38,7 +40,7 @@
                     android:id="@+id/tv_existing_branch_name_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/white"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:text="Name: "/>
@@ -48,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/white"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:text="Sample Branch Name"/>
@@ -65,7 +67,7 @@
                     android:id="@+id/tv_existing_branch_address_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/white"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:text="Address: "/>
@@ -74,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
+                    android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:text="address" />
             </LinearLayout>
@@ -89,7 +92,7 @@
                     android:id="@+id/tv_existing_branch_contact_num_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/white"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:text="Contact Number: "/>
@@ -98,6 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
+                    android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:text="1231231313" />
             </LinearLayout>

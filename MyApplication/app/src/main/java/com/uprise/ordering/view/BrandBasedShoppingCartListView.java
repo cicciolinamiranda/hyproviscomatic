@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.model.BrandModel;
 import com.uprise.ordering.model.CartItemsModel;
 import com.uprise.ordering.model.ProductModel;
+import com.uprise.ordering.util.InputFilterMinMax;
 import com.uprise.ordering.util.Util;
 
 import java.io.InputStream;
@@ -76,6 +78,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         tvBrandPrice =(TextView) rowView.findViewById(R.id.tv_brand_price);
         tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
         etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
+        etQuantity.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "10000")});
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
@@ -253,7 +256,11 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
             if(!etQuantity.getText().toString().isEmpty()) {
 
                 if(etQuantity.getText().toString().equalsIgnoreCase("0")) etQuantity.setText("1");
-                count = Integer.parseInt(etQuantity.getText().toString());
+                try {
+                    count = Integer.parseInt(etQuantity.getText().toString());
+                }catch (NumberFormatException e) {
+                    count = 0;
+                }
                 isCountZero();
 
                 if(count > 0) {
