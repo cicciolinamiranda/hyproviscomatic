@@ -16,8 +16,6 @@ import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.NotificationsModel;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,14 +43,18 @@ public class NotificationsList extends ArrayAdapter<NotificationsModel> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         rowView = inflater.inflate(R.layout.custom_notifications_list, null, true);
-        TextView tvMsg = (TextView) rowView.findViewById(R.id.tv_notification_title);
-        TextView tvDate = (TextView) rowView.findViewById(R.id.tv_notification_date);
-        LinearLayout llItemNotif = (LinearLayout) rowView.findViewById(R.id.ll_item_notifications);
-        tvMsg.setText(web.get(position).getTitle());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
-        long dv = Long.valueOf(web.get(position).getDate())*1000;
-        tvDate.setText(dateFormat.format(new Date(dv)));
 
+        if (position % 2 == 0) {
+            rowView.setBackgroundColor(resources.getColor(R.color.colorAccent));
+        } else {
+            rowView.setBackgroundColor(resources.getColor(R.color.colorAccentDark));
+        }
+
+        TextView tvTitle = (TextView) rowView.findViewById(R.id.tv_notification_title);
+        TextView tvMsg = (TextView) rowView.findViewById(R.id.tv_notification_content);
+        LinearLayout llItemNotif = (LinearLayout) rowView.findViewById(R.id.ll_item_notifications);
+        tvTitle.setText(web.get(position).getTitle());
+        tvMsg.setText(web.get(position).getMessage());
         llItemNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -43,6 +43,7 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
         sqlDatabaseHelper = new SqlDatabaseHelper(OrderListActivity.this);
+        getSupportActionBar().setTitle(getResources().getString(R.string.label_my_orders));
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         orderList = (ListView) findViewById(R.id.list_orders);
         llNoRecords = (LinearLayout) findViewById(R.id.ll_order_list_no_records);

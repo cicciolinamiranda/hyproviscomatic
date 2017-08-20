@@ -137,4 +137,8 @@
     <string name="label_account">Account</string>
     <string name="label_shop_details">Shop details</string>
     <string name="new_total_label">New Total:</string>
+    <string name="label_my_orders">My Orders</string>
+    <string name="label_order_amount">Amount:</string>
+    <string name="label_order_discount">Discount:</string>
+    <string name="label_notifications">Notifications</string>
 </resources>

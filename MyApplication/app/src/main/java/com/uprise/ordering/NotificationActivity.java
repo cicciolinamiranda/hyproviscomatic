@@ -41,6 +41,7 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        getSupportActionBar().setTitle(getString(R.string.label_notifications));
 
         lvNotificationsList = (ListView) findViewById(R.id.list_notifications);
         llNoRecords = (LinearLayout) findViewById(R.id.ll_order_list_no_records);
