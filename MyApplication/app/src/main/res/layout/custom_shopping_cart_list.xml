@@ -152,8 +152,7 @@
                             android:inputType="number"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textColor="@android:color/white"
-                            android:theme="@style/LandingEditText" />
+                            android:textColor="@drawable/et_quantity" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 

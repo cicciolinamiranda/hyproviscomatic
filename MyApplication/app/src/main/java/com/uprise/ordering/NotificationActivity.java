@@ -2,6 +2,7 @@ package com.uprise.ordering;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
@@ -41,8 +43,11 @@ public class NotificationActivity extends BaseAuthenticatedActivity implements R
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        getSupportActionBar().setTitle(getString(R.string.label_notifications));
-
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.label_notifications));
         lvNotificationsList = (ListView) findViewById(R.id.list_notifications);
         llNoRecords = (LinearLayout) findViewById(R.id.ll_order_list_no_records);
         rlShopCartLoader = (RelativeLayout) findViewById(R.id.rl_order_list_loading_layout);

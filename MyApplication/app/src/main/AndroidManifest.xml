@@ -78,12 +78,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".NotificationActivity"
-            android:label="@string/title_activity_notif"
+            android:label="@string/label_notifications"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NotifMsgActivity"
-            android:label="@string/title_activity_notif"
+            android:label="@string/label_notifications"
             android:parentActivityName=".NotificationActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -93,12 +93,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".OrderListActivity"
-            android:label="@string/title_activity_orders"
+            android:label="@string/label_my_orders"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".OrderDetailsActivity"
-            android:label="@string/title_activity_orders"
+            android:label="@string/label_my_orders"
             android:parentActivityName=".OrderListActivity"
             android:screenOrientation="portrait" />
 

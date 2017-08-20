@@ -62,10 +62,11 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         tvOrderStatus.setText(web.get(position).getOrderStatus());
 
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy  hh:mm:ss a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+
         long dv = Long.valueOf(web.get(position).getDate())*1000;
-        tvOrderDate.setText(dateFormat.format(new Date(dv)));
-//        tvOrderDate.setText(dateFormat.format(new Date()));
+        tvOrderDate.setText(dateFormat.format(new Date(dv))+" | "+timeFormat.format(new Date(dv)));
         return rowView;
     }
 }

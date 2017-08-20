@@ -2,6 +2,7 @@ package com.uprise.ordering;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.OrderModel;
@@ -42,8 +44,13 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.label_my_orders));
+
         sqlDatabaseHelper = new SqlDatabaseHelper(OrderListActivity.this);
-        getSupportActionBar().setTitle(getResources().getString(R.string.label_my_orders));
         loginModel = sqlDatabaseHelper.getLoginCredentials();
         orderList = (ListView) findViewById(R.id.list_orders);
         llNoRecords = (LinearLayout) findViewById(R.id.ll_order_list_no_records);
@@ -111,6 +118,10 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
                 finish();
                 startActivity(new Intent(OrderListActivity.this, MainActivity.class));
                 break;
+            case R.id.menu_orderlist_refresh:
+                startActivity(getIntent());
+                finish();
+                break;
             case R.id.menu_orderlist_prev:
                 orderModels.clear();
                 restCallServices.getPurchaseList(OrderListActivity.this, this, loginModel, prevUrl);
@@ -177,7 +188,7 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.pagination_menu, menu);
+        mi.inflate(R.menu.order_list_activity_menu, menu);
         previousMenu = menu.findItem(R.id.menu_orderlist_prev);
         previousMenu.setVisible(false);
         nextMenu = menu.findItem(R.id.menu_orderlist_next);

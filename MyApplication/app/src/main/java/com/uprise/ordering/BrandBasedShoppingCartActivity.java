@@ -3,6 +3,7 @@ package com.uprise.ordering;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -58,6 +59,11 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.title_activity_cart));
         llNoRecords = (LinearLayout) findViewById(R.id.ll_shopping_cart_no_records);
         llShopCartList = (RelativeLayout) findViewById(R.id.ll_shopping_cart_list);
         lvShoppingCartList = (ListView) findViewById(R.id.list_shopping_cart);

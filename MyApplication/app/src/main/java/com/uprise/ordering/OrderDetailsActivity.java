@@ -1,6 +1,7 @@
 package com.uprise.ordering;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView title=(TextView)findViewById(getResources().getIdentifier("action_bar_title", "id", getPackageName()));
+        title.setText(getString(R.string.label_my_orders));
+
         lvOrderItemsList = (ListView) findViewById(R.id.list_order_items);
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_order_item__estimated_total_value);
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);

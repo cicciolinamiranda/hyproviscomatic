@@ -78,29 +78,8 @@ public class OrderItemsListView extends ArrayAdapter<OrderItemsModel> {
         tvBrandName.setText(orderItemsModels.get(position).getBrandName());
         tvBrandPrice.setText(String.format("%.2f",orderItemsModels.get(position).getPrice()) + " Php");
 
-        //TODO: NO ITEMS FOR NOW
         itemImage.setVisibility(View.GONE);
-//        new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(orderItemsModels.get(position).getPhotoUrl());
         etQuantity.setText(orderItemsModels.get(position).getQuantity()+"");
-        etQuantity.setTextColor(resources.getColor(R.color.black));
-//        if(Util.getInstance().isProductsAndCartItemsNotEmpty(productModels, OrderItemsModel)) {
-//
-//            ProductModel matchedProductModel = Util.getInstance().getMatchedProductModel(cartItemsModels.get(position), productModels);
-//
-//            if(matchedProductModel != null &&
-//                    !matchedProductModel.getBrands().isEmpty()) {
-//                BrandModel matchedBrandModel = Util.getInstance().getMatchedBrandModel(cartItemsModels.get(position), matchedProductModel.getBrands(), matchedProductModel.getId());
-//                if(matchedBrandModel != null) {
-//                    tvProductName.setText(matchedProductModel.getName());
-//                    tvBrandName.setText(matchedBrandModel.getBrandName().toString());
-//                    tvBrandPrice.setText(String.format("%.2f",matchedBrandModel.getPrice()) + " Php");
-//                    new OrderItemsListView.LoadImageAsyncTask(itemImage).execute(matchedBrandModel.getBrandPhotoUrl());
-//                    etQuantity.setText(cartItemsModels.get(position).getQuantity()+"");
-//                    etQuantity.setTextColor(resources.getColor(R.color.black));
-//                }
-//            }
-//
-//        }
 
         return rowView;
     }

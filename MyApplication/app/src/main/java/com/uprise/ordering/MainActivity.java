@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
@@ -64,8 +65,11 @@ public class MainActivity extends BaseAuthenticatedActivity /** LocationTracking
         toggle.syncState();
         getSupportActionBar().setTitle("");
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setBackgroundColor(getResources().getColor(R.color.navigation_drawer_bg_color));
+
+        navigationView.setItemBackground(ContextCompat.getDrawable(MainActivity.this, R.color.colorAccent));
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.WHITE));
         navigationView.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
         navigationView.setNavigationItemSelectedListener(this);
