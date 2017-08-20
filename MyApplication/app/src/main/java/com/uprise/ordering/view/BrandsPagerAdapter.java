@@ -141,7 +141,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
                 if (cartItemsModel.getBrandId().equalsIgnoreCase(web.get(position).getId())
                         && cartItemsModel.getProductModelId().equalsIgnoreCase(productId)) {
                     addToCartBtn.setEnabled(false);
-                    addToCartBtn.setText(resources.getString(R.string.added_to_cart));
+//                    addToCartBtn.setText(resources.getString(R.string.added_to_cart));
                     saveEditBtn.setVisibility(View.GONE);
                     etQuantity.setText(cartItemsModel.getQuantity()+"");
                 }
@@ -271,7 +271,7 @@ public class BrandsPagerAdapter extends PagerAdapter {
             oldQtyValue = count;
             addToCartBtn.setEnabled(false);
             saveEditBtn.setVisibility(View.GONE);
-            addToCartBtn.setText(resources.getString(R.string.added_to_cart));
+//            addToCartBtn.setText(resources.getString(R.string.added_to_cart));
         }
     }
 

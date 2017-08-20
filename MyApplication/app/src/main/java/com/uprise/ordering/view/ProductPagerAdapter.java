@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -142,6 +143,9 @@ public class ProductPagerAdapter extends PagerAdapter {
                         && cartItemsModel.getProductModelId().equalsIgnoreCase(web.get(position).getId())
                         && cartItemsModel.getAttributeId().equalsIgnoreCase(web.get(position).getAttributeId())) {
                     addToCartBtn.setEnabled(false);
+//                    addToCartBtn.setVisibility(View.GONE);
+                    addToCartBtn.getLayoutParams().height= ViewPager.LayoutParams.WRAP_CONTENT;
+                    addToCartBtn.getLayoutParams().width= ViewPager.LayoutParams.WRAP_CONTENT;
                     addToCartBtn.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_corners_disabled));
                     addToCartBtn.setText(resources.getString(R.string.added_to_cart));
                     saveEditBtn.setVisibility(View.GONE);
@@ -208,7 +212,7 @@ public class ProductPagerAdapter extends PagerAdapter {
                     break;
                 case R.id.btn_plus_brand_qty:
                     count++;
-                    if(!addToCartBtn.isEnabled() && oldQtyValue != count && count > 0)
+                    if(!addToCartBtn.isEnabled()  && oldQtyValue != count && count > 0)
 
                     {
                         saveEditBtn.setVisibility(View.VISIBLE);
@@ -271,7 +275,11 @@ public class ProductPagerAdapter extends PagerAdapter {
             oldQtyValue = count;
             addToCartBtn.setEnabled(false);
             saveEditBtn.setVisibility(View.GONE);
+            addToCartBtn.getLayoutParams().height= ViewPager.LayoutParams.WRAP_CONTENT;
+            addToCartBtn.getLayoutParams().width= ViewPager.LayoutParams.WRAP_CONTENT;
+            addToCartBtn.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_corners_disabled));
             addToCartBtn.setText(resources.getString(R.string.added_to_cart));
+//            addToCartBtn.setText(resources.getString(R.string.added_to_cart));
         }
     }
 

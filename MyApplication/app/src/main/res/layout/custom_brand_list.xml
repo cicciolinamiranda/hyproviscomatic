@@ -15,37 +15,42 @@
         android:id="@+id/iv_brand_image"
         android:src="@drawable/placeholder"
         />
-    <TextView
-        android:id="@+id/tv_brand_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sample Brand name"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent"
-        android:gravity="center_horizontal"
-        />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_brand_name"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Sample Brand name"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_brand_price"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/tv_label_brand_price"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textColor="@color/material_red"
-            android:text="Price:"
-            android:gravity="right"
-            />
+
             <TextView
-            android:id="@+id/tv_brand_price"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" android:textColor="@color/material_red"
-            android:text="0"
-            android:gravity="left"
-            />
+                android:id="@+id/tv_brand_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Sample Brand name"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                />
+
+                <TextView
+                     android:id="@+id/tv_brand_price"
+                    android:layout_width="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:text="0"
+                    android:gravity="right"
+                />
         </LinearLayout>
 
     <LinearLayout
@@ -167,12 +172,12 @@
         android:layout_marginTop="10dp">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_to_cart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
             android:textColor="@color/light"
             android:id="@+id/btn_add_to_cart"
-            android:background="@drawable/rounded_corners_accent"/>
+            android:background="@drawable/asset_add_to_cart"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -180,7 +185,7 @@
             android:textColor="@color/black"
             android:visibility="gone"
             android:id="@+id/btn_save_edit_brand_item"
-            android:background="@drawable/rounded_corners_accent" />
+            android:background="@drawable/rounded_corners_white" />
     </LinearLayout>
 </LinearLayout>
 

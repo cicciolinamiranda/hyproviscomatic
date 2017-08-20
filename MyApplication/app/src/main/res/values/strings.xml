@@ -53,7 +53,7 @@
     <string name="nav_products">Shop now!</string>
     <string name="add_to_cart">Add to\ncart</string>
     <string name="label_brand_default_value">0</string>
-    <string name="label_brand_qty">Qty</string>
+    <string name="label_brand_qty">Quantity</string>
     <string name="brand_qty_default">How many?</string>
     <string name="added_to_cart">Added to\ncart</string>
     <string name="action_save_new_qty">Save new\nquantity</string>
