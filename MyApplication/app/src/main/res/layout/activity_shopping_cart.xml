@@ -58,6 +58,7 @@
         <ListView
             android:layout_width="match_parent"
             android:divider="@android:color/white"
+            android:dividerHeight="1dip"
             android:layout_height="match_parent"
             android:id="@+id/list_shopping_cart"
             android:layout_alignParentTop="true"/>
