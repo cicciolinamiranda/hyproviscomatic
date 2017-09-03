@@ -55,7 +55,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
     private List<BrandModel> brandModels;
 
 
-    public BrandBasedShoppingCartListView(Activity context,
+    public  BrandBasedShoppingCartListView(Activity context,
                                 List<CartItemsModel> cartItemsModels,
                                 List<BrandModel> brandModels, BrandBasedShoppingCartListView.ShoppingCartListViewListener listener) {
         super(context, R.layout.custom_shopping_cart_list, cartItemsModels);
