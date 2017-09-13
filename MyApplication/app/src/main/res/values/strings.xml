@@ -141,4 +141,7 @@
     <string name="label_order_amount">Amount:</string>
     <string name="label_order_discount">Discount:</string>
     <string name="label_notifications">Notifications</string>
+    <string name="btn_submit_proof_of_payment">Submit Proof of Payment</string>
+    <string name="max_of_two_photos_only">Max of 2 photos only</string>
+    <string name="title_proof_of_payment">Proof Of Payment</string>
 </resources>

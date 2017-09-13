@@ -54,7 +54,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    compile('com.google.api-client:google-api-client-android:1.17.0-rc') {
+        exclude module: 'httpclient'
+    }
+    compile('com.google.http-client:google-http-client-gson:1.17.0-rc') {
+        exclude module: 'httpclient'
+    }
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
@@ -64,10 +69,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
-    compile('com.google.api-client:google-api-client-android:1.17.0-rc') {
-        exclude module: 'httpclient'
-    }
-    compile('com.google.http-client:google-http-client-gson:1.17.0-rc') {
-        exclude module: 'httpclient'
-    }
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    testCompile 'junit:junit:4.12'
 }
