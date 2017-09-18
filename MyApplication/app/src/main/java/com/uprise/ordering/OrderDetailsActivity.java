@@ -43,7 +43,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_order_item__estimated_total_value);
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);
         tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
-        OrderModel orderModel = getIntent().getParcelableExtra("orderModel");
+        final OrderModel orderModel = getIntent().getParcelableExtra("orderModel");
         ArrayList<ProductModel> productModels = Util.getInstance().generateProductModels();
         cartItemsModelArrayAdapter = new OrderItemsListView(OrderDetailsActivity.this,
                 orderModel.getOrderItemsModels(),
@@ -66,7 +66,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         llSubmitModeOfPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OrderDetailsActivity.this, ProofOfPaymentActivity.class));
+                Intent proofOfPaymentIntent = new Intent(OrderDetailsActivity.this, ProofOfPaymentActivity.class);
+                if(orderModel != null) {
+                    proofOfPaymentIntent.putExtra("orderModel", orderModel);
+                }
+                startActivity(proofOfPaymentIntent);
             }
         });
 

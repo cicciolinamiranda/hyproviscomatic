@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.uprise.ordering.AddBranchActivity;
+import com.uprise.ordering.ProofOfPaymentActivity;
 import com.uprise.ordering.R;
 import com.uprise.ordering.constant.ApplicationConstants;
 
@@ -123,6 +124,10 @@ public class CameraImageActivity extends AppCompatActivity implements
                 else if(deleted && resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT){
                     Log.d("Access:AssetMgmt", "Photo PERMIT successfully deleted: " + imageUri);
                     AddBranchActivity.totalPermitImages--;
+                }
+                else if(deleted && resultCode == ApplicationConstants.RESULT_GALLERY_PROOF_OF_PAYMENT){
+                    Log.d("Access:AssetMgmt", "Photo PERMIT successfully deleted: " + imageUri);
+                    ProofOfPaymentActivity.totalProofOfPaymentImages--;
                 }
                 else {
                     Log.d("Access:AssetMgmt", "Photo failed to be deleted: " + imageUri);

@@ -749,7 +749,11 @@ public class RestCallServices {
         try {
             File dir = new File(ApplicationConstants.DATA_STORAGE_STORE_PATH);
 
-            if(resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT)  dir = new File(ApplicationConstants.DATA_STORAGE_PERMIT_PATH);
+            if(resultCode == ApplicationConstants.RESULT_GALLERY_PERMIT)  {
+                dir = new File(ApplicationConstants.DATA_STORAGE_PERMIT_PATH);
+            } else if(resultCode == ApplicationConstants.RESULT_GALLERY_PROOF_OF_PAYMENT) {
+                dir = new File(ApplicationConstants.DATA_STORAGE_PROOF_OF_PAYMENT_PATH);
+            }
             if(!dir.exists()){
                 dir.mkdir();
             }

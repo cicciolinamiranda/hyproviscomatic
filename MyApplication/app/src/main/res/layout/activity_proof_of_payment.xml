@@ -63,6 +63,7 @@
             <!--android:orientation="horizontal">-->
 
             <LinearLayout
+                android:layout_marginBottom="5dp"
                 android:id="@+id/ll_btn_proof_of_payment_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
         <!--</LinearLayout>-->
 
         <LinearLayout
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
