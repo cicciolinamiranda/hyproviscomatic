@@ -25,6 +25,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private TextView tvEstimatedTotal;
     private TextView tvNetTotal;
     private TextView tvDiscount;
+    private TextView tvShippingFee;
     private ArrayAdapter<OrderItemsModel> cartItemsModelArrayAdapter;
     private LinearLayout llSubmitModeOfPayment;
     @Override
@@ -43,6 +44,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_order_item__estimated_total_value);
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);
         tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
+        tvShippingFee = (TextView) findViewById(R.id.tv_order_item__estimated_shipping_free_value);
         final OrderModel orderModel = getIntent().getParcelableExtra("orderModel");
         ArrayList<ProductModel> productModels = Util.getInstance().generateProductModels();
         cartItemsModelArrayAdapter = new OrderItemsListView(OrderDetailsActivity.this,
@@ -51,9 +53,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         lvOrderItemsList.setAdapter(cartItemsModelArrayAdapter);
         tvEstimatedTotal.setText(String.format("%.2f", orderModel.getTotalAmount())+" Php");
         double computedDiscountPercentage = orderModel.getDiscount();
-        double netTotal = orderModel.getTotalAmount() - computedDiscountPercentage;
+        double shippingFreeDouble = orderModel.getShippingFee();
+        double netTotal = orderModel.getTotalAmount();
         tvNetTotal.setText(String.format("%.2f", netTotal)+" Php");
         tvDiscount.setText(String.format("%.2f", computedDiscountPercentage)+" Php");
+        tvShippingFee.setText(String.format("%.2f", shippingFreeDouble)+" Php");
         getSupportActionBar().setTitle("Order# "+orderModel.getOrderId());
 
         llSubmitModeOfPayment.setVisibility(View.GONE);

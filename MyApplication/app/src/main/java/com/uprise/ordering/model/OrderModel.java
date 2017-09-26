@@ -19,6 +19,7 @@ public class OrderModel implements Parcelable {
 //    private int quantity;
     private double totalAmount;
     private double discount;
+    private double shippingFee;
 //    private OrderStatus orderStatus;
 private String orderStatus;
 
@@ -35,6 +36,7 @@ private String orderStatus;
 //        dest.writeInt(orderStatus);
         dest.writeString(orderStatus);
         dest.writeDouble(discount);
+        dest.writeDouble(shippingFee);
     }
 
 
@@ -49,6 +51,7 @@ private String orderStatus;
 //        orderStatus = in.readTypedObject(OrderStatus.CREATOR);
         orderStatus = in.readString();
         discount = in.readDouble();
+        shippingFee = in.readDouble();
     }
 
     public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
@@ -139,5 +142,13 @@ private String orderStatus;
 
     public void setOrderItemsModels(ArrayList<OrderItemsModel> orderItemsModels) {
         this.orderItemsModels = orderItemsModels;
+    }
+
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
     }
 }

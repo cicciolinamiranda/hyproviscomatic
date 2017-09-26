@@ -645,6 +645,11 @@ public class Util {
                 orderModel.setDiscount(discount);
             }
 
+            if(jsonObject.getString("shipping_fee") != null && !jsonObject.getString("shipping_fee").isEmpty()) {
+                double shippingFree = Double.parseDouble(jsonObject.getString("shipping_fee"));
+                orderModel.setShippingFee(shippingFree);
+            }
+
 
             if(jsonObject.getString("total") != null && !jsonObject.getString("total").isEmpty()) {
                 double total = Double.parseDouble(jsonObject.getString("total"));

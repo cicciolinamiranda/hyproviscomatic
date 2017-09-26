@@ -145,4 +145,6 @@
     <string name="max_of_two_photos_only">Max of 2 photos only</string>
     <string name="title_proof_of_payment">Proof Of Payment</string>
     <string name="error_proof_of_payment_required">Please upload atleast 1 photo\nof your proof of payment</string>
+    <string name="estimated_shipping_fee_label">Shipping fee:</string>
+    <string name="label_order_shipping_fee">Shipping Fee:</string>
 </resources>

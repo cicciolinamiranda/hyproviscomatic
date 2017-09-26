@@ -53,10 +53,12 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         TextView tvOrderStatus = (TextView) rowView.findViewById(R.id.tv_order_status);
         TextView tvOrderAmount = (TextView) rowView.findViewById(R.id.tv_order_amount);
         TextView tvOrderDiscount = (TextView) rowView.findViewById(R.id.tv_order_discount);
+        TextView tvOrderShippingFee = (TextView) rowView.findViewById(R.id.tv_order_shipping_fee);
 
 
         tvOrderAmount.setText(String.format("%.2f",web.get(position).getTotalAmount()) + " Php");
         tvOrderDiscount.setText(String.format("%.2f",web.get(position).getDiscount()) + " Php");
+        tvOrderShippingFee.setText(String.format("%.2f",web.get(position).getShippingFee()) + " Php");
 
         tvOrderNumber.setText(web.get(position).getOrderId());
         tvOrderStatus.setText(web.get(position).getOrderStatus());
