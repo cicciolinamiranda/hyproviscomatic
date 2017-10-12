@@ -402,7 +402,7 @@ public class RestCallServices {
     public void postPurchase(final Context ctx, final RestServiceListener listener,
                              final LoginModel loginModel, final List<CartItemsModel> cartItemsModels, double total) {
         final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_get_purchase);
+                + ctx.getResources().getString(R.string.endpoint_post_purchase);
         final JSONObject purchaseObject = new JSONObject();
         JSONArray itemsJsonArray = new JSONArray();
         try {
