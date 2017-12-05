@@ -29,6 +29,7 @@ import com.uprise.ordering.camera.CameraImageActivity;
 import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.ImageModel;
 import com.uprise.ordering.model.OrderModel;
+import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
 
@@ -42,7 +43,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class ProofOfPaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProofOfPaymentActivity extends AppCompatActivity implements View.OnClickListener,
+        RestCallServices.RestServiceListener {
 
     private Spinner spinnerModeOfPayment;
     private LinearLayout llModeOfPayment;
@@ -137,10 +139,8 @@ public class ProofOfPaymentActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.action_submit_proof_of_payment:
 
-                //TODO post endpoint
                 if(isFormCanBeSubmitted()){
-                    setResult(RESULT_OK, new Intent());
-                    finish();
+
                 }
                 break;
         }
@@ -384,5 +384,25 @@ public class ProofOfPaymentActivity extends AppCompatActivity implements View.On
             imageModel.setNumOfImages(imageModel.getStringBase().size());
         }
         return imageModel;
+    }
+
+    @Override
+    public int getResultCode() {
+
+        //TODO: impl
+        return 0;
+    }
+
+    @Override
+    public void onSuccess(RestCalls callType, String string) {
+
+        //TODO: impl
+
+    }
+
+    @Override
+    public void onFailure(RestCalls callType, String string) {
+
+        //TODO: impl
     }
 }

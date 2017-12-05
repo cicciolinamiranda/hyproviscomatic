@@ -91,6 +91,8 @@
                 android:inputType="number"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:focusableInTouchMode="true"
+                android:descendantFocusability="beforeDescendants"
                 android:textColor="@android:color/white"
                 android:theme="@style/LandingEditText" />
         </android.support.design.widget.TextInputLayout>

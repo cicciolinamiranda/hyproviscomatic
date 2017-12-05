@@ -12,7 +12,9 @@ import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.BranchModel;
 import com.uprise.ordering.model.CartItemsModel;
+import com.uprise.ordering.model.ImageModel;
 import com.uprise.ordering.model.LoginModel;
+import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.RegistrationModel;
 import com.uprise.ordering.rest.HttpClient;
 import com.uprise.ordering.rest.RestCalls;
@@ -88,18 +90,10 @@ public class RestCallServices {
 
         Log.d(ApplicationConstants.APP_CODE, "registration api url:" + registrationEndpoint);
 
-//        InputStream inputStream = null;
-//        HttpURLConnection urlConnection = null;
-
         final ArrayList<NameValuePair> params = new ArrayList<>();
 
         final JSONObject body = new JSONObject();
         final JSONObject shopObj = new JSONObject();
-
-//        params.add(new NameValuePair("username", registrationModel.getEmail()));
-//        params.add(new NameValuePair("password", registrationModel.getPassword()));
-//        params.add(new NameValuePair("email", registrationModel.getEmail()));
-//        params.add(new NameValuePair("first_name", registrationModel.getShopName()));
 
 //               Profile
         try {
@@ -399,6 +393,14 @@ public class RestCallServices {
         }).execute();
     }
 
+    public void updatePurchaseWithReceipt(final Context ctx, final RestServiceListener listener,
+                               final LoginModel loginModel, OrderModel orderModel, ImageModel receiptImages) {
+
+        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_post_purchase);
+        final JSONObject orderObject = new JSONObject();
+        JSONArray itemsJsonArray = new JSONArray();
+    }
     public void postPurchase(final Context ctx, final RestServiceListener listener,
                              final LoginModel loginModel, final List<CartItemsModel> cartItemsModels, double total) {
         final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
@@ -417,6 +419,7 @@ public class RestCallServices {
                     itemObjJson.put("product", cartItemsModel.getProductModelId());
                     itemObjJson.put("brand", cartItemsModel.getBrandId());
                     itemObjJson.put("attribute_id", cartItemsModel.getAttributeId());
+                    itemObjJson.put("receipt", " ");
                     itemsJsonArray.put(itemObjJson);
                 }
             }

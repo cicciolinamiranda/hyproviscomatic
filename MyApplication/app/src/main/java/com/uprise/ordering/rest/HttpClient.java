@@ -8,6 +8,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
@@ -94,6 +95,58 @@ public class HttpClient {
 
             long t = System.currentTimeMillis();
             HttpResponse response = (HttpResponse) httpclient.execute(httpGetRequest);
+            Log.i(TAG, "HTTPResponse received in [" + (System.currentTimeMillis() - t) + "ms]");
+
+            // Get hold of the response entity (-> the data):
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                // Read the content stream
+                InputStream instream = entity.getContent();
+//                Header contentEncoding = response.getFirstHeader("Content-Encoding");
+//                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+//                    instream = new GZIPInputStream(instream);
+//                }
+
+                // convert content stream to a String
+                String resultString = convertStreamToString(instream);
+                instream.close();
+//                resultString = resultString.substring(1,resultString.length()-1); // remove wrapping "[" and "]"
+
+                // Transform the String into a JSONObject
+                JSONObject jsonObjRecv = new JSONObject(resultString);
+                // Raw DEBUG output of our received JSON object:
+                Log.i(TAG, "<JSONObject>\n" + jsonObjRecv.toString() + "\n</JSONObject>");
+
+                return jsonObjRecv;
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static JSONObject SenHttpPutWithAuthentication(String URL, JSONObject jsonObjSend, String token) {
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            HttpPut httpPutRequest = new HttpPut(URL);
+
+            StringEntity se;
+            se = new StringEntity(jsonObjSend.toString());
+
+            httpPutRequest.setEntity(se);
+            httpPutRequest.setHeader(HTTP.CONTENT_TYPE, "application/json");
+            httpPutRequest.addHeader("Authorization","JWT "+token);
+//            httpPostRequest.setHeader("Accept-Encoding", "gzip"); // only set this parameter if you would like to use gzip compression
+
+            long t = System.currentTimeMillis();
+            HttpResponse response = (HttpResponse) httpclient.execute(httpPutRequest);
+
             Log.i(TAG, "HTTPResponse received in [" + (System.currentTimeMillis() - t) + "ms]");
 
             // Get hold of the response entity (-> the data):

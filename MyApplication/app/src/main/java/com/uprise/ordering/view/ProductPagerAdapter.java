@@ -134,6 +134,7 @@ public class ProductPagerAdapter extends PagerAdapter {
 
         saveEditBtn.setOnClickListener(count);
         etQuantity.addTextChangedListener(count);
+        etQuantity.requestFocus();
 //        minusBtn.setOnClickListener(count);
 //        plusBtn.setOnClickListener(count);
         addToCartBtn.setOnClickListener(count);
@@ -234,7 +235,7 @@ public class ProductPagerAdapter extends PagerAdapter {
             isCountZero();
 
             if(this.etQuantity != null) {
-                this.etQuantity.setText(count+"");
+                this.etQuantity.setText("");
             }
 
         }
@@ -274,11 +275,15 @@ public class ProductPagerAdapter extends PagerAdapter {
                 }catch (NumberFormatException e) {
                     count = 0;
                 }
-                isCountZero();
+            } else {
+                count = 0;
             }
+
+            isCountZero();
         }
 
         private void saveItem() {
+            etQuantity.clearFocus();
             savedCardItem.setQuantity(count);
             savedCardItem.setBrandId(brandId);
             savedCardItem.setAttributeId(attributeId);

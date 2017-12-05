@@ -79,6 +79,7 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
         tvProductName = (TextView) rowView.findViewById(R.id.tv_product_name);
         etQuantity = (EditText) rowView.findViewById(R.id.et_brand_qty);
         etQuantity.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "10000")});
+        etQuantity.requestFocus();
         minusBtn = (ImageButton) rowView.findViewById(R.id.btn_minus_brand_qty);
         plusBtn = (ImageButton)  rowView.findViewById(R.id.btn_plus_brand_qty);
         deleteBtn = (ImageButton) rowView.findViewById(R.id.btn_delete_cart_item);
@@ -261,13 +262,14 @@ public class BrandBasedShoppingCartListView extends ArrayAdapter<CartItemsModel>
                 }catch (NumberFormatException e) {
                     count = 0;
                 }
-                isCountZero();
-
                 if(count > 0) {
                     saveItem();
                     listener.editCartItem(savedCardItem);
                 }
+            } else {
+                count = 0;
             }
+            isCountZero();
 
         }
     }
