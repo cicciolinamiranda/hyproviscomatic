@@ -394,21 +394,74 @@ public class RestCallServices {
     }
 
     public void updatePurchaseWithReceipt(final Context ctx, final RestServiceListener listener,
-                               final LoginModel loginModel, OrderModel orderModel, ImageModel receiptImages) {
+                               final LoginModel loginModel, OrderModel orderModel, ImageModel receiptImages, String modeOfPayment) {
 
         final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_post_purchase);
+                + ctx.getResources().getString(R.string.endpoint_post_purchase)+"/"+orderModel.getOrderId();
         final JSONObject orderObject = new JSONObject();
-        JSONArray itemsJsonArray = new JSONArray();
+//        JSONArray itemsJsonArray = new JSONArray();
+
+        try {
+            orderObject.put("payment_method", modeOfPayment);
+
+
+            //TODO: make it for loop once the api is change to array type similar to registration api
+            if(receiptImages != null && receiptImages.getStringBase() != null && !receiptImages.getStringBase().isEmpty()) {
+
+                //TODO: for now it always get the first value. Must be change if api already accepts array
+                Bitmap modeOfPaymentBmpImage = getBitmapFrom(receiptImages.getStringBase().get(0), ApplicationConstants.RESULT_GALLERY_PROOF_OF_PAYMENT);
+                String modeOfPaymentImageStr = "data:image/png;base64,"+bitmapToBase64(modeOfPaymentBmpImage);
+                Log.i(TAG, "MODE OF PAYMENT IMAGE:--->" + modeOfPaymentImageStr);
+                orderObject.put("receipt", modeOfPaymentImageStr);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new RestAsyncTask(new RestAsyncTaskListener() {
+            ArrayList<org.apache.http.NameValuePair> params = new ArrayList<>();
+            String resultStr;
+
+
+            @Override
+            public void doInBackground() {
+                JSONObject obj = HttpClient.SenHttpPutWithAuthentication(purchaseEndpoint, orderObject, loginModel.getToken());
+                try {
+
+                    if(obj != null && obj.getString("items") != null )resultStr = obj.getString("items");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void result() {
+                if (resultStr == null || resultStr.isEmpty() || resultStr.contains("is required")) {
+
+                    RestCallServices.this.failedPost(listener, RestCalls.PURCHASE
+                            , ctx.getString(R.string.unable_to_submit_mode_of_payment));
+                } else {
+
+                    listener.onSuccess(RestCalls.PURCHASE, resultStr);
+                }
+
+
+            }
+        }).execute();
     }
     public void postPurchase(final Context ctx, final RestServiceListener listener,
-                             final LoginModel loginModel, final List<CartItemsModel> cartItemsModels, double total) {
+                             final LoginModel loginModel, final List<CartItemsModel> cartItemsModels) {
         final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
                 + ctx.getResources().getString(R.string.endpoint_post_purchase);
         final JSONObject purchaseObject = new JSONObject();
         JSONArray itemsJsonArray = new JSONArray();
         try {
             purchaseObject.put("user", loginModel.getUsername());
+            purchaseObject.put("receipt", " ");
+            purchaseObject.put("payment_method", ctx.getString(R.string.default_payment_method));
 
             if(cartItemsModels != null && cartItemsModels.size() >0) {
 
@@ -419,7 +472,6 @@ public class RestCallServices {
                     itemObjJson.put("product", cartItemsModel.getProductModelId());
                     itemObjJson.put("brand", cartItemsModel.getBrandId());
                     itemObjJson.put("attribute_id", cartItemsModel.getAttributeId());
-                    itemObjJson.put("receipt", " ");
                     itemsJsonArray.put(itemObjJson);
                 }
             }

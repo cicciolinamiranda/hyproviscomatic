@@ -20,8 +20,9 @@ public class OrderModel implements Parcelable {
     private double totalAmount;
     private double discount;
     private double shippingFee;
+    private String paymentMethod;
 //    private OrderStatus orderStatus;
-private String orderStatus;
+    private String orderStatus;
 
     public OrderModel() {}
 
@@ -37,6 +38,7 @@ private String orderStatus;
         dest.writeString(orderStatus);
         dest.writeDouble(discount);
         dest.writeDouble(shippingFee);
+        dest.writeString(paymentMethod);
     }
 
 
@@ -52,6 +54,7 @@ private String orderStatus;
         orderStatus = in.readString();
         discount = in.readDouble();
         shippingFee = in.readDouble();
+        paymentMethod = in.readString();
     }
 
     public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
@@ -150,5 +153,13 @@ private String orderStatus;
 
     public void setShippingFee(double shippingFee) {
         this.shippingFee = shippingFee;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

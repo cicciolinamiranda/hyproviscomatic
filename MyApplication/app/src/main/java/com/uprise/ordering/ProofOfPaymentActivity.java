@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,11 +26,16 @@ import android.widget.Toast;
 
 import com.uprise.ordering.camera.CameraImageActivity;
 import com.uprise.ordering.constant.ApplicationConstants;
+import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.ImageModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +47,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class ProofOfPaymentActivity extends AppCompatActivity implements View.OnClickListener,
+public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements View.OnClickListener,
         RestCallServices.RestServiceListener {
 
     private Spinner spinnerModeOfPayment;
@@ -107,6 +111,9 @@ public class ProofOfPaymentActivity extends AppCompatActivity implements View.On
         });
 
         orderModel = getIntent().getParcelableExtra("orderModel");
+        sqlDatabaseHelper = new SqlDatabaseHelper(ProofOfPaymentActivity.this);
+        loginModel = sqlDatabaseHelper.getLoginCredentials();
+        restCallServices = new RestCallServices(this);
     }
 
     private void setSpinnerModeOfPayment(int position) {
@@ -139,14 +146,16 @@ public class ProofOfPaymentActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.action_submit_proof_of_payment:
 
-                if(isFormCanBeSubmitted()){
+                if(isFormCanBeSubmitted() && restCallServices != null &&
+                        loginModel != null && orderModel != null && Util.getInstance().isNetworkAvailable(this)) {
+                    restCallServices.updatePurchaseWithReceipt(this, this,
+                            loginModel, orderModel, imageProofOfPaymentModel, modeOfPaymentStr);
 
                 }
                 break;
         }
         return true;
     }
-
     private boolean isFormCanBeSubmitted() {
 
         if(modeOfPaymentStr.equalsIgnoreCase(MODE_OF_PAYMENT.get(0)) &&
@@ -389,20 +398,63 @@ public class ProofOfPaymentActivity extends AppCompatActivity implements View.On
     @Override
     public int getResultCode() {
 
-        //TODO: impl
         return 0;
     }
 
     @Override
     public void onSuccess(RestCalls callType, String string) {
 
-        //TODO: impl
+        OrderModel responseOrderModel = new OrderModel();
+        //TODO: modify still impl
+        if(callType.equals(RestCalls.PURCHASE)) {
 
+            try {
+
+                JSONObject jsonObject = new JSONObject(string);
+                JSONArray jsonArray = new JSONArray();
+
+                if(jsonArray != null) {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject items = jsonArray.getJSONObject(i);
+                        if(items != null) {
+                            responseOrderModel = Util.getInstance().generateOrderModelFromJson(items);
+                        }
+                    }
+                }
+
+                successResponseDialog(responseOrderModel);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void successResponseDialog(final OrderModel orderModel) {
+        Util.getInstance().showDialog(this, "Mode of payment is submitted. " +
+                        "Order Status will now be on PENDING", this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent newIntent = new Intent();
+                        newIntent.putExtra("orderModel", orderModel);
+                        setResult(ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT, newIntent);
+                        finish();
+                    }
+                });
     }
 
     @Override
     public void onFailure(RestCalls callType, String string) {
 
-        //TODO: impl
+        Util.getInstance().showDialog(this, string, this.getString(R.string.action_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
     }
 }

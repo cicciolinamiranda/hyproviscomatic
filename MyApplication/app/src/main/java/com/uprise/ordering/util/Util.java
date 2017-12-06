@@ -126,12 +126,13 @@ public class Util {
     public void showDialog(Context ctx, String message, String okButton
             , DialogInterface.OnClickListener positiveListener) {
 
-
-        new AlertDialog.Builder(ctx)
-                .setMessage(message)
-                .setPositiveButton(okButton, positiveListener)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        if(ctx != null) {
+            new AlertDialog.Builder(ctx)
+                    .setMessage(message)
+                    .setPositiveButton(okButton, positiveListener)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
 
@@ -638,6 +639,10 @@ public class Util {
             }
             if(jsonObject.getString("status") != null && !jsonObject.getString("status").isEmpty()) {
                 orderModel.setOrderStatus(jsonObject.getString("status"));
+            }
+
+            if(jsonObject.getString("payment_method") != null && !jsonObject.getString("payment_method").isEmpty()) {
+                orderModel.setPaymentMethod(jsonObject.getString("payment_method"));
             }
 
             if(jsonObject.getString("discount") != null && !jsonObject.getString("discount").isEmpty()) {

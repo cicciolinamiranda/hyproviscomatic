@@ -23,7 +23,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private ListView lvOrderItemsList;
     private TextView tvEstimatedTotal;
-    private TextView tvNetTotal;
+//    private TextView tvNetTotal;
     private TextView tvDiscount;
     private TextView tvShippingFee;
     private ArrayAdapter<OrderItemsModel> cartItemsModelArrayAdapter;
@@ -43,7 +43,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         lvOrderItemsList = (ListView) findViewById(R.id.list_order_items);
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_order_item__estimated_total_value);
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);
-        tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
+//        tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
         tvShippingFee = (TextView) findViewById(R.id.tv_order_item__estimated_shipping_free_value);
         final OrderModel orderModel = getIntent().getParcelableExtra("orderModel");
         ArrayList<ProductModel> productModels = Util.getInstance().generateProductModels();
@@ -54,8 +54,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvEstimatedTotal.setText(String.format("%.2f", orderModel.getTotalAmount())+" Php");
         double computedDiscountPercentage = orderModel.getDiscount();
         double shippingFreeDouble = orderModel.getShippingFee();
-        double netTotal = orderModel.getTotalAmount();
-        tvNetTotal.setText(String.format("%.2f", netTotal)+" Php");
+//        double netTotal = orderModel.getTotalAmount();
+//        tvNetTotal.setText(String.format("%.2f", netTotal)+" Php");
         tvDiscount.setText(String.format("%.2f", computedDiscountPercentage)+" Php");
         tvShippingFee.setText(String.format("%.2f", shippingFreeDouble)+" Php");
         getSupportActionBar().setTitle("Order# "+orderModel.getOrderId());
@@ -63,8 +63,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         llSubmitModeOfPayment.setVisibility(View.GONE);
 
         //Todo: status will be changed
-        if(orderModel.getOrderStatus().equalsIgnoreCase("pending")) {
+        if(orderModel.getOrderStatus().equalsIgnoreCase("for_payment")) {
             llSubmitModeOfPayment.setVisibility(View.VISIBLE);
+        } else{
+            llSubmitModeOfPayment.setVisibility(View.GONE);
+
         }
 
         llSubmitModeOfPayment.setOnClickListener(new View.OnClickListener() {

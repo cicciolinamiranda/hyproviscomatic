@@ -166,7 +166,6 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
                 llShopCartList.setVisibility(View.GONE);
                 llLowerLayouts.setVisibility(View.GONE);
 
-                //TODO: Must transfer in MyOrders
                 restCallServices.postPurchase(BrandBasedShoppingCartActivity.this, new RestCallServices.RestServiceListener() {
                     @Override
                     public int getResultCode() {
@@ -211,7 +210,7 @@ public class BrandBasedShoppingCartActivity extends BaseAuthenticatedActivity im
                             }
                         });
                     }
-                }, loginModel, cartItemsModelArrayList, total);
+                }, loginModel, cartItemsModelArrayList);
 
                 break;
         }

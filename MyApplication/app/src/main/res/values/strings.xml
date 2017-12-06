@@ -148,4 +148,8 @@
     <string name="error_proof_of_payment_required">Please upload atleast 1 photo\nof your proof of payment</string>
     <string name="estimated_shipping_fee_label">Shipping fee:</string>
     <string name="label_order_shipping_fee">Shipping Fee:</string>
+
+    <string name="default_payment_method">bank_deposit</string>
+    <string name="unable_to_submit_mode_of_payment">Unable to submit mode of payment.Please try again.</string>
+
 </resources>
