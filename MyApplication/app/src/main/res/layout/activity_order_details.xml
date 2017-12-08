@@ -123,35 +123,35 @@
                 />
         </LinearLayout>
 
-        <!--<LinearLayout-->
-            <!--android:id="@+id/ll_order_item_net_total"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="bottom"-->
-            <!--android:background="@color/colorAccentDark"-->
-            <!--android:orientation="horizontal">-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="50dp"-->
-                <!--android:text="@string/new_total_label"-->
-                <!--android:id="@+id/tv_order_item_net_total"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:gravity="left|center_vertical"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--/>-->
+        <LinearLayout
+            android:id="@+id/ll_order_item_net_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:background="@color/colorAccentDark"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/new_total_label"
+                android:id="@+id/tv_order_item_net_total"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="20dp"
+                />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="50dp"-->
-                <!--android:text="0.00 Php"-->
-                <!--android:id="@+id/tv_order_item_net_total_value"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:gravity="right|center_vertical"-->
-                <!--android:layout_marginRight="20dp"-->
-                <!--/>-->
-        <!--</LinearLayout>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="0.00 Php"
+                android:id="@+id/tv_order_item_net_total_value"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                />
+        </LinearLayout>
 
         <!--button submit proof of payment-->
         <LinearLayout

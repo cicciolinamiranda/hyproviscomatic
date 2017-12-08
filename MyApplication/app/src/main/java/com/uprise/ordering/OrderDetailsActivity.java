@@ -24,7 +24,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private ListView lvOrderItemsList;
     private TextView tvEstimatedTotal;
-//    private TextView tvNetTotal;
+    private TextView tvNetTotal;
     private TextView tvDiscount;
     private TextView tvShippingFee;
     private TextView tvModeOfPaymentLabel;
@@ -46,7 +46,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         lvOrderItemsList = (ListView) findViewById(R.id.list_order_items);
         tvEstimatedTotal = (TextView) findViewById(R.id.tv_order_item__estimated_total_value);
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);
-//        tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
+        tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
         tvShippingFee = (TextView) findViewById(R.id.tv_order_item__estimated_shipping_free_value);
         tvModeOfPaymentLabel = (TextView) findViewById(R.id.tv_proceed_to_checkout);
         tvModeOfPaymentLabel.setTextColor(getResources().getColor(R.color.light));
@@ -56,16 +56,29 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 orderModel.getOrderItemsModels(),
                 productModels);
         lvOrderItemsList.setAdapter(cartItemsModelArrayAdapter);
-        tvEstimatedTotal.setText(String.format("%.2f", orderModel.getTotalAmount())+" Php");
+        tvEstimatedTotal.setText(String.format("%.2f", orderModel.getRawTotalAmount())+" Php");
         double computedDiscountPercentage = orderModel.getDiscount();
         double shippingFreeDouble = orderModel.getShippingFee();
-//        double netTotal = orderModel.getTotalAmount();
-//        tvNetTotal.setText(String.format("%.2f", netTotal)+" Php");
+        double netTotal = orderModel.getTotalAmount();
+        tvNetTotal.setText(String.format("%.2f", netTotal)+" Php");
         tvDiscount.setText(String.format("%.2f", computedDiscountPercentage)+" Php");
         tvShippingFee.setText(String.format("%.2f", shippingFreeDouble)+" Php");
         getSupportActionBar().setTitle("Order# "+orderModel.getOrderId());
 
         displayModeOfPaymentButton(orderModel);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT && data != null) {
+            updatedPaymentOrderModel = data.getParcelableExtra("orderModel");
+            displayModeOfPaymentButton(updatedPaymentOrderModel);
+        }
+    }
+
+    private void displayModeOfPaymentButton(final OrderModel orderModel) {
 
         llSubmitModeOfPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,19 +92,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT && data != null) {
-            updatedPaymentOrderModel = data.getParcelableExtra("orderModel");
-            displayModeOfPaymentButton(updatedPaymentOrderModel);
-        }
-    }
-
-    private void displayModeOfPaymentButton(OrderModel orderModel) {
         if(orderModel != null && orderModel.getOrderStatus() != null) {
             if (orderModel.getOrderStatus().equalsIgnoreCase(ApplicationConstants.PURCHASE_STATUS.keySet().toArray()[2].toString())) {
                 llSubmitModeOfPayment.setBackgroundColor(getResources().getColor(R.color.buttons_color));

@@ -683,6 +683,11 @@ public class Util {
                 orderModel.setTotalAmount(total);
             }
 
+            if(jsonObject.getString("gross_total") != null && !jsonObject.getString("gross_total").isEmpty()) {
+                double total = Double.parseDouble(jsonObject.getString("gross_total"));
+                orderModel.setRawTotalAmount(total);
+            }
+
             if(jsonObject.getString("date_added") != null && !jsonObject.getString("date_added").isEmpty()) {
                 orderModel.setDate(jsonObject.getString("date_added"));
             }

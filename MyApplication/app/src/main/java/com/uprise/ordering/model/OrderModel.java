@@ -17,6 +17,7 @@ public class OrderModel implements Parcelable {
 //    private ArrayList<CartItemsModel> cartItemsModels;
     private ArrayList<OrderItemsModel> orderItemsModels;
 //    private int quantity;
+    private double rawTotalAmount;
     private double totalAmount;
     private double discount;
     private double shippingFee;
@@ -39,6 +40,7 @@ public class OrderModel implements Parcelable {
         dest.writeDouble(discount);
         dest.writeDouble(shippingFee);
         dest.writeString(paymentMethod);
+        dest.writeDouble(rawTotalAmount);
     }
 
 
@@ -55,6 +57,7 @@ public class OrderModel implements Parcelable {
         discount = in.readDouble();
         shippingFee = in.readDouble();
         paymentMethod = in.readString();
+        rawTotalAmount = in.readDouble();
     }
 
     public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
@@ -161,5 +164,13 @@ public class OrderModel implements Parcelable {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public double getRawTotalAmount() {
+        return rawTotalAmount;
+    }
+
+    public void setRawTotalAmount(double rawTotalAmount) {
+        this.rawTotalAmount = rawTotalAmount;
     }
 }
