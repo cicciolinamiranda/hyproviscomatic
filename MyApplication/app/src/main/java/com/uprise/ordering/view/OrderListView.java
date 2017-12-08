@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.uprise.ordering.R;
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.OrderModel;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +62,7 @@ public class OrderListView extends ArrayAdapter<OrderModel> {
         tvOrderShippingFee.setText(String.format("%.2f",web.get(position).getShippingFee()) + " Php");
 
         tvOrderNumber.setText(web.get(position).getOrderId());
-        tvOrderStatus.setText(web.get(position).getOrderStatus());
+        tvOrderStatus.setText(ApplicationConstants.PURCHASE_STATUS.get(web.get(position).getOrderStatus()));
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");

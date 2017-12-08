@@ -111,6 +111,7 @@
     <!--Endpoints-->
     <string name="endpoint_server">http://139.162.57.95</string>
     <string name="endpoint_post_registration">/api/registration</string>
+    <string name="endpoint_payment">/api/payment</string>
     <string name="endpoint_post_purchase">/api/purchase</string>
     <string name="endpoint_get_purchase">/api/purchase?ordering=-date_added</string>
     <string name="endpoint_get_notifications">/api/announcement?ordering=-date_added</string>
@@ -128,7 +129,7 @@
     <string name="unable_to_add_branch">Unable to save branch. Please Try Again</string>
     <string name="unable_to_save_branch">Unable to save branch. Please Try Again.</string>
     <string name="branch_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
-    <string name="purchase_approval_msg">Kindly wait for email approval or contact Admin for assistance.</string>
+    <string name="purchase_approval_msg">Your purchase has been submitted. Status is now FOR PAYMENT.</string>
     <string name="estimated_discount_label">Discounts:</string>
     <string name="unable_to_get_notif">Unable to get notifications</string>
     <string name="total_label">Total:</string>
@@ -149,7 +150,7 @@
     <string name="estimated_shipping_fee_label">Shipping fee:</string>
     <string name="label_order_shipping_fee">Shipping Fee:</string>
 
-    <string name="default_payment_method">bank_deposit</string>
+    <string name="default_payment_method"></string>
     <string name="unable_to_submit_mode_of_payment">Unable to submit mode of payment.Please try again.</string>
 
 </resources>

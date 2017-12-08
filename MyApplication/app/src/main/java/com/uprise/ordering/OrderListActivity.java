@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.database.SqlDatabaseHelper;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.rest.RestCalls;
@@ -103,7 +104,7 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(OrderListActivity.this, OrderDetailsActivity.class);
                     intent.putExtra("orderModel", orderModelArrayAdapter.getItem(position));
-                    startActivity(intent);
+                    startActivityForResult(intent, ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT);
 
                 }
             });
@@ -195,5 +196,13 @@ public class OrderListActivity extends BaseAuthenticatedActivity implements Rest
         nextMenu = menu.findItem(R.id.menu_orderlist_next);
         nextMenu.setVisible(false);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT) {
+            startActivity(getIntent());
+            finish();
+        }
     }
 }

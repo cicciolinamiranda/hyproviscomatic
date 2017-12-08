@@ -393,27 +393,34 @@ public class RestCallServices {
         }).execute();
     }
 
-    public void updatePurchaseWithReceipt(final Context ctx, final RestServiceListener listener,
+    public void updatePayment(final Context ctx, final RestServiceListener listener,
                                final LoginModel loginModel, OrderModel orderModel, ImageModel receiptImages, String modeOfPayment) {
 
-        final String purchaseEndpoint = ctx.getResources().getString(R.string.endpoint_server)
-                + ctx.getResources().getString(R.string.endpoint_post_purchase)+"/"+orderModel.getOrderId();
+        final String paymentEndpoint = ctx.getResources().getString(R.string.endpoint_server)
+                + ctx.getResources().getString(R.string.endpoint_payment)+"/"+orderModel.getOrderId();
         final JSONObject orderObject = new JSONObject();
 //        JSONArray itemsJsonArray = new JSONArray();
+        JSONArray receiptJsonArray = new JSONArray();
 
         try {
             orderObject.put("payment_method", modeOfPayment);
 
 
-            //TODO: make it for loop once the api is change to array type similar to registration api
             if(receiptImages != null && receiptImages.getStringBase() != null && !receiptImages.getStringBase().isEmpty()) {
 
-                //TODO: for now it always get the first value. Must be change if api already accepts array
-                Bitmap modeOfPaymentBmpImage = getBitmapFrom(receiptImages.getStringBase().get(0), ApplicationConstants.RESULT_GALLERY_PROOF_OF_PAYMENT);
-                String modeOfPaymentImageStr = "data:image/png;base64,"+bitmapToBase64(modeOfPaymentBmpImage);
-                Log.i(TAG, "MODE OF PAYMENT IMAGE:--->" + modeOfPaymentImageStr);
-                orderObject.put("receipt", modeOfPaymentImageStr);
+                int numReceiptPics = 1;
+                for(String receiptImgPath: receiptImages.getStringBase()) {
+                    JSONObject receiptPhotoJson = new JSONObject();
+                    Bitmap modeOfPaymentBmpImage = getBitmapFrom(receiptImgPath, ApplicationConstants.RESULT_GALLERY_PROOF_OF_PAYMENT);
+                    String modeOfPaymentImageStr = "data:image/png;base64,"+bitmapToBase64(modeOfPaymentBmpImage);
+                    receiptPhotoJson.put("image", modeOfPaymentImageStr);
+                    receiptPhotoJson.put("description", "Photo of Receipt No. "+ numReceiptPics);
+                    receiptJsonArray.put(receiptPhotoJson);
+                    numReceiptPics++;
+                }
             }
+
+            orderObject.put("receipt", receiptJsonArray);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -426,13 +433,10 @@ public class RestCallServices {
 
             @Override
             public void doInBackground() {
-                JSONObject obj = HttpClient.SenHttpPutWithAuthentication(purchaseEndpoint, orderObject, loginModel.getToken());
-                try {
+                JSONObject obj = HttpClient.SenHttpPutWithAuthentication(paymentEndpoint, orderObject, loginModel.getToken());
 
-                    if(obj != null && obj.getString("items") != null )resultStr = obj.getString("items");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    if(obj != null && !obj.toString().isEmpty())resultStr = obj.toString();
+
 
 
             }
@@ -460,7 +464,7 @@ public class RestCallServices {
         JSONArray itemsJsonArray = new JSONArray();
         try {
             purchaseObject.put("user", loginModel.getUsername());
-            purchaseObject.put("receipt", " ");
+            purchaseObject.put("receipt", new JSONArray());
             purchaseObject.put("payment_method", ctx.getString(R.string.default_payment_method));
 
             if(cartItemsModels != null && cartItemsModels.size() >0) {

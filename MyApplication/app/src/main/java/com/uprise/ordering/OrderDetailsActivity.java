@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.uprise.ordering.constant.ApplicationConstants;
 import com.uprise.ordering.model.OrderItemsModel;
 import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.model.ProductModel;
@@ -26,8 +27,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
 //    private TextView tvNetTotal;
     private TextView tvDiscount;
     private TextView tvShippingFee;
+    private TextView tvModeOfPaymentLabel;
     private ArrayAdapter<OrderItemsModel> cartItemsModelArrayAdapter;
     private LinearLayout llSubmitModeOfPayment;
+    private OrderModel updatedPaymentOrderModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvDiscount = (TextView) findViewById(R.id.tv_order_item__estimated_discount_value);
 //        tvNetTotal = (TextView) findViewById(R.id.tv_order_item_net_total_value);
         tvShippingFee = (TextView) findViewById(R.id.tv_order_item__estimated_shipping_free_value);
+        tvModeOfPaymentLabel = (TextView) findViewById(R.id.tv_proceed_to_checkout);
+        tvModeOfPaymentLabel.setTextColor(getResources().getColor(R.color.light));
         final OrderModel orderModel = getIntent().getParcelableExtra("orderModel");
         ArrayList<ProductModel> productModels = Util.getInstance().generateProductModels();
         cartItemsModelArrayAdapter = new OrderItemsListView(OrderDetailsActivity.this,
@@ -60,33 +65,52 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvShippingFee.setText(String.format("%.2f", shippingFreeDouble)+" Php");
         getSupportActionBar().setTitle("Order# "+orderModel.getOrderId());
 
-        llSubmitModeOfPayment.setVisibility(View.GONE);
-
-        //Todo: status will be changed
-        if(orderModel.getOrderStatus().equalsIgnoreCase("for_payment")) {
-            llSubmitModeOfPayment.setVisibility(View.VISIBLE);
-        } else{
-            llSubmitModeOfPayment.setVisibility(View.GONE);
-
-        }
+        displayModeOfPaymentButton(orderModel);
 
         llSubmitModeOfPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent proofOfPaymentIntent = new Intent(OrderDetailsActivity.this, ProofOfPaymentActivity.class);
-                if(orderModel != null) {
+                if(orderModel != null && orderModel.getOrderStatus() != null &&
+                        orderModel.getOrderStatus().equalsIgnoreCase(ApplicationConstants.PURCHASE_STATUS.keySet().toArray()[2].toString())) {
+                    Intent proofOfPaymentIntent = new Intent(OrderDetailsActivity.this, ProofOfPaymentActivity.class);
                     proofOfPaymentIntent.putExtra("orderModel", orderModel);
+                    startActivityForResult(proofOfPaymentIntent, ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT);
                 }
-                startActivity(proofOfPaymentIntent);
             }
         });
 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT && data != null) {
+            updatedPaymentOrderModel = data.getParcelableExtra("orderModel");
+            displayModeOfPaymentButton(updatedPaymentOrderModel);
+        }
+    }
+
+    private void displayModeOfPaymentButton(OrderModel orderModel) {
+        if(orderModel != null && orderModel.getOrderStatus() != null) {
+            if (orderModel.getOrderStatus().equalsIgnoreCase(ApplicationConstants.PURCHASE_STATUS.keySet().toArray()[2].toString())) {
+                llSubmitModeOfPayment.setBackgroundColor(getResources().getColor(R.color.buttons_color));
+                tvModeOfPaymentLabel.setText(getString(R.string.btn_submit_proof_of_payment));
+            } else {
+                llSubmitModeOfPayment.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                tvModeOfPaymentLabel.setText(ApplicationConstants.PURCHASE_STATUS.get(orderModel.getOrderStatus()));
+            }
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+
+                if(updatedPaymentOrderModel != null) {
+                    setResult(ApplicationConstants.RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT);
+                }
                 finish();
                 break;
         }

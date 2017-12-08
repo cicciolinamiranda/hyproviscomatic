@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,8 +31,8 @@ import com.uprise.ordering.model.OrderModel;
 import com.uprise.ordering.rest.RestCalls;
 import com.uprise.ordering.rest.service.RestCallServices;
 import com.uprise.ordering.util.Util;
+import com.uprise.ordering.view.ModeOfPaymentAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +42,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -63,9 +61,7 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
     public static int totalProofOfPaymentImages = 0;
 
 
-    private ArrayAdapter<String> modeOfPaymentSpinnerAdapter;
-
-    private final List<String> MODE_OF_PAYMENT = new ArrayList<>(Arrays.asList("Bank Transfer", "Cash on Delivery"));
+    private ModeOfPaymentAdapter modeOfPaymentSpinnerAdapter;
 
     private String modeOfPaymentStr;
 
@@ -93,8 +89,7 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
         tvMaxPhotosMsg = (TextView) findViewById(R.id.tv_max_of_two_pic_proof_of_payment);
         btnProofOfPaymentCamera = (Button) findViewById(R.id.btn_proof_of_payment_picture_camera);
         btnProofOfPaymentCamera.setOnClickListener(this);
-        modeOfPaymentSpinnerAdapter = new ArrayAdapter<>(ProofOfPaymentActivity.this, R.layout.list_item_label_spinner, MODE_OF_PAYMENT);
-        modeOfPaymentSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        modeOfPaymentSpinnerAdapter = new ModeOfPaymentAdapter(ApplicationConstants.MODE_OF_PAYMENT);
         spinnerModeOfPayment.setAdapter(modeOfPaymentSpinnerAdapter);
 
         setSpinnerModeOfPayment(0);
@@ -117,8 +112,8 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
     }
 
     private void setSpinnerModeOfPayment(int position) {
-        this.modeOfPaymentStr =  MODE_OF_PAYMENT.get(position);
 
+        this.modeOfPaymentStr = ApplicationConstants.MODE_OF_PAYMENT.keySet().toArray()[position].toString();
         if(position == 1) {
             llProofOfPaymentCamera.setVisibility(View.GONE);
             llProofOfPaymentImages.setVisibility(View.GONE);
@@ -148,7 +143,7 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
 
                 if(isFormCanBeSubmitted() && restCallServices != null &&
                         loginModel != null && orderModel != null && Util.getInstance().isNetworkAvailable(this)) {
-                    restCallServices.updatePurchaseWithReceipt(this, this,
+                    restCallServices.updatePayment(this, this,
                             loginModel, orderModel, imageProofOfPaymentModel, modeOfPaymentStr);
 
                 }
@@ -158,7 +153,7 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
     }
     private boolean isFormCanBeSubmitted() {
 
-        if(modeOfPaymentStr.equalsIgnoreCase(MODE_OF_PAYMENT.get(0)) &&
+        if(modeOfPaymentStr.equalsIgnoreCase(ApplicationConstants.MODE_OF_PAYMENT.keySet().toArray()[0].toString()) &&
                 (imageProofOfPaymentModel == null ||
                 imageProofOfPaymentModel.getIntegerBase() == null ||
                 imageProofOfPaymentModel.getIntegerBase().isEmpty())) {
@@ -411,16 +406,10 @@ public class ProofOfPaymentActivity extends BaseAuthenticatedActivity implements
             try {
 
                 JSONObject jsonObject = new JSONObject(string);
-                JSONArray jsonArray = new JSONArray();
 
-                if(jsonArray != null) {
+                if(jsonObject != null) {
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject items = jsonArray.getJSONObject(i);
-                        if(items != null) {
-                            responseOrderModel = Util.getInstance().generateOrderModelFromJson(items);
-                        }
-                    }
+                    responseOrderModel = Util.getInstance().generatePaymentRespFromJson(jsonObject);
                 }
 
                 successResponseDialog(responseOrderModel);

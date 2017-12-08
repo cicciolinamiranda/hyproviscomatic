@@ -3,6 +3,8 @@ package com.uprise.ordering.constant;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by cicciolina on 10/15/16.
@@ -66,5 +68,15 @@ public class ApplicationConstants {
 
     public static final int RESULT_FROM_SUBMIT_PROOF_OF_PAYMENT = 0X18;
 
+    public static final Map<String,String> MODE_OF_PAYMENT = new HashMap<String,String>() {{
+        put("bank_deposit", "Bank Transfer");
+        put("cod", "Cash On Delivery");
 
+    }};
+
+    public static final Map<String,String> PURCHASE_STATUS = new HashMap<String,String>() {{
+        put("for_payment", "FOR PAYMENT");
+        put("pending", "PENDING");
+        put("approved", "APPROVED");
+    }};
 }

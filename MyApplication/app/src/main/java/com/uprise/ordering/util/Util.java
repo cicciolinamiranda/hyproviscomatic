@@ -600,6 +600,28 @@ public class Util {
         return new LatLng(parseDoubleWithDefault(lat), parseDoubleWithDefault(lng));
     }
 
+    public OrderModel generatePaymentRespFromJson(JSONObject jsonObject) {
+        OrderModel orderModel = new OrderModel();
+        try {
+
+            if(jsonObject.getString("id") != null && !jsonObject.getString("id").isEmpty()) {
+                orderModel.setOrderId(jsonObject.getString("id"));
+            }
+            if(jsonObject.getString("status") != null && !jsonObject.getString("status").isEmpty()) {
+                orderModel.setOrderStatus(jsonObject.getString("status"));
+            }
+
+            if(jsonObject.getString("payment_method") != null && !jsonObject.getString("payment_method").isEmpty()) {
+                orderModel.setPaymentMethod(jsonObject.getString("payment_method"));
+            }
+
+            return orderModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return orderModel;
+    }
+
     public OrderModel generateOrderModelFromJson(JSONObject jsonObject) {
         OrderModel orderModel = new OrderModel();
         ArrayList<OrderItemsModel> orderItemsModels = new ArrayList<>();

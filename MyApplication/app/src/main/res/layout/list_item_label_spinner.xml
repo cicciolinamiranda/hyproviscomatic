@@ -7,6 +7,7 @@
     android:paddingEnd="14dp"
     android:textSize="14sp"
     android:text="sample"
+    android:id="@+id/spinner_label"
     android:textStyle="normal"
     android:gravity="center"
     android:textColor="@color/edittext_reg_color"
