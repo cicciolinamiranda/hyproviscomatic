@@ -15,8 +15,8 @@
         completions."
     </string>
     <string name="action_register">Create New Account?</string>
-    <string name="action_products">Our Products</string>
-    <string name="action_reseller">Our Resellers</string>
+    <string name="action_products">View Our Products As Guest</string>
+    <string name="action_reseller">View Our Resellers</string>
     <string name="welcome">Welcome</string>
     <string name="reg_shopname">Shop Name</string>
     <string name="reg_shopaddress">Shop address</string>
